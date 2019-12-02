@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import M from "materialize-css";// import materialize. M is the alias of materialize
 
 //Navbar For Students
-export class Navbar extends Component {
+export class Navbar2 extends Component {
     componentDidMount() {
 
         //To make it float at right
@@ -33,14 +33,10 @@ export class Navbar extends Component {
                         <ul id="nav-mobile" className="right hide-on-med-and-down">
                             <li><a href="#">Home</a></li>
 
-                            <li><a href="#" >
-                                L & F
 
-                            </a>
-                            </li>
-                            <li><a href="#">BatStateU Org Reports</a></li>
-                            <li><a href="#">Events</a></li>
                             <li><a href="#">Activities</a></li>
+                            <li><a href="#">Events</a></li>
+                            <li><a href="#">Assessments</a></li>
                             {/* DropDown */}
                             <li>
                                 <a href="#" className="dropdown-trigger" data-target="dropdown-settings">
@@ -68,11 +64,11 @@ export class Navbar extends Component {
                 <ul className="sidenav" id="mobile-demo" edge="right">
                     <li><a href="#">Home</a></li>
                     {/* DropDown */}
-                    <li><a href="#">Lost & Found</a></li>
-                    <li><a href="#">BatStateU Org Reports</a></li>
-                    <li><a href="#">Events</a></li>
-                    {/* DropDown */}
                     <li><a href="#">Activities</a></li>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Assessments</a></li>
+                    {/* DropDown */}
+                    <li><a href="#"></a></li>
                     <li class="divider"></li>
                     <br></br>
                     <li><a href="#" className="black-text">Downloadable Files</a></li>
@@ -84,4 +80,4 @@ export class Navbar extends Component {
     }
 }
 
-export default Navbar;
+export default Navbar2;

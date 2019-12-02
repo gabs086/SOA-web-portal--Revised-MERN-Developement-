@@ -17,6 +17,7 @@ export class Navbar2 extends Component {
         var elems = document.querySelectorAll('.dropdown-trigger');
         var instances = M.Dropdown.init(elems, {
             alignment: 'left',
+            constrainWidth: false
         });
 
     }
@@ -26,27 +27,28 @@ export class Navbar2 extends Component {
             <div>
                 <nav>
                     <div className="nav-wrapper" style={{ backgroundColor: "#820101" }}>
-                        <a href="#" className="brand-logo">SOA Web Portal</a>
-                        {/* Hamburger Trigger */}
-                        <a href="#" data-target="mobile-demo" className="sidenav-trigger right"><i className="material-icons">menu</i></a>
+                        <div className="container">
+                            <a href="#" className="brand-logo">SOA Web Portal</a>
+                            {/* Hamburger Trigger */}
+                            <a href="#" data-target="mobile-demo" className="sidenav-trigger right"><i className="material-icons">menu</i></a>
 
-                        <ul id="nav-mobile" className="right hide-on-med-and-down">
-                            <li><a href="#">Home</a></li>
-
-
-                            <li><a href="#">Activities</a></li>
-                            <li><a href="#">Events</a></li>
-                            <li><a href="#">Assessments</a></li>
-                            {/* DropDown */}
-                            <li>
-                                <a href="#" className="dropdown-trigger" data-target="dropdown-settings">
-                                    <i className="fa fa-cog fa-2x text-white" aria-hidden="true"></i>
-                                    <i class="material-icons right">arrow_drop_down</i>
-                                </a>
-                            </li>
-                        </ul>
+                            <ul id="nav-mobile" className="right hide-on-med-and-down">
+                                <li><a href="#">Home</a></li>
 
 
+                                <li><a href="#">Activities</a></li>
+                                <li><a href="#">Events</a></li>
+                                <li><a href="#">Assessments</a></li>
+                                {/* DropDown */}
+                                <li>
+                                    <a href="#" className="dropdown-trigger" data-target="dropdown-settings">
+                                        <i className="fa fa-cog fa-2x text-white" aria-hidden="true"></i>
+                                        <i class="material-icons right">arrow_drop_down</i>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
                     </div>
                 </nav>
 

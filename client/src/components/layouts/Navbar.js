@@ -26,6 +26,7 @@ export class Navbar extends Component {
             <div>
                 <nav>
                     <div className="nav-wrapper" style={{ backgroundColor: "#820101" }}>
+                        <div className="container">
                         <a href="#" className="brand-logo">SOA Web Portal</a>
                         {/* Hamburger Trigger */}
                         <a href="#" data-target="mobile-demo" className="sidenav-trigger right"><i className="material-icons">menu</i></a>
@@ -50,7 +51,7 @@ export class Navbar extends Component {
                             </li>
                         </ul>
 
-
+                        </div>
                     </div>
                 </nav>
 

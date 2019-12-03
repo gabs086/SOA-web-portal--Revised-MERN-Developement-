@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
+const users = require("./routes/api/users");
+
 //Router
 const app = express();
 
@@ -24,18 +26,14 @@ mongoose.connect(
 //PORT configuration
 const port = process.env.PORT || 5000;
 
-
-//APIs
-
-//Routes
-
-app.use('/api/users', require('./routes/api/users'));
-
-//Passport configuration
-require('./config/passport')(passport);
-
-//Passport middleware
+// APIs
+// Passport middleware
 app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
+// Routes
+app.use("/api/users", users);
+
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));
 

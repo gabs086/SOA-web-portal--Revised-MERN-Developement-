@@ -102,9 +102,9 @@ class Index extends React.Component {
                 <Container component="main" maxWidth="sm">
                     <CssBaseline /> {/* krung krung sa css baseline hahaha*/}
                     <div className={classes.paper}>
-                        <Typography component="h1" variant="h3">
-                            <img src={indexhead} alt="SOA Web Portal" />
-                        </Typography>
+
+                        <img src={indexhead} alt="SOA Web Portal" />
+
                         <Typography component="h1" variant="h5">
                             Sign In
                     </Typography>

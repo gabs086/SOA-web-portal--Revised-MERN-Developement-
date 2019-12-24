@@ -2,19 +2,28 @@ import React from 'react';
 import './App.css';
 import 'materialize-css/dist/css/materialize.min.css';
 
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 //Components
-// import Navbar from './components/layouts/Navbar';
-// import Navbar2 from './components/layouts/Navbar2';
-// import DashboardAdmin from './components/layouts/DashboardAdmin';
-// import DashboardHead from './components/layouts/DashboardHead';
 import Index from './components/Index';
+import StudentIndex from './components/st/StudentIndex';
+import OrgIndex from './components/org/OrgIndex';
+import HeadIndex from './components/h/HeadIndex';
+import AdminIndex from './components/ad/AdminIndex';
+import { Switch } from '@material-ui/core';
 
 
 function App() {
   return (
-    <div className="App">
-      <Index />
-    </div>
+    <Router>
+
+      <Route exact path="/" component={StudentIndex}></Route>
+      <Route exact path="/org" component={OrgIndex}></Route>
+      <Route exact path="/h" component={HeadIndex}></Route>
+      <Route exact path="/ad" component={AdminIndex}></Route>
+
+    </Router>
+
   );
 }
 

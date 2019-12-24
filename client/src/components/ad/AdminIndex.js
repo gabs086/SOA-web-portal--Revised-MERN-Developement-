@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DashboardAdmin from '../layouts/DashboardAdmin';
 
-export class Index extends Component {
+export class AdminIndex extends Component {
     render() {
         return (
             <div>
@@ -11,4 +11,4 @@ export class Index extends Component {
     }
 }
 
-export default Index;
+export default AdminIndex;

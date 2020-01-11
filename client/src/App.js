@@ -11,8 +11,6 @@ import StudentIndex from './components/st/StudentIndex';
 import OrgIndex from './components/org/OrgIndex';
 import HeadIndex from './components/h/HeadIndex';
 import AdminIndex from './components/ad/AdminIndex';
-import { Switch } from '@material-ui/core';
-import { Materialbox } from 'materialize-css';
 
 
 function App() {

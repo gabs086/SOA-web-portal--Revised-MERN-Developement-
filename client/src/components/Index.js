@@ -2,15 +2,19 @@ import React from 'react';
 
 import indexhead from './img/indexhead.jpg';
 
-//PropTypes
+//PropTypes and actions
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { loginUser } from "../actions/authActions";
+
+
+
+
 //MaterialUI Dependencies
 import { withStyles } from '@material-ui/core/styles';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-
 import Box from '@material-ui/core/Box'
 
 // import Avatar from '@material-ui/core/Avatar';
@@ -81,6 +85,7 @@ class Index extends React.Component {
         this.setState({
             [prop]: e.target.value
         })
+        console.log(this.state.password);
     }
 
     handleClickShowPassword() {

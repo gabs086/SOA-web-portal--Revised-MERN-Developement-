@@ -17,7 +17,8 @@ function App() {
   return (
     <Router>
 
-      <Route exact path="/" component={StudentIndex}></Route>
+      <Route exact path="/" component={Index}></Route>
+      <Route exact path="/st" component={StudentIndex}></Route>
       <Route exact path="/org" component={OrgIndex}></Route>
       <Route exact path="/h" component={HeadIndex}></Route>
       <Route exact path="/ad" component={AdminIndex}></Route>

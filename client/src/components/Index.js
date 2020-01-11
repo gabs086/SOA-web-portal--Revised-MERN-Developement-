@@ -14,11 +14,8 @@ import { loginUser } from "../actions/authActions";
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box'
 
-// import Avatar from '@material-ui/core/Avatar';
-import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
+import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography';
 
 import TextField from '@material-ui/core/TextField';
@@ -74,6 +71,7 @@ class Index extends React.Component {
 
 
         this.state = {
+            username: '',
             password: '',
             showPassword: false
 
@@ -84,14 +82,13 @@ class Index extends React.Component {
     handleChange = prop => e => {
         this.setState({
             [prop]: e.target.value
-        })
-        console.log(this.state.password);
+        });
     }
 
     handleClickShowPassword() {
         this.setState(state => ({
             showPassword: !state.showPassword
-        }))
+        }));
     }
     handleMouseDownPassword(e) {
         e.preventDefault();
@@ -119,11 +116,11 @@ class Index extends React.Component {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email"
-                                name="email"
-                                autoComplete="email"
+                                id="username"
+                                label="Username"
+                                name="username"
                                 autoFocus
+                                onChange={this.handleChange("username")}
                             />
                             <TextField
                                 margin="normal"

@@ -64,8 +64,9 @@ const styles = {
 class Index extends React.Component {
     constructor(props) {
         super(props)
-
+        // Form 
         this.handleChange = this.handleChange.bind(this);
+
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
 

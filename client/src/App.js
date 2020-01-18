@@ -1,9 +1,12 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 // Materialize 
 import 'materialize-css/dist/css/materialize.min.css';
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+//Redux
+import { Provider } from "react-redux";
+import store from "./store";
 
 //Components
 import Index from './components/Index';
@@ -12,19 +15,57 @@ import OrgIndex from './components/org/OrgIndex';
 import HeadIndex from './components/h/HeadIndex';
 import AdminIndex from './components/ad/AdminIndex';
 
+//PrivateRoute
+import PrivateRoute from './private-route/PrivateRoute';
+
+//Authentication
+import jwt_decode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
+import { setCurrentUser, logoutUser } from "./actions/authActions";
+
+// Check for token to keep user logged in
+if (localStorage.jwtToken) {
+  // Set auth token header auth
+  const token = localStorage.jwtToken;
+  setAuthToken(token);
+  // Decode token and get user info and exp
+  const decoded = jwt_decode(token);
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
+
+
+  // Check for expired token
+  const currentTime = Date.now() / 1000; // to get in milliseconds
+  if (decoded.exp < currentTime) {
+    // Logout user
+    store.dispatch(logoutUser());
+    // Redirect to login
+    window.location.href = "./login";
+  }
+}
 
 function App() {
   return (
-    <Router>
+    <Provider store={store}>
 
-      <Route exact path="/" component={Index}></Route>
-      <Route exact path="/st" component={StudentIndex}></Route>
-      <Route exact path="/org" component={OrgIndex}></Route>
-      <Route exact path="/h" component={HeadIndex}></Route>
-      <Route exact path="/ad" component={AdminIndex}></Route>
+      <Router>
+        <Route exact path="/" component={Index} />
+        <Route exact path="/st" component={StudentIndex} />
+        <Route exact path="/org" component={OrgIndex} />
+        <Route exact path="/h" component={HeadIndex} />
+        <Route exact path="/ad" component={AdminIndex} />
 
-    </Router>
+        {/* Private Routes  */}
+        <Switch>
+          {/* <PrivateRoute exact path="/st" component={StudentIndex} />
+          <PrivateRoute exact path="/org" component={OrgIndex} />
+          <PrivateRoute exact path="/h" component={HeadIndex} />
+          <PrivateRoute exact path="/ad" component={AdminIndex} /> */}
+        </Switch>
 
+      </Router>
+
+    </Provider>
   );
 }
 

@@ -40,7 +40,7 @@ if (localStorage.jwtToken) {
     // Logout user
     store.dispatch(logoutUser());
     // Redirect to login
-    window.location.href = "./login";
+    window.location.href = "./";
   }
 }
 
@@ -50,17 +50,12 @@ function App() {
 
       <Router>
         <Route exact path="/" component={Index} />
-        <Route exact path="/st" component={StudentIndex} />
-        <Route exact path="/org" component={OrgIndex} />
-        <Route exact path="/h" component={HeadIndex} />
-        <Route exact path="/ad" component={AdminIndex} />
-
         {/* Private Routes  */}
         <Switch>
-          {/* <PrivateRoute exact path="/st" component={StudentIndex} />
+          <PrivateRoute exact path="/st" component={StudentIndex} />
           <PrivateRoute exact path="/org" component={OrgIndex} />
           <PrivateRoute exact path="/h" component={HeadIndex} />
-          <PrivateRoute exact path="/ad" component={AdminIndex} /> */}
+          <PrivateRoute exact path="/ad" component={AdminIndex} />
         </Switch>
 
       </Router>

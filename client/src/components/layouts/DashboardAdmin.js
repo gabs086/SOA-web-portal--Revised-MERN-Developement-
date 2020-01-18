@@ -15,6 +15,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+//Redux components
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
 
 const drawerWidth = 240;
 
@@ -79,7 +84,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function DashboardAdmin() {
+//Component
+//The argument of the DashboardAdmin if for redux component in react hooks
+function DashboardAdmin({ auth, logoutUser }) {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -166,6 +173,15 @@ export default function DashboardAdmin() {
                         <ListItemText>List 2</ListItemText>
                     </ListItem>
                 </List>
+                <Divider />
+
+                {/* Item List 2 */}
+                <List>
+                    <ListItem button onClick={logoutUser}>
+                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                        <ListItemText>Logout</ListItemText>
+                    </ListItem>
+                </List>
             </Drawer>
 
             {/* for the main content */}
@@ -176,3 +192,14 @@ export default function DashboardAdmin() {
         </div>
     );
 }
+
+//Redux State connection 
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+//Dipatch proptypes(React Hooks) 
+const mapDispatchToProps = { logoutUser };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardAdmin);
+
+

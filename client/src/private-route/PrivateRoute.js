@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 //For Implementing Redux components
 import { connect } from 'react-redux';
@@ -18,7 +18,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
                 // else 
                 : (
                     //if not, it will stay in the login route
-                    <Redirect to="/login" />
+                    <Redirect to="/" />
                 )
         }
     />

@@ -2,7 +2,6 @@ import {
     SET_CURRENT_USER,
     USER_LOADING
 } from "../actions/types";
-import { stat } from "fs";
 
 const isEmpty = require("is-empty");
 

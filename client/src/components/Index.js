@@ -7,9 +7,6 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { loginUser } from "../actions/authActions";
 
-
-
-
 //MaterialUI Dependencies
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -66,6 +63,7 @@ class Index extends React.Component {
         super(props)
         // Form 
         this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
 
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
@@ -74,16 +72,54 @@ class Index extends React.Component {
         this.state = {
             username: '',
             password: '',
+            errors: {},
+
             showPassword: false
 
         }
 
     }
 
-    handleChange = prop => e => {
-        this.setState({
-            [prop]: e.target.value
-        });
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            if (this.props.auth.user.type === "admin") {
+                this.props.history.push("/ad");
+            }
+            if (this.props.auth.user.type === "head") {
+                this.props.history.push("/h");
+            }
+            if (this.props.auth.user.type === "org") {
+                this.props.history.push("/org");
+            }
+            if (this.props.auth.user.type === "student") {
+                this.props.history.push("/st");
+            }
+
+        }
+    }
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        if (nextProps.auth.isAuthenticated) {
+            if (nextProps.auth.user.type === "admin") {
+                nextProps.history.push("/ad");
+            }
+            if (nextProps.auth.user.type === "head") {
+                nextProps.history.push("/h");
+            }
+            if (nextProps.auth.user.type === "org") {
+                nextProps.history.push("/org");
+            }
+            if (nextProps.auth.user.type === "student") {
+                nextProps.history.push("/st");
+            }
+
+        }
+
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
     }
 
     handleClickShowPassword() {
@@ -95,10 +131,29 @@ class Index extends React.Component {
         e.preventDefault();
     }
 
+    handleChange = prop => e => {
+        this.setState({
+            [prop]: e.target.value
+        });
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+
+        const loginData = {
+            username: this.state.username,
+            password: this.state.password
+        };
+        //Function for authentication
+        this.props.loginUser(loginData);
+
+    }
+
     render() {
         const { classes } = this.props;
         const password = this.state.password;
         const showPassword = this.state.showPassword;
+        const errors = this.state.errors;
         const handleClickShowPassword = this.handleClickShowPassword
         return (
             <div className={classes.root}>
@@ -112,7 +167,7 @@ class Index extends React.Component {
                             Sign In
                     </Typography>
 
-                        <form className={classes.form} noValidate>
+                        <form className={classes.form} noValidate onSubmit={this.onSubmit}>
                             <TextField
                                 margin="normal"
                                 required
@@ -123,6 +178,9 @@ class Index extends React.Component {
                                 autoFocus
                                 onChange={this.handleChange("username")}
                             />
+                            <span className="red-text">
+                                {errors.usernotfound}
+                            </span>
                             <TextField
                                 margin="normal"
                                 required
@@ -148,7 +206,11 @@ class Index extends React.Component {
                                     ),
                                 }}
                             />
-
+                            {/* Errors Showing */}
+                            <span className="red-text">
+                                {errors.passwordincorrect}
+                            </span>
+                            <br></br>
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
@@ -180,7 +242,21 @@ class Index extends React.Component {
 
 
 Index.propTypes = {
-    classes: PropTypes.object.isRequired
-}
+    //Style propTypes
+    classes: PropTypes.object.isRequired,
+    //Function propTypes
+    loginUser: PropTypes.func.isRequired,
+    //Reducer propTypes
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+};
 
-export default withStyles(styles)(Index);
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+export default connect(
+    mapStateToProps,
+    { loginUser }
+)(withStyles(styles)(Index));

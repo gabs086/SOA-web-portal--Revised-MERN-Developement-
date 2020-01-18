@@ -98,30 +98,6 @@ class Index extends React.Component {
         }
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        if (nextProps.auth.isAuthenticated) {
-            if (nextProps.auth.user.type === "admin") {
-                nextProps.history.push("/ad");
-            }
-            if (nextProps.auth.user.type === "head") {
-                nextProps.history.push("/h");
-            }
-            if (nextProps.auth.user.type === "org") {
-                nextProps.history.push("/org");
-            }
-            if (nextProps.auth.user.type === "student") {
-                nextProps.history.push("/st");
-            }
-
-        }
-
-        if (nextProps.errors) {
-            this.setState({
-                errors: nextProps.errors
-            });
-        }
-    }
-
     handleClickShowPassword() {
         this.setState(state => ({
             showPassword: !state.showPassword
@@ -149,12 +125,33 @@ class Index extends React.Component {
 
     }
 
+    //Alernative method for componentWillReceiveProps
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.auth.isAuthenticated) {
+            if (nextProps.auth.user.type === "admin") {
+                nextProps.history.push("/ad");
+            }
+            if (nextProps.auth.user.type === "head") {
+                nextProps.history.push("/h");
+            }
+            if (nextProps.auth.user.type === "org") {
+                nextProps.history.push("/org");
+            }
+            if (nextProps.auth.user.type === "student") {
+                nextProps.history.push("/st");
+            }
+
+        }
+
+        if (nextProps.errors) {
+            return ({ errors: nextProps.errors })
+        }
+    }
+
     render() {
         const { classes } = this.props;
-        const password = this.state.password;
-        const showPassword = this.state.showPassword;
-        const errors = this.state.errors;
-        const handleClickShowPassword = this.handleClickShowPassword
+        const { password, showPassword, errors } = this.state;
+        const handleClickShowPassword = this.handleClickShowPassword;
         return (
             <div className={classes.root}>
                 <Container component="main" maxWidth="sm">
@@ -179,6 +176,7 @@ class Index extends React.Component {
                                 onChange={this.handleChange("username")}
                             />
                             <span className="red-text">
+                                {errors.username}
                                 {errors.usernotfound}
                             </span>
                             <TextField
@@ -208,6 +206,7 @@ class Index extends React.Component {
                             />
                             {/* Errors Showing */}
                             <span className="red-text">
+                                {errors.password}
                                 {errors.passwordincorrect}
                             </span>
                             <br></br>

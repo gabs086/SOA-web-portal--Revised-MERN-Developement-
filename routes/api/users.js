@@ -63,45 +63,47 @@ router.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     // Find user by email
-    Users.findOne({ username }).then(user => {
-        // Check if user exists
-        if (!user) {
-            return res.status(404).json({ usernotfound: "Username not found" });
-        }
-        // Check password
-        bcrypt.compare(password, user.password).then(isMatch => {
-            if (isMatch) {
-                // User matched
-                // Create JWT Payload
-                const payload = {
-                    id: user.id,
-                    username: user.username,
-                    //Added what type the user login
-                    type: user.type
-                };
-                // Sign token
-                jwt.sign(
-                    payload,
-                    keys.secretOrKey,
-                    {
-                        expiresIn: 31556926 // 1 year in seconds
-                    },
-                    (err, token) => {
-                        res.json({
-                            success: true,
-                            //added the usertype
-                            type: user.type,
-                            token: "Bearer " + token
-                        });
-                    }
-                );
-            } else {
-                return res
-                    .status(400)
-                    .json({ passwordincorrect: "Password incorrect" });
+    Users.findOne({ username })
+        .then(user => {
+            // Check if user exists
+            if (!user) {
+                return res.status(404).json({ usernotfound: "Username not found" });
             }
-        });
-    });
+            // Check password
+            bcrypt.compare(password, user.password).then(isMatch => {
+                if (isMatch) {
+                    // User matched
+                    // Create JWT Payload
+                    const payload = {
+                        id: user.id,
+                        username: user.username,
+                        //Added what type the user login
+                        type: user.type
+                    };
+                    // Sign token
+                    jwt.sign(
+                        payload,
+                        keys.secretOrKey,
+                        {
+                            expiresIn: 31556926 // 1 year in seconds
+                        },
+                        (err, token) => {
+                            res.json({
+                                success: true,
+                                //added the usertype
+                                type: user.type,
+                                token: "Bearer " + token
+                            });
+                        }
+                    );
+                } else {
+                    return res
+                        .status(400)
+                        .json({ passwordincorrect: "Password incorrect" });
+                }
+            });
+        })
+        .catch(err => console.log(err));
 });
 
 module.exports = router;

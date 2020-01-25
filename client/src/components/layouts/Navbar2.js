@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
 //Materialize Components
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
@@ -48,6 +50,8 @@ class Navbar2 extends Component {
         this.handleSettingsClose = this.handleSettingsClose.bind(this);
         this.handleSettingsOpen = this.handleSettingsOpen.bind(this);
 
+        this.onLogoutClick = this.onLogoutClick.bind(this);
+
         this.state = {
             // L&F Dropdown 
             anchorEl: null,
@@ -70,6 +74,12 @@ class Navbar2 extends Component {
 
     handleSettingsClose() {
         this.setState({ anchorDropDownEl: null });
+    }
+
+    onLogoutClick() {
+        if (window.confirm("Are you sure you want to logout?")) {
+            this.props.logoutUser();
+        }
     }
 
     render() {
@@ -99,8 +109,8 @@ class Navbar2 extends Component {
                 open={isSettingsOpen}
                 close={this.handleSettingsOpen}
             >
-                <MenuItem onClick={this.handleSettingsClose}>Settings Item 1 </MenuItem>
-                <MenuItem onClick={this.handleSettingsClose}>Settings Item 2 </MenuItem>
+                <MenuItem onClick={this.handleSettingsClose}>Downloadable </MenuItem>
+                <MenuItem onClick={this.onLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
 
@@ -149,7 +159,15 @@ class Navbar2 extends Component {
 }
 
 Navbar2.proptTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    // /Logout Func from the authActions
+    logoutUser: PropTypes.func.isRequired,
+    //object prop from the authReducer
+    auth: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Navbar2);
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, { logoutUser })(withStyles(styles)(Navbar2));

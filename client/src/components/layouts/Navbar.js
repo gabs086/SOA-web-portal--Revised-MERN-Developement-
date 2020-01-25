@@ -77,7 +77,7 @@ class Navbar extends Component {
         this.setState({ anchorDropDownEl: null });
     }
 
-    onLogoutClick(e) {
+    onLogoutClick() {
         if (window.confirm("Are you sure you want to logout?")) {
             this.props.logoutUser();
         }

@@ -175,7 +175,7 @@ class Index extends React.Component {
                                 autoFocus
                                 onChange={this.handleChange("username")}
                             />
-                            <span className="red-text">
+                            <span style={{ color: "red" }}>
                                 {errors.username}
                                 {errors.usernotfound}
                             </span>
@@ -205,7 +205,7 @@ class Index extends React.Component {
                                 }}
                             />
                             {/* Errors Showing */}
-                            <span className="red-text">
+                            <span style={{ color: "red" }}>
                                 {errors.password}
                                 {errors.passwordincorrect}
                             </span>

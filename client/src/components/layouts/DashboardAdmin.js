@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -86,7 +86,7 @@ const useStyles = makeStyles(theme => ({
 
 //Component
 //The argument of the DashboardAdmin if for redux component in react hooks
-function DashboardAdmin({ auth, logoutUser }) {
+function DashboardAdmin(props) {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -101,6 +101,15 @@ function DashboardAdmin({ auth, logoutUser }) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const onLogOutClick = useCallback(
+        (e) => {
+            if (window.confirm("Are you sure you want to Logout")) {
+                e.preventDefault();
+                props.logoutUser();
+            }
+        }, []
+    )
 
     return (
         <div className={classes.root}>
@@ -177,7 +186,7 @@ function DashboardAdmin({ auth, logoutUser }) {
 
                 {/* Item List 2 */}
                 <List>
-                    <ListItem button onClick={logoutUser}>
+                    <ListItem button onClick={onLogOutClick}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText>Logout</ListItemText>
                     </ListItem>
@@ -187,7 +196,7 @@ function DashboardAdmin({ auth, logoutUser }) {
             {/* for the main content */}
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-
+                {props.children}
             </main>
         </div>
     );

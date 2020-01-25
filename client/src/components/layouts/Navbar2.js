@@ -114,8 +114,7 @@ class Navbar2 extends Component {
 
                         <div className={classes.sectionDesktop}>
                             <Button color="inherit">Home</Button>
-                            <Button color="inherit">L&F</Button>
-                            <Button color="inherit">BatStateU Org Reports</Button>
+                            <Button color="inherit">Calendar</Button>
                             <Button color="inherit">Events</Button>
                             <Button
                                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}

@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
-// Materialize 
-import 'materialize-css/dist/css/materialize.min.css';
 
 //Redux
 import { Provider } from "react-redux";
@@ -50,10 +48,12 @@ function App() {
 
       <Router>
         <Route exact path="/" component={Index} />
+        <Route exact path="/sample" component={StudentIndex} />
+        <Route exact path="/sample2" component={OrgIndex} />
         {/* Private Routes  */}
         <Switch>
-          <PrivateRoute exact path="/st" component={StudentIndex} />
-          <PrivateRoute exact path="/org" component={OrgIndex} />
+          {/* <PrivateRoute exact path="/st" component={StudentIndex} /> */}
+          {/* <PrivateRoute exact path="/org" component={OrgIndex} /> */}
           <PrivateRoute exact path="/h" component={HeadIndex} />
           <PrivateRoute exact path="/ad" component={AdminIndex} />
         </Switch>

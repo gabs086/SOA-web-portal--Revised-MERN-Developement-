@@ -1,88 +1,156 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+//Materialize Components
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import SettingsIcon from '@material-ui/icons/Settings';
 
-import M from "materialize-css";// import materialize. M is the alias of materialize
+const styles = theme => ({
+    root: {
+        width: "100%",
+    },
+    title: {
+        display: 'none',
+        [theme.breakpoints.up("sm")]: {
+            display: "block"
+        },
+        flexGrow: 1
+    },
+    sectionDesktop: {
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'flex',
+        },
+    },
+    sectionMobile: {
+        display: 'flex',
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
+    },
+});
 
 //Navbar For Students
-export class Navbar extends Component {
-    componentDidMount() {
+class Navbar extends Component {
+    constructor(props) {
+        super(props)
 
-        //To make it float at right
-        const elem = document.querySelector(".sidenav");
-        M.Sidenav.init(elem, {
-            edge: "right",
-            inDuration: 250
-        });
+        this.handleMenuClose = this.handleMenuClose.bind(this);
+        this.handleActivityOpen = this.handleActivityOpen.bind(this);
 
-        //DropDown
-        const elems = document.querySelectorAll('.dropdown-trigger');
-        M.Dropdown.init(elems, {
-            alignment: 'left',
-        });
+        this.handleSettingsClose = this.handleSettingsClose.bind(this);
+        this.handleSettingsOpen = this.handleSettingsOpen.bind(this);
 
+        this.state = {
+            // L&F Dropdown 
+            anchorEl: null,
+            //Settings dropdown
+            anchorDropDownEl: null
+        }
+    }
+
+    handleActivityOpen(e) {
+        this.setState({ anchorEl: e.currentTarget });
+    }
+
+    handleMenuClose() {
+        this.setState({ anchorEl: null });
+    }
+
+    handleSettingsOpen(e) {
+        this.setState({ anchorDropDownEl: e.currentTarget });
+    }
+
+    handleSettingsClose() {
+        this.setState({ anchorDropDownEl: null });
     }
 
     render() {
+        const { classes } = this.props;
+        const { anchorEl, anchorDropDownEl } = this.state;
+        const isMenuOpen = Boolean(anchorEl);
+        const isSettingsOpen = Boolean(anchorDropDownEl);
+
+        const renderMenu = (
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={isMenuOpen}
+                close={this.handleMenuClose}
+            >
+                <MenuItem onClick={this.handleMenuClose}>Menu Item 1 </MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Menu Item 2 </MenuItem>
+            </Menu>
+        );
+
+        const renderSettings = (
+            <Menu
+                anchorEl={anchorDropDownEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={isSettingsOpen}
+                close={this.handleSettingsOpen}
+            >
+                <MenuItem onClick={this.handleSettingsClose}>Settings Item 1 </MenuItem>
+                <MenuItem onClick={this.handleSettingsClose}>Settings Item 2 </MenuItem>
+            </Menu>
+        )
+
         return (
-            <div>
-                <nav>
-                    <div className="nav-wrapper" style={{ backgroundColor: "#820101" }}>
-                        <div className="container">
-                            <Link to="#" className="brand-logo">SOA Web Portal</Link>
-                            {/* Hamburger Trigger */}
-                            <Link to="#" data-target="mobile-demo" className="sidenav-trigger right"><i className="material-icons">menu</i></Link>
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Toolbar style={{ background: "#8a1c1c" }}>
+                        <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                            SOA Web Portal
+                        </Typography>
 
-                            <ul id="nav-mobile" className="right hide-on-med-and-down">
-                                <li><Link to="#">Home</Link></li>
-
-                                <li><Link to="#" >
-                                    L & F
-                            </Link>
-                                </li>
-                                <li><Link to="#">BatStateU Org Reports</Link></li>
-                                <li><Link to="#">Events</Link></li>
-                                <li><Link to="#">Activities</Link></li>
-                                {/* DropDown */}
-                                <li>
-                                    <Link to="#" className="dropdown-trigger" data-target="dropdown-settings">
-                                        <i className="fa fa-cog fa-2x text-white" aria-hidden="true"></i>
-                                        <i className="material-icons right">arrow_drop_down</i>
-                                    </Link>
-                                </li>
-                            </ul>
-
+                        <div className={classes.sectionDesktop}>
+                            <Button color="inherit">Home</Button>
+                            <Button color="inherit">L&F</Button>
+                            <Button color="inherit">BatStateU Org Reports</Button>
+                            <Button color="inherit">Events</Button>
+                            <Button
+                                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                                aria-haspopup="true"
+                                onClick={this.handleActivityOpen}
+                                color="inherit"
+                            >Activities</Button>
+                            <Button
+                                color="inherit"
+                                aria-owns={isSettingsOpen ? 'material-appbar' : undefined}
+                                aria-haspopup="true"
+                                onClick={this.handleSettingsOpen}
+                            >
+                                <SettingsIcon />
+                            </Button>
                         </div>
-                    </div>
-                </nav>
 
-                {/* LostandFound DropDown */}
-                <ul id="dropdown-settings" className="dropdown-content">
-                    <li><Link to="#" className="black-text">Downloadable Files</Link></li>
-                    <li className="divider"></li>
-                    <li><Link to="#" className="black-text">Logout</Link></li>
+                        <div className={classes.sectionMobile}>
+                            <Button
+                                onClick={this.handleMobileMenuOpen} color="inherit">
+                                <MenuIcon />
+                            </Button>
+                        </div>
 
-                </ul>
-
-
-
-
-                <ul className="sidenav" id="mobile-demo" edge="right">
-                    <li><Link to="#">Home</Link></li>
-                    {/* DropDown */}
-                    <li><Link to="#">Lost & Found</Link></li>
-                    <li><Link to="#">BatStateU Org Reports</Link></li>
-                    <li><Link to="#">Events</Link></li>
-                    {/* DropDown */}
-                    <li><Link to="#">Activities</Link></li>
-                    <li className="divider"></li>
-                    <br></br>
-                    <li><Link to="#" className="black-text">Downloadable Files</Link></li>
-                    <li><Link to="#" className="black-text">Logout</Link></li>
-
-                </ul>
+                    </Toolbar>
+                </AppBar>
+                {renderMenu}
+                {renderSettings}
             </div>
         )
     }
 }
 
-export default Navbar;
+Navbar.proptTypes = {
+    classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(Navbar);

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -102,14 +102,11 @@ function DashboardAdmin(props) {
         setOpen(false);
     };
 
-    const onLogOutClick = useCallback(
-        (e) => {
-            if (window.confirm("Are you sure you want to Logout")) {
-                e.preventDefault();
-                props.logoutUser();
-            }
-        }, []
-    )
+    const onLogOutClick = e => {
+        e.preventDefault();
+        if (window.confirm("Are you sure to Logout?"))
+            props.logoutUser();
+    }
 
     return (
         <div className={classes.root}>

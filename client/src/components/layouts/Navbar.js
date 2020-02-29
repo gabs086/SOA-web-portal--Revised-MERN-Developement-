@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 
 const styles = theme => ({
@@ -95,7 +96,7 @@ class Navbar extends Component {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isMenuOpen}
-                close={this.handleMenuClose}
+                onClose={this.handleMenuClose}
             >
                 <MenuItem onClick={this.handleMenuClose}>Menu Item 1 </MenuItem>
                 <MenuItem onClick={this.handleMenuClose}>Menu Item 2 </MenuItem>
@@ -108,7 +109,7 @@ class Navbar extends Component {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isSettingsOpen}
-                close={this.handleSettingsOpen}
+                onClose={this.handleSettingsClose}
             >
                 <MenuItem onClick={this.handleSettingsClose}>Downloadable Files </MenuItem>
                 <MenuItem onClick={this.onLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
@@ -133,7 +134,9 @@ class Navbar extends Component {
                                 aria-haspopup="true"
                                 onClick={this.handleActivityOpen}
                                 color="inherit"
-                            >Activities</Button>
+                            >Activities
+                            <ArrowDropDownIcon />
+                            </Button>
                             <Button
                                 color="inherit"
                                 aria-owns={isSettingsOpen ? 'material-appbar' : undefined}

@@ -15,6 +15,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+//Redux components
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
 
 const drawerWidth = 240;
 
@@ -79,7 +84,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function DashboardHead() {
+function DashboardHead(props) {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -94,6 +99,12 @@ export default function DashboardHead() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const onLogOutClick = e => {
+        e.preventDefault();
+        if (window.confirm("Are you sure to Logout?"))
+            props.logoutUser();
+    }
 
     return (
         <div className={classes.root}>
@@ -166,13 +177,32 @@ export default function DashboardHead() {
                         <ListItemText>List 2</ListItemText>
                     </ListItem>
                 </List>
+
+                <Divider />
+
+                {/* Item List 2 */}
+                <List>
+                    <ListItem button onClick={onLogOutClick}>
+                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                        <ListItemText>Logout</ListItemText>
+                    </ListItem>
+                </List>
             </Drawer>
 
             {/* for the main content */}
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-
+                {props.children}
             </main>
         </div>
     );
 }
+
+//Redux State connection 
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+//Dipatch proptypes(React Hooks) 
+const mapDispatchToProps = { logoutUser };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardHead); 

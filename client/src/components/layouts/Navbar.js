@@ -156,7 +156,7 @@ class Navbar extends Component {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
                             Are you you want to Logout?
-            </DialogContentText>
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.onHandleLogoutClickClose} variant="outlined" color="primary">

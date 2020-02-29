@@ -17,12 +17,23 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 //Redux components
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 
 const drawerWidth = 240;
+
+const Transition = props => {
+    return <Slide direction="up" {...props} />
+}
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -91,26 +102,63 @@ function DashboardHead(props) {
 
     //States
     const [open, setOpen] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
 
     // onclick menu toggle
-    const handleDrawerOpen = () => {
+    const handleDrawerOpen = _ => {
         setOpen(true);
     };
 
-    const handleDrawerClose = () => {
+    const handleDrawerClose = _ => {
         setOpen(false);
     };
 
+    const onModalLogoutClick = _ => {
+        setModalOpen(true)
+    }
+
+    const onHandleLogoutClickClose = _ => {
+        setModalOpen(false)
+    }
+
     const onLogOutClick = e => {
-        e.preventDefault();
-        if (window.confirm("Are you sure to Logout?"))
-            props.logoutUser();
+        props.logoutUser();
     }
 
     //Name of user
     const { user } = props.auth;
     return (
         <div className={classes.root}>
+            {/* Modal  */}
+            <Dialog
+                open={modalOpen}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={onHandleLogoutClickClose}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">
+                    {"Logging Out"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Are you you want to Logout?
+                        </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onHandleLogoutClickClose} variant="outlined" color="primary">
+                        Cancel
+                        </Button>
+                    <Button onClick={onLogOutClick} variant="outlined" color="secondary">
+                        Logout
+                               </Button>
+                </DialogActions>
+            </Dialog>
+
+
+
+            {/* Dashboard  */}
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -185,7 +233,7 @@ function DashboardHead(props) {
 
                 {/* Item List 2 */}
                 <List>
-                    <ListItem button onClick={onLogOutClick}>
+                    <ListItem button onClick={onModalLogoutClick}>
                         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
                         <ListItemText>Logout</ListItemText>
                     </ListItem>

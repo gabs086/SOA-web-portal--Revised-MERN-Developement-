@@ -14,6 +14,12 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 
 const styles = theme => ({
@@ -41,6 +47,10 @@ const styles = theme => ({
     },
 });
 
+const Transition = props => {
+    return <Slide direction="up" {...props} />
+}
+
 //Navbar For Students
 class Navbar extends Component {
     constructor(props) {
@@ -53,12 +63,16 @@ class Navbar extends Component {
         this.handleSettingsOpen = this.handleSettingsOpen.bind(this);
 
         this.onLogoutClick = this.onLogoutClick.bind(this);
+        this.onModalLogoutClick = this.onModalLogoutClick.bind(this);
+        this.onHandleLogoutClickClose = this.onHandleLogoutClickClose.bind(this);
 
         this.state = {
             // L&F Dropdown 
             anchorEl: null,
             //Settings dropdown
-            anchorDropDownEl: null
+            anchorDropDownEl: null,
+            //logout modal
+            modalLogout: false
         }
     }
 
@@ -78,15 +92,24 @@ class Navbar extends Component {
         this.setState({ anchorDropDownEl: null });
     }
 
+    // Modal Logout Function 
+    onModalLogoutClick() {
+        this.setState({ modalLogout: true })
+        this.setState({ anchorDropDownEl: null });
+    }
+
+    onHandleLogoutClickClose() {
+        this.setState({ modalLogout: false })
+    }
+
+    // Logout Function
     onLogoutClick() {
-        if (window.confirm("Are you sure you want to logout?")) {
-            this.props.logoutUser();
-        }
+        this.props.logoutUser();
     }
 
     render() {
         const { classes } = this.props;
-        const { anchorEl, anchorDropDownEl } = this.state;
+        const { anchorEl, anchorDropDownEl, modalLogout } = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isSettingsOpen = Boolean(anchorDropDownEl);
 
@@ -112,12 +135,41 @@ class Navbar extends Component {
                 onClose={this.handleSettingsClose}
             >
                 <MenuItem onClick={this.handleSettingsClose}>Downloadable Files </MenuItem>
-                <MenuItem onClick={this.onLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
+                <MenuItem onClick={this.onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
 
         return (
             <div className={classes.root}>
+                {/* Modal */}
+                <Dialog
+                    open={modalLogout}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={this.onHandleLogoutClickClose}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="alert-dialog-slide-title">
+                        {"Logging Out"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Are you you want to Logout?
+            </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.onHandleLogoutClickClose} variant="outlined" color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.onLogoutClick} variant="outlined" color="secondary">
+                            Logout
+                               </Button>
+                    </DialogActions>
+                </Dialog>
+
+
+                {/* Navbar  */}
                 <AppBar position="static">
                     <Toolbar style={{ background: "#8a1c1c" }}>
                         <Typography className={classes.title} variant="h6" color="inherit" noWrap>

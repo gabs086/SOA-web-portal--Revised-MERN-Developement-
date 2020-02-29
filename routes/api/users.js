@@ -80,7 +80,7 @@ router.post("/login", (req, res) => {
                         //Added what type the user login
                         type: user.type,
                         // Campus of the user (Whether its student, org, head or admin)
-                        type: user.campus
+                        campus: user.campus
                     };
                     // Sign token
                     jwt.sign(

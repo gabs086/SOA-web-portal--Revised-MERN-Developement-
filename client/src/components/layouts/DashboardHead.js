@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -108,9 +109,6 @@ function DashboardHead(props) {
 
     //Name of user
     const { user } = props.auth;
-
-    console.log({ user });
-
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -155,7 +153,7 @@ function DashboardHead(props) {
                 {/* SideNav Drawer Components */}
                 <div className={classes.toolbar}>
 
-                    <Typography>SOA Head -  </Typography>
+                    <Box fontSize={12} m={1}>SOA Head - {user.campus}</Box>
 
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <MenuIcon /> : <MenuIcon />}

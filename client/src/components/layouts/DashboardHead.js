@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -106,6 +106,11 @@ function DashboardHead(props) {
             props.logoutUser();
     }
 
+    //Name of user
+    const { user } = props.auth;
+
+    console.log({ user });
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -150,7 +155,7 @@ function DashboardHead(props) {
                 {/* SideNav Drawer Components */}
                 <div className={classes.toolbar}>
 
-                    <Typography>SOA Head - </Typography>
+                    <Typography>SOA Head -  </Typography>
 
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <MenuIcon /> : <MenuIcon />}

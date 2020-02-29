@@ -78,7 +78,9 @@ router.post("/login", (req, res) => {
                         id: user.id,
                         username: user.username,
                         //Added what type the user login
-                        type: user.type
+                        type: user.type,
+                        // Campus of the user (Whether its student, org, head or admin)
+                        type: user.campus
                     };
                     // Sign token
                     jwt.sign(
@@ -92,6 +94,8 @@ router.post("/login", (req, res) => {
                                 success: true,
                                 //added the usertype
                                 type: user.type,
+                                // added the campus of the user 
+                                campus: user.campus,
                                 token: "Bearer " + token
                             });
                         }

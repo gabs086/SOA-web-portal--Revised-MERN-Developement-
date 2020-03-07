@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const cors = require("cors");
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
@@ -13,15 +13,12 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
+app.use(cors());
 
 //DB configuration
-const db = require("./config/keys").mongoURI;
+// const db = require("./config/keys").mongoURI;
 //DB connection
-mongoose.connect(
-    db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
-)
-    .then(() => console.log("MongoDB successfully connected"))
-    .catch(err => console.log(err));
+
 
 //PORT configuration
 const port = process.env.PORT || 5000;

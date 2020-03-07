@@ -19,8 +19,13 @@ const Users = require('../../models/user.model');
 router.post('/register', (req, res) => {
 
     //Checking of similar username
-    Users.findOne({ username: req.body.username })
+    Users.findOne({ 
+        where:{
+            username: req.body.username
+        }
+         })
         .then(user => {
+            const today = new Date();
 
             if (user) {
                 return res.status(400).json({ username: "Username exist" })
@@ -31,7 +36,8 @@ router.post('/register', (req, res) => {
                     username: req.body.username,
                     password: req.body.password,
                     type: req.body.type,
-                    campus: req.body.campus
+                    campus: req.body.campus,
+                    created_at: today
                 });
 
                 bcrypt.genSalt(10, (err, salt) => {
@@ -63,7 +69,11 @@ router.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     // Find user by email
-    Users.findOne({ username })
+    Users.findOne({ 
+        where: {
+            username : req.body.username
+        }
+        })
         .then(user => {
             // Check if user exists
             if (!user) {

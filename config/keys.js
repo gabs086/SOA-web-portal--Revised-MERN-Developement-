@@ -1,1 +1,1 @@
-module.exports = { ssecretOrKey: "secret" } 
+module.exports = { secretOrKey: "secret" } 

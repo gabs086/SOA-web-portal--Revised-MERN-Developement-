@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -7,17 +8,26 @@ const users = require("./routes/api/users");
 
 //Router
 const app = express();
+//Sessions
+let sess = {
+    secret: 'soa-portal-secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}
+}
+// Session for production and test development 
+if(app.get('env') === 'production'){
+    app.set('trust proxy', 1); 
+    sess.cookie.secure = true;
+}
+app.use(session(sess));
 
 //Middleware
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(bodyParser.json());
 app.use(cors());
-
-//DB configuration
-// const db = require("./config/keys").mongoURI;
-//DB connection
+app.use(bodyParser.json());
 
 
 //PORT configuration

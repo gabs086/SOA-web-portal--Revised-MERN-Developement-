@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 //Materialize Components
 import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +21,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+
 
 
 const styles = theme => ({
@@ -45,6 +55,11 @@ const styles = theme => ({
             display: 'none',
         },
     },
+
+    //Drawer style components
+    list:{
+        width: 250,
+    }
 });
 
 const Transition = props => {
@@ -66,14 +81,26 @@ class Navbar extends Component {
         this.onModalLogoutClick = this.onModalLogoutClick.bind(this);
         this.onHandleLogoutClickClose = this.onHandleLogoutClickClose.bind(this);
 
+        this.toggleDrawer = this.toggleDrawer.bind(this);
+
         this.state = {
             // L&F Dropdown 
             anchorEl: null,
             //Settings dropdown
             anchorDropDownEl: null,
             //logout modal
-            modalLogout: false
+            modalLogout: false,
+
+            // State for toggling the drawer
+            right: false
         }
+    }
+
+    //Drawer Toggle
+    toggleDrawer = (side, open) => () =>{
+        this.setState({
+            [side]: open 
+        });
     }
 
     handleActivityOpen(e) {
@@ -113,6 +140,7 @@ class Navbar extends Component {
         const isMenuOpen = Boolean(anchorEl);
         const isSettingsOpen = Boolean(anchorDropDownEl);
 
+        // Activities Mobile Components
         const renderMenu = (
             <Menu
                 anchorEl={anchorEl}
@@ -125,7 +153,7 @@ class Navbar extends Component {
                 <MenuItem onClick={this.handleMenuClose}>Menu Item 2 </MenuItem>
             </Menu>
         );
-
+            // Setings Monile component
         const renderSettings = (
             <Menu
                 anchorEl={anchorDropDownEl}
@@ -138,6 +166,29 @@ class Navbar extends Component {
                 <MenuItem onClick={this.onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
+
+        //Drawer components
+        const sideList = (
+            <div className={classes.list}>
+              <List>
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+              <Divider />
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          );
 
         return (
             <div className={classes.root}>
@@ -199,12 +250,26 @@ class Navbar extends Component {
                             </Button>
                         </div>
 
+                        {/* Drawer Mobile components  */}
                         <div className={classes.sectionMobile}>
                             <Button
-                                onClick={this.handleMobileMenuOpen} color="inherit">
+                                onClick={this.toggleDrawer('right',true)} color="inherit">
                                 <MenuIcon />
                             </Button>
                         </div>
+                        {/* Drawer Toggler  */}
+                        <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer('right',false)}>
+                        <div
+                            tabIndex={0}
+                            role="button"
+                            onClick={this.toggleDrawer('right', false)}
+                            onKeyDown={this.toggleDrawer('right', false)}
+                        >
+                            {sideList}
+                        </div>
+
+                        </Drawer>
+                        
 
                     </Toolbar>
                 </AppBar>

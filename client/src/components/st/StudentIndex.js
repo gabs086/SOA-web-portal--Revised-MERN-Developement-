@@ -103,10 +103,9 @@ class StudentIndex extends Component {
                         </ListItemLink>
                     </List>
                 </div>
-
                 <center>
                 <Button variant="outlined" color="secondary" className={classes.button}>
-                    Secondaryqweqweqwe
+                    Secondary
                 </Button>
                 </center>
 

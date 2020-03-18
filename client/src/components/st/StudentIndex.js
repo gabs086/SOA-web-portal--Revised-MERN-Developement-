@@ -17,6 +17,9 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 
 import Button from '@material-ui/core/Button';
 
+import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
+import EventIcon from '@material-ui/icons/Event';
+
 // Material UI styles 
 const styles = theme => ({
     root: {
@@ -75,7 +78,7 @@ class StudentIndex extends Component {
                             {/* L ist 2  */}
                         <ListItem button>
                             <ListItemIcon>
-                                <DraftsIcon />
+                                <ViewHeadlineIcon />
                             </ListItemIcon>
                             <ListItemText primary="View BatStateU Organizational Reports" />
                             </ListItem>

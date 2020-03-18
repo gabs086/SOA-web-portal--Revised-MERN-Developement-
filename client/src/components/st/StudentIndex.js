@@ -19,6 +19,8 @@ import Button from '@material-ui/core/Button';
 
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import EventIcon from '@material-ui/icons/Event';
+import LocalActivityIcon from '@material-ui/icons/LocalActivity';
+import AssignmentReturnedIcon from '@material-ui/icons/AssignmentReturned';
 
 // Material UI styles 
 const styles = theme => ({
@@ -86,21 +88,21 @@ class StudentIndex extends Component {
 
                         <ListItemLink href="#simple-list">
                         <ListItemIcon>
-                                <DraftsIcon />
+                                <EventIcon />
                             </ListItemIcon>
                         <ListItemText primary="View Calendar of Events" />
                         </ListItemLink>
 
                         <ListItemLink href="#simple-list">
                         <ListItemIcon>
-                                <DraftsIcon />
+                                <LocalActivityIcon />
                             </ListItemIcon>
                         <ListItemText primary="Join to activities led by Student Organizations" />
                         </ListItemLink>
 
                         <ListItemLink href="#simple-list">
                         <ListItemIcon>
-                                <DraftsIcon />
+                                <AssignmentReturnedIcon />
                             </ListItemIcon>
                         <ListItemText primary="Download Files you need for getting the service of the university" />
                         </ListItemLink>
@@ -108,7 +110,7 @@ class StudentIndex extends Component {
                 </div>
                 <center>
                 <Button variant="outlined" color="secondary" className={classes.button}>
-                    Secondary
+                    Learn More...
                 </Button>
                 </center>
 

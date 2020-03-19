@@ -1,10 +1,13 @@
+// /Dependencies 
 const express = require('express');
 const session = require('express-session');
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
+//API Routes
 const users = require("./routes/api/users");
+const laf = require('./routes/api/laf');
 
 //Router
 const app = express();
@@ -40,6 +43,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
+app.use("/api/reportlostitem", laf);
 
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

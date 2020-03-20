@@ -43,6 +43,7 @@ router.post('/reportlostitem', (req,res) => {
     const details = req.body.details;
     const contact = req.body.contact;
     const status = "Unfound/Unclaimed";
+    const seen = 0;
 
     const newLafReports = new LafReports({
         name,
@@ -54,12 +55,12 @@ router.post('/reportlostitem', (req,res) => {
         details,
         contact,
         status,
+        seen
     });
 
     newLafReports.save()
-    .then(lafreport =>{ 
-        res.json(lafreport);
-        console.log(lafreport);
+    .then( _ =>{ 
+        res.json('Reports Sent');
     })
     .catch(err => res.status(500).json(err));
 

@@ -49,6 +49,9 @@ module.exports = db.sequelize.define(
         status: {
             type: Sequelize.STRING
         },
+        seen:{
+            type: Sequelize.INTEGER
+        },
         created_at: {
             type: Sequelize.DATEONLY,
             defaultValue: Sequelize.NOW

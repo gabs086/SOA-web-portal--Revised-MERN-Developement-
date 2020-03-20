@@ -228,7 +228,9 @@ class Navbar extends Component {
 
                         <div className={classes.sectionDesktop}>
                             <Button color="inherit">Home</Button>
-                            <Button color="inherit">L&F</Button>
+                            <Button color="inherit" href="/st/lostandfoundpage">
+                                L&F
+                            </Button>
                             <Button color="inherit">BatStateU Org Reports</Button>
                             <Button color="inherit">Events</Button>
                             <Button

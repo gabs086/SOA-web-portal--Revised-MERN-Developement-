@@ -5,9 +5,11 @@ const isEmpty = require('is-empty');
 const validateLostAndFoundInput = data => {
     let errors = {}
     // Name of the student 
-    data.studentname = !isEmpty(data.studentname) ? data.studentname : '';
+    data.name = !isEmpty(data.name) ? data.name : '';
     // Students SR-Code 
-    data.sr_code = !isEmpty(data.sr_code) ? data.sr_code : '';
+    data.src = !isEmpty(data.src) ? data.src : '';
+    // College year of students 
+    data.yr = !isEmpty(data.yr) ? data.yr : '' ;
     // Campus of their school 
     data.campus = !isEmpty(data.campus) ? data.campus : '';
     // What Department 
@@ -19,8 +21,9 @@ const validateLostAndFoundInput = data => {
     // Contact if its or Number 
     data.contact = !isEmpty(data.contact) ? data.contact : '';
 
-    const studentName = data.studentname;
-    const srCode = data.sr_code;
+    const studentName = data.name;
+    const src= data.src;
+    const yr = data.yr;
     const campus = data.campus;
     const department = data.department;
     const course = data.course;
@@ -29,10 +32,13 @@ const validateLostAndFoundInput = data => {
 
 
     if(Validator.isEmpty(studentName))
-        errors.studentname = "Your Name is Required. Please input your name";
+        errors.name = "Your Name is Required. Please input your name";
     
-    if(Validator.isEmpty(srCode))
-        errors.sr_code = "Your SR-CODE is required. Please input your SR-CODE";
+    if(Validator.isEmpty(src))
+        errors.SRcode = "Your SR-CODE is required. Please input your SR-CODE";
+    
+    if(Validator.isEmpty(yr))
+        errors.year = "Your year of college is required. Please input your college year";
 
     if(Validator.isEmpty(campus))
         errors.campus = "Please include what campus in BatStateU are you in";
@@ -48,12 +54,10 @@ const validateLostAndFoundInput = data => {
 
     if(Validator.isEmpty(contact)){
         errors.contact = "Please include your contact details";
-    } 
-        else if(!Validator.isEmail(contact)){
-            errors.contact = "Your contact must be an email";
-        }
-        else if(!Validator.isInt(contact)){
-            errors.contact = "Your contact must be a phone number of yours";
+    }
+
+    if(!Validator.isEmail(contact) && !Validator.isInt(contact)){
+            errors.contact = "Your contact must be an email or a phone number you have";
         }
        
     return { errors, isValid: isEmpty(errors) };

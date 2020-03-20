@@ -43,7 +43,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
-app.use("/api/reportlostitem", laf);
+app.use("/api/laf", laf);
 
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

@@ -34,9 +34,9 @@ router.post('/reportlostitem', (req,res) => {
     }
 
     // All the request made by the user 
-    const studentName = req.body.studentname;
-    const srCode = req.body.sr_code;
-    const studentYear = req.body.studentyear;
+    const name = req.body.name;
+    const src = req.body.src;
+    const yr = req.body.yr;
     const campus = req.body.campus;
     const department = req.body.department;
     const course = req.body.course;
@@ -45,9 +45,9 @@ router.post('/reportlostitem', (req,res) => {
     const status = "Unfound/Unclaimed";
 
     const newLafReports = new LafReports({
-        studentName,
-        srCode,
-        studentYear,
+        name,
+        src,
+        yr,
         campus,
         department,
         course,
@@ -55,8 +55,12 @@ router.post('/reportlostitem', (req,res) => {
         contact,
         status,
     });
+
     newLafReports.save()
-    .then(lafreport => res.json(lafreport))
+    .then(lafreport =>{ 
+        res.json(lafreport);
+        console.log(lafreport);
+    })
     .catch(err => res.status(500).json(err));
 
 });
@@ -64,8 +68,8 @@ router.post('/reportlostitem', (req,res) => {
 //@rout GET api/laf/getreportlostitem
 //@desc GET all reports in lost and found;
 //@access PUBLIC
-router.get('/getreportlostitem', async (req, res) => {
-    const lafreport = await LafReports.find();
-});
+// router.get('/getreportlostitem', async (req, res) => {
+//     const lafreport = await LafReports.find();
+// });
 
 module.exports = router;

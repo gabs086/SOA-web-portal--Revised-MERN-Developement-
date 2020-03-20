@@ -16,19 +16,19 @@ const Sequelize = require('sequelize');
 const db = require('../config/db');
 
 module.exports = db.sequelize.define(
-    'lostitemsreport',{
+    'lostitemsreports',{
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement:true
         },
-        studentname: {
+        name: {
             type:Sequelize.STRING
         },
-        sr_code: {
+        src: {
             type: Sequelize.STRING
         },
-        studentyear: {
+        yr: {
             type: Sequelize.STRING
         },
         campus: {

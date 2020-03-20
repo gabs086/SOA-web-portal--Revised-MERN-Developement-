@@ -8,9 +8,14 @@ import store from "./store";
 
 //Components
 import Index from './components/Index';
+
 import StudentIndex from './components/st/StudentIndex';
+import LostAndFoundContent from './components/st/LostAndFoundContent';
+
 import OrgIndex from './components/org/OrgIndex';
+
 import HeadIndex from './components/h/HeadIndex';
+
 import AdminIndex from './components/ad/AdminIndex';
 
 //PrivateRoute
@@ -48,11 +53,20 @@ function App() {
 
       <Router>
         <Route exact path="/" component={Index} />
+
         {/* Private Routes  */}
         <Switch>
+          {/* Student Route Pages  */}
           <PrivateRoute exact path="/st" component={StudentIndex} />
+          <PrivateRoute exact path="/st/lostandfoundpage" component={LostAndFoundContent} />
+
+          {/* Student Organization Route Pages  */}
           <PrivateRoute exact path="/org" component={OrgIndex} />
+
+          {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />
+
+          {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />
         </Switch>
 

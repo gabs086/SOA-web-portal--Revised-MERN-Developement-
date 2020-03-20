@@ -22,6 +22,14 @@ const LafReports = require('../../models/laf.model');
 const validateLostAndFoundInput = require('../../validation/laf');
 
 
+//@rout GET api/laf/getreportlostitem
+//@desc GET all reports in lost and found;
+//@access PUBLIC
+// router.get('/getreportlostitem', async (req, res) => {
+//     const lafreport = await LafReports.find();
+// });
+
+
 //@rout POST api/laf/reportlostitem
 //@desc Report lost item via lost item report form
 //@access  Public
@@ -66,11 +74,5 @@ router.post('/reportlostitem', (req,res) => {
 
 });
 
-//@rout GET api/laf/getreportlostitem
-//@desc GET all reports in lost and found;
-//@access PUBLIC
-// router.get('/getreportlostitem', async (req, res) => {
-//     const lafreport = await LafReports.find();
-// });
 
 module.exports = router;

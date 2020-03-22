@@ -78,7 +78,7 @@ class LostAndFoundContent extends Component {
                                                 </Typography>
                                             </CardContent>
                                             <CardActions>
-                                                <Button size="small" variant="outlined" color="secondary">
+                                                <Button href="/st/reportlostitem" size="small" variant="outlined" color="secondary">
                                                 File a Report
                                                 </Button>
                                             </CardActions>

@@ -11,6 +11,7 @@ import Index from './components/Index';
 
 import StudentIndex from './components/st/StudentIndex';
 import LostAndFoundContent from './components/st/LostAndFoundContent';
+import LostItemForm from './components/st/LostItemForm';
 
 import OrgIndex from './components/org/OrgIndex';
 
@@ -59,6 +60,7 @@ function App() {
           {/* Student Route Pages  */}
           <PrivateRoute exact path="/st" component={StudentIndex} />
           <PrivateRoute exact path="/st/lostandfoundpage" component={LostAndFoundContent} />
+          <PrivateRoute exact path="/st/reportlostitem" component={LostItemForm} />
 
           {/* Student Organization Route Pages  */}
           <PrivateRoute exact path="/org" component={OrgIndex} />

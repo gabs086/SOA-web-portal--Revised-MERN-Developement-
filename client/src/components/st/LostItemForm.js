@@ -49,7 +49,8 @@ const styles = theme => ({
       },
       submit:{
         marginTop: theme.spacing(3),
-      }
+      },
+     
 });
 
 
@@ -65,7 +66,10 @@ class LostItemForm extends Component {
             name: '',
             src: '',
             yr: '',
-            campusDefaultValue: '',
+            campus: '',
+            department: '',
+            course:'',
+            details:'',
 
             // Data For fetching the campuses
             campuses:[],
@@ -102,29 +106,18 @@ class LostItemForm extends Component {
     handleSubmit(e){
         e.preventDefault();
 
-        const { name, src, yr } = this.state;
+        const { name, src, yr, campus, department, course, details } = this.state;
         const newLostReport = {
-            name, src, yr
+            name, src, yr, campus, department, course, details
         };
 
         console.log(newLostReport);
     }
 
     render(){
-        let campusSelect;
-        {this.state.loading 
-            ?
-            campusSelect = <MenuItem></MenuItem>
-            :
-            campusSelect = this.state.campuses.map((campus, id)=> {
-                return(
-                <MenuItem key={id} value={campus.campusname}>{campus.campusname}</MenuItem>
-                )
-            })
-        }
 
         const { classes } = this.props;
-        const { yr, campusDefaultValue } = this.state;
+        const { yr, campus, details } = this.state;
         const previousPage = this.previousPage;
         const handleChange = this.handleChange;
         const handleSubmit = this.handleSubmit;
@@ -202,19 +195,71 @@ class LostItemForm extends Component {
                                     <FormControl className={classes.formControl}>
 
                                     <InputLabel htmlFor="campus-simple">Campus</InputLabel>
-                                    <Select
-                                        value={campusDefaultValue}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                        name: 'campus',
-                                        id: 'campus-simple',
-                                        }}
-                                    >
-                                        {campusSelect}
+                                   
+                            <Select
+                                value={campus}
+                                onChange={handleChange}
+                                inputProps={{
+                                name: 'campus',
+                                id: 'campus-simple',
+                                }}
+                            >
+
+                                {this.state.loading ?
+
+                                <MenuItem></MenuItem> :
+
+                                this.state.campuses.map((campus,id) => {
+                                    return ( <MenuItem key={id} value={campus.campusname}>{campus.campusname}</MenuItem>)
+                                })   
+                            }
+                           
+
+                            </Select>
                                             
-                                    </Select>
                                     </FormControl>
 
+                                </Grid>
+
+                                {/* Department TextField */}
+                                <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    id="department"
+                                    name="department"
+                                    label="Department"
+                                    fullWidth
+                                    autoComplete="department"
+                                    onChange={handleChange}
+                                />  
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    id="course"
+                                    name="course"
+                                    label="Course"
+                                    fullWidth
+                                    autoComplete="Course"
+                                    onChange={handleChange}
+                                />  
+                                </Grid>
+
+                                {/* Details Text Field  */}
+                                <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    id="details"
+                                    name="details"
+                                    label="Details of Lost item"
+                                    multiline
+                                    rowsMax="4"
+                                    value={details}
+                                    onChange={handleChange}
+                                    className={classes.formControl}
+                                    margin="normal"
+                            />
                                 </Grid>
 
                                 <Button

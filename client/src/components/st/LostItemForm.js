@@ -50,7 +50,9 @@ const styles = theme => ({
       submit:{
         marginTop: theme.spacing(3),
       }
-})
+});
+
+
 
 class LostItemForm extends Component {
     constructor(props){
@@ -63,9 +65,11 @@ class LostItemForm extends Component {
             name: '',
             src: '',
             yr: '',
+            campusDefaultValue: '',
 
             // Data For fetching the campuses
-            campuses:[]
+            campuses:[],
+            loading: true
 
         }
 
@@ -75,11 +79,14 @@ class LostItemForm extends Component {
         axios.get('/api/campuses')
         .then(res => {
             this.setState({
-                campuses: res.data
-            })
+                campuses: res.data,
+                loading: false
+            });
         })
         .catch(err => console.log(err));
     }
+
+  
 
     handleChange(e){
         this.setState({
@@ -104,12 +111,23 @@ class LostItemForm extends Component {
     }
 
     render(){
+        let campusSelect;
+        {this.state.loading 
+            ?
+            campusSelect = <MenuItem></MenuItem>
+            :
+            campusSelect = this.state.campuses.map((campus, id)=> {
+                return(
+                <MenuItem key={id} value={campus.campusname}>{campus.campusname}</MenuItem>
+                )
+            })
+        }
+
         const { classes } = this.props;
-        const { yr } = this.state;
+        const { yr, campusDefaultValue } = this.state;
         const previousPage = this.previousPage;
         const handleChange = this.handleChange;
         const handleSubmit = this.handleSubmit;
-        console.log(this.state.campuses);
         return(
             <div className={classes.root}>
 
@@ -130,6 +148,7 @@ class LostItemForm extends Component {
 
                         <Grid container spacing={3}>
 
+                            {/* Ful Name Text Fiel  */}
                         <Grid item xs={12} md={12}>
                                 <TextField
                                     required
@@ -142,6 +161,7 @@ class LostItemForm extends Component {
                                 />
                                 </Grid>
 
+                                {/* SR-Code TextField  */}
                                 <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
@@ -155,7 +175,7 @@ class LostItemForm extends Component {
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>
-
+                                    {/* College Year TextField */}
                                 <FormControl className={classes.formControl}>
                                         <InputLabel htmlFor="yr-simple">College Year</InputLabel>
                                         <Select
@@ -174,6 +194,26 @@ class LostItemForm extends Component {
                                             <MenuItem value={'Longer than 5th'}>Longer than 5th</MenuItem>
                                         </Select>
                                         </FormControl>
+
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    {/* Campuses TextField */}
+                                    <FormControl className={classes.formControl}>
+
+                                    <InputLabel htmlFor="campus-simple">Campus</InputLabel>
+                                    <Select
+                                        value={campusDefaultValue}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                        name: 'campus',
+                                        id: 'campus-simple',
+                                        }}
+                                    >
+                                        {campusSelect}
+                                            
+                                    </Select>
+                                    </FormControl>
 
                                 </Grid>
 

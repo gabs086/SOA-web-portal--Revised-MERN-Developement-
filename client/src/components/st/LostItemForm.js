@@ -12,6 +12,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
 const styles = theme => ({
     root: {
@@ -46,6 +47,9 @@ const styles = theme => ({
         // margin: theme.spacing.unit,
         minWidth: '100% ',
       },
+      submit:{
+        marginTop: theme.spacing(3),
+      }
 })
 
 class LostItemForm extends Component {
@@ -60,8 +64,21 @@ class LostItemForm extends Component {
             src: '',
             yr: '',
 
+            // Data For fetching the campuses
+            campuses:[]
+
         }
 
+    }
+
+    componentDidMount(){
+        axios.get('/api/campuses')
+        .then(res => {
+            this.setState({
+                campuses: res.data
+            })
+        })
+        .catch(err => console.log(err));
     }
 
     handleChange(e){
@@ -92,6 +109,7 @@ class LostItemForm extends Component {
         const previousPage = this.previousPage;
         const handleChange = this.handleChange;
         const handleSubmit = this.handleSubmit;
+        console.log(this.state.campuses);
         return(
             <div className={classes.root}>
 
@@ -164,7 +182,7 @@ class LostItemForm extends Component {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                                // className={classes.submit}
+                                className={classes.submit}
                             >
                                 submit
                             </Button>

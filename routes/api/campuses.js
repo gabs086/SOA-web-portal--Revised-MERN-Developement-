@@ -7,11 +7,17 @@ const Campuses = require('../../models/campuses.model');
 //@route GET /api/campuses/
 //@DESC API for getting all the campuse
 //@access Private. Devs only
-router.get('/', (req,res) => {
-    Campuses.findAll()
-    .then(campus => res.json(campus))
-    .catch(err => res.status(500).json(err));
-})
+router.get('/',  async (req,res) => {
+    const campus = await Campuses.findAll();
+
+    try{
+        if(campus)
+            res.json(campus)
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
+});
 
 
 //@route POST /api/campuses/addcampuses

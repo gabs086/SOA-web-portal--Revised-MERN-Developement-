@@ -65,12 +65,12 @@ class StudentIndex extends Component {
                 <div className={classes.root}>
                     <List component="nav">
                         {/* List 1  */}
-                        <ListItem button>
+                        <ListItemLink href='/st/lostandfoundpage'>
                             <ListItemIcon>
                                 <InboxIcon />
                             </ListItemIcon>
                             <ListItemText primary="File Reports for Lost and Found Items" />
-                            </ListItem>
+                            </ListItemLink>
 
                             {/* L ist 2  */}
                         <ListItem button>

@@ -9,6 +9,7 @@ const passport = require('passport');
 const users = require("./routes/api/users");
 const laf = require('./routes/api/laf');
 const campuses = require('./routes/api/campuses');
+const departments = require('./routes/api/departments');
 
 //Router
 const app = express();
@@ -46,6 +47,7 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/laf", laf);
 app.use("/api/campuses", campuses);
+app.use("/api/departments", departments);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));
 

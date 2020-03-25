@@ -1,12 +1,13 @@
 import {
     SET_CURRENT_USER,
-    USER_LOADING
+    USER_LOADING,
 } from "../actions/types";
 
 const isEmpty = require("is-empty");
 
 //InitialState
 const initialState = {
+    token: localStorage.getItem('jwtToken'),
     isAuthenticated: false,
     user: {},
     loading: false
@@ -26,7 +27,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 loading: true
-            };
+            }
         default:
             return state;
 

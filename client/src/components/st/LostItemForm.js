@@ -12,6 +12,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+
 import axios from 'axios';
 
 const styles = theme => ({
@@ -50,6 +55,7 @@ const styles = theme => ({
       submit:{
         marginTop: theme.spacing(3),
       },
+    
      
 });
 
@@ -61,6 +67,7 @@ class LostItemForm extends Component {
         this.previousPage = this.previousPage.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.chooseContactOption = this.chooseContactOption.bind(this);
 
         this.getCampuses = this.getCampuses.bind(this);
 
@@ -72,12 +79,16 @@ class LostItemForm extends Component {
             department: '',
             course:'',
             details:'',
+            contact:'',
 
             // Data For fetching the campuses
             campuses:[],
             departments: [],
             loadingCampuses: true,
             loadingDepartments: true,
+
+            // Contact Radio States 
+            contactValue: '',
 
             // Error handling 
             errors: {}
@@ -114,7 +125,11 @@ class LostItemForm extends Component {
 
     }
 
-  
+    chooseContactOption(e){
+        this.setState({
+            contactValue: e.target.value
+        });
+    }
 
     handleChange(e){
         this.setState({
@@ -130,15 +145,49 @@ class LostItemForm extends Component {
     handleSubmit(e){
         e.preventDefault();
 
-        const { name, src, yr, campus, department, course, details } = this.state;
+        const { name, src, yr, campus, department, course, details, contact } = this.state;
         const newLostReport = {
-            name, src, yr, campus, department, course, details
+            name, src, yr, campus, department, course, details, contact
         };
 
         console.log(newLostReport);
     }
 
     render(){
+        let contactTextField;
+        if(this.state.contactValue === 'phone'){
+            contactTextField  = 
+            <TextField
+            id='contact'
+            label="Contact Number"
+            name='contact'
+            value={this.state.contact}
+            onChange={this.handleChange}
+            type="number"
+            className={this.props.formControl}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            margin="normal"
+          /> 
+        }
+
+        if(this.state.contactValue === 'email'){
+            contactTextField = 
+            <TextField
+                required
+                id="contact"
+                name="contact"
+                label="E-Mail"
+                fullWidth
+                className={this.props.formControl}
+                value={this.state.contact}
+                autoComplete="contact"
+                type='email'
+                onChange={this.handleChange}
+            />
+        }
+        
 
         const { classes } = this.props;
         const { yr, campus, department, details, loadingCampuses, loadingDepartments } = this.state;
@@ -306,6 +355,34 @@ class LostItemForm extends Component {
                                     margin="normal"
                             />
                                 </Grid>
+                                
+                                {/* Contact Text Field  */}
+                                <Grid item sx={12}>
+                                    <FormControl component="fieldset" className={classes.formControl}>
+                                        <FormLabel component="legend">Contact</FormLabel> 
+
+                                        <RadioGroup 
+                                        aria-label="Contact"
+                                        name="contact"
+                                        className={classes.group}
+                                        value={this.state.contactValue}
+                                        onChange={this.chooseContactOption}
+                                        >
+                                            <FormControlLabel value='phone' control={<Radio />} label="Phone" />
+
+                                            <FormControlLabel value="email" control={<Radio />} label="Email" />
+
+                                        </RadioGroup>
+
+                                    </FormControl> 
+
+                                </Grid>
+
+                                <Grid>
+                                   { contactTextField }
+                                </Grid>
+
+
 
                                 <Button
                                 type="submit"

@@ -62,6 +62,8 @@ class LostItemForm extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
+        this.getCampuses = this.getCampuses.bind(this);
+
         this.state = {
             name: '',
             src: '',
@@ -73,21 +75,43 @@ class LostItemForm extends Component {
 
             // Data For fetching the campuses
             campuses:[],
-            loading: true
+            departments: [],
+            loadingCampuses: true,
+            loadingDepartments: true,
 
+            // Error handling 
+            errors: {}
         }
 
     }
 
-    componentDidMount(){
+    getCampuses(){
         axios.get('/api/campuses')
         .then(res => {
             this.setState({
                 campuses: res.data,
-                loading: false
+                loadingCampuses: false
             });
         })
         .catch(err => console.log(err));
+    }
+
+    getDepartments(){
+        axios.get('/api/departments')
+        .then(res => {
+            this.setState({
+                departments: res.data,
+                loadingDepartments: false,
+            })
+        })
+        .catch(err => console.log(err));
+    }
+
+    componentDidMount(){
+       this.getCampuses();
+
+       this.getDepartments();
+
     }
 
   
@@ -117,7 +141,7 @@ class LostItemForm extends Component {
     render(){
 
         const { classes } = this.props;
-        const { yr, campus, details } = this.state;
+        const { yr, campus, department, details, loadingCampuses, loadingDepartments } = this.state;
         const previousPage = this.previousPage;
         const handleChange = this.handleChange;
         const handleSubmit = this.handleSubmit;
@@ -172,6 +196,7 @@ class LostItemForm extends Component {
                                 <FormControl className={classes.formControl}>
                                         <InputLabel htmlFor="yr-simple">College Year</InputLabel>
                                         <Select
+                                            required
                                             value={yr}
                                             onChange={handleChange}
                                             inputProps={{
@@ -196,26 +221,27 @@ class LostItemForm extends Component {
 
                                     <InputLabel htmlFor="campus-simple">Campus</InputLabel>
                                    
-                            <Select
-                                value={campus}
-                                onChange={handleChange}
-                                inputProps={{
-                                name: 'campus',
-                                id: 'campus-simple',
-                                }}
-                            >
+                                        <Select
+                                        required
+                                            value={campus}
+                                            onChange={handleChange}
+                                            inputProps={{
+                                            name: 'campus',
+                                            id: 'campus-simple',
+                                            }}
+                                        >
 
-                                {this.state.loading ?
+                                            {loadingCampuses ?
 
-                                <MenuItem></MenuItem> :
+                                            <MenuItem></MenuItem> :
 
-                                this.state.campuses.map((campus,id) => {
-                                    return ( <MenuItem key={id} value={campus.campusname}>{campus.campusname}</MenuItem>)
-                                })   
-                            }
-                           
+                                            this.state.campuses.map((campus,id) => {
+                                                return ( <MenuItem key={id} value={campus.campusname}>{campus.campusname}</MenuItem>)
+                                            })   
+                                        }
+                                    
 
-                            </Select>
+                                        </Select>
                                             
                                     </FormControl>
 
@@ -223,15 +249,34 @@ class LostItemForm extends Component {
 
                                 {/* Department TextField */}
                                 <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    id="department"
-                                    name="department"
-                                    label="Department"
-                                    fullWidth
-                                    autoComplete="department"
-                                    onChange={handleChange}
-                                />  
+                                    <FormControl className={classes.formControl}>
+
+                                        <InputLabel htmlFor="department-simple">Department</InputLabel>
+
+                                        <Select
+                                        required
+                                        value={department}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                        name: 'department',
+                                        id: 'department-simple',
+                                        }}
+                                        >
+
+                                        {loadingDepartments ?
+
+                                        <MenuItem></MenuItem> :
+
+                                        this.state.departments.map((department,id) => {
+                                        return ( <MenuItem key={id} value={department.department}>{department.department}</MenuItem>)
+                                        })   
+                                        }
+
+
+                                        </Select>
+                                                
+                                </FormControl>
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>

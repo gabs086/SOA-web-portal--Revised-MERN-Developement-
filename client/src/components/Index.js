@@ -143,6 +143,8 @@ class Index extends React.Component {
 
         }
 
+        // console.log(nextProps.errors);
+
         if (nextProps.errors) {
             return ({ errors: nextProps.errors })
         }

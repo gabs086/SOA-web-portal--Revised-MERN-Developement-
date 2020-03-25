@@ -7,7 +7,6 @@ const isEmpty = require("is-empty");
 
 //InitialState
 const initialState = {
-    token: localStorage.getItem('jwtToken'),
     isAuthenticated: false,
     user: {},
     loading: false

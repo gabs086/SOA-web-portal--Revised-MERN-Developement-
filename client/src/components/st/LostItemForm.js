@@ -158,6 +158,7 @@ class LostItemForm extends Component {
         if(this.state.contactValue === 'phone'){
             contactTextField  = 
             <TextField
+            required
             id='contact'
             label="Contact Number"
             name='contact'

@@ -38,7 +38,7 @@ const validateLostAndFoundInput = data => {
         errors.SRcode = "Your SR-CODE is required. Please input your SR-CODE";
     
     if(Validator.isEmpty(yr))
-        errors.year = "Your year of college is required. Please input your college year";
+        errors.yr = "Your year of college is required. Please input your college year";
 
     if(Validator.isEmpty(campus))
         errors.campus = "Please include what campus in BatStateU are you in";

@@ -5,6 +5,7 @@ import {
 // Initial State 
 const initialState = {
     lost: false,
+    addded: false,
     found: false,
     reports: [],
     loading: false
@@ -16,8 +17,11 @@ export default function (state = initialState, action){
             return {
                 ...state,
                 lost: true,
+                added:true,
                 reports: [action.payload, ...state.reports]
                 
             };
+        default: 
+            return state;
     }
 }

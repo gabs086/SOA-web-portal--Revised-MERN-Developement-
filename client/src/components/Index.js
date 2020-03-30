@@ -127,6 +127,7 @@ class Index extends React.Component {
 
     //Alernative method for componentWillReceiveProps
     static getDerivedStateFromProps(nextProps, prevState) {
+        // console.log(nextProps);
         if (nextProps.auth.isAuthenticated) {
             if (nextProps.auth.user.type === "admin") {
                 nextProps.history.push("/ad");
@@ -143,11 +144,12 @@ class Index extends React.Component {
 
         }
 
-        // console.log(nextProps.errors);
 
         if (nextProps.errors) {
             return ({ errors: nextProps.errors })
+        
         }
+        
     }
 
     render() {

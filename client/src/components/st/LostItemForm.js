@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { addLostReport } from "../../actions/lafActions";
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
@@ -150,7 +153,17 @@ class LostItemForm extends Component {
             name, src, yr, campus, department, course, details, contact
         };
 
-        console.log(newLostReport);
+        this.props.addLostReport(newLostReport);
+
+        window.alert('Lost Item Reported');
+        this.props.history.push('/st/lostandfoundpage')
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        console.log(nextProps)
+        if (nextProps.errors) {
+            return ({ errors: nextProps.errors })
+        }
     }
 
     render(){
@@ -191,7 +204,7 @@ class LostItemForm extends Component {
         
 
         const { classes } = this.props;
-        const { yr, campus, department, details, loadingCampuses, loadingDepartments } = this.state;
+        const { yr, campus, department, details, loadingCampuses, loadingDepartments, errors } = this.state;
         const previousPage = this.previousPage;
         const handleChange = this.handleChange;
         const handleSubmit = this.handleSubmit;
@@ -226,6 +239,9 @@ class LostItemForm extends Component {
                                     autoComplete="name"
                                     onChange={handleChange}
                                 />
+                                <span style={{ color: "red" }}>
+                                     {errors.name}
+                                </span>
                                 </Grid>
 
                                 {/* SR-Code TextField  */}
@@ -239,6 +255,9 @@ class LostItemForm extends Component {
                                     autoComplete="src"
                                     onChange={handleChange}
                                 />
+                                <span style={{ color: "red" }}>
+                                     {errors.src}
+                                </span>
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>
@@ -262,7 +281,9 @@ class LostItemForm extends Component {
                                             <MenuItem value={'Longer than 5th'}>Longer than 5th</MenuItem>
                                         </Select>
                                         </FormControl>
-
+                                 <span style={{ color: "red" }}>
+                                     {errors.yr}
+                                </span>
                                 </Grid>
 
                                 <Grid item xs={12}>
@@ -295,6 +316,10 @@ class LostItemForm extends Component {
                                             
                                     </FormControl>
 
+                                <span style={{ color: "red" }}>
+                                     {errors.campus}
+                                </span>
+
                                 </Grid>
 
                                 {/* Department TextField */}
@@ -326,6 +351,9 @@ class LostItemForm extends Component {
                                         </Select>
                                                 
                                 </FormControl>
+                                <span style={{ color: "red" }}>
+                                     {errors.department}
+                                </span>
 
                                 </Grid>
 
@@ -339,6 +367,9 @@ class LostItemForm extends Component {
                                     autoComplete="Course"
                                     onChange={handleChange}
                                 />  
+                                <span style={{ color: "red" }}>
+                                     {errors.course}
+                                </span>
                                 </Grid>
 
                                 {/* Details Text Field  */}
@@ -355,6 +386,9 @@ class LostItemForm extends Component {
                                     className={classes.formControl}
                                     margin="normal"
                             />
+                            <span style={{ color: "red" }}>
+                                     {errors.details}
+                                </span>
                                 </Grid>
                                 
                                 {/* Contact Text Field  */}
@@ -376,11 +410,15 @@ class LostItemForm extends Component {
                                         </RadioGroup>
 
                                     </FormControl> 
+                                  
 
                                 </Grid>
 
                                 <Grid>
                                    { contactTextField }
+                                   <span style={{ color: "red" }}>
+                                     {errors.contact}
+                                </span>
                                 </Grid>
 
 
@@ -409,6 +447,19 @@ class LostItemForm extends Component {
 
 LostItemForm.propTypes = {
     classes: PropTypes.object.isRequired,
-}
+    //Lost and Found action
+    addLostReport: PropTypes.func.isRequired,
+    //Reducers
+    laf: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+};
 
-export default withStyles(styles)(LostItemForm);
+const mapStateToProps = state => ({
+    laf: state.laf,
+    errors: state.errors
+});
+
+export default connect(
+    mapStateToProps,
+    { addLostReport }
+)(withStyles(styles)(LostItemForm));

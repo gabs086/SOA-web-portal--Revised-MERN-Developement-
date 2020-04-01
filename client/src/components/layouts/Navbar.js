@@ -227,11 +227,16 @@ class Navbar extends Component {
                             </Button>
                         </div>
                         {/* Drawer Toggler  */}
-                        <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer('right',false)}>
+                        <Drawer anchor="right" open={this.state.right} 
+                        onClose={this.toggleDrawer('right',false)}
+                        >
                         <div
                             tabIndex={0}
                             role="button"
-                            onClick={this.toggleDrawer('right', false)}
+
+                            // Muted feature because of onClick behavior, always closign every click  in the drawer 
+                            // onClick={this.toggleDrawer('right', false)}
+
                             onKeyDown={this.toggleDrawer('right', false)}
                         >
                             <SideListNavbar class={classes.list}/>

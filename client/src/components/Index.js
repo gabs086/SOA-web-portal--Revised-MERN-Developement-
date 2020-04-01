@@ -147,7 +147,6 @@ class Index extends React.Component {
 
         if (nextProps.errors) {
             return ({ errors: nextProps.errors })
-        
         }
         
     }

@@ -35,7 +35,7 @@ const validateLostAndFoundInput = data => {
         errors.name = "Your Name is Required. Please input your name";
     
     if(Validator.isEmpty(src))
-        errors.SRcode = "Your SR-CODE is required. Please input your SR-CODE";
+        errors.src = "Your SR-CODE is required. Please input your SR-CODE";
     
     if(Validator.isEmpty(yr))
         errors.yr = "Your year of college is required. Please input your college year";

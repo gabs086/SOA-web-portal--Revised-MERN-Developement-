@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import SuccessMsg from './SuccessMsg';
 import Navbar from "../layouts/Navbar";
-import Grid from '@material-ui/core/Grid';
 
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -48,11 +50,43 @@ const styles = theme => ({
 
 
 class LostAndFoundContent extends Component {
+    constructor(props){
+        super(props)
+
+        this.handleClose = this.handleClose.bind(this);
+
+        this.state = {  open: false }
+    }
+
+    componentDidMount(){
+        if(this.props.laf.lost){
+            this.setState({
+                open: true
+            })
+        }
+    }
+
+    handleClose(event, reason){
+        if(reason === 'clickaway'){
+            return;
+        }
+
+        this.setState({
+            open: false
+        })
+    }
 
     render(){
         const { classes } = this.props;
+        const { open } = this.state;
+        const handleClose = this.handleClose;
+
         return(
             <div>
+                {/* //Success Confirmation message  */}
+                <SuccessMsg open={open} onClose={handleClose}/>
+
+                {/* Main Content */}
             <Navbar />
                 {/* Main paper  */}
                 <Container style={{paddingTop: 20}}>
@@ -69,6 +103,7 @@ class LostAndFoundContent extends Component {
                                                 image={lostandfound}
                                                 title="Image title"
                                             />
+                                            {/* This Content will be for the lost and found form content  */}
                                             <CardContent className={classes.cardContent}>
                                                 <Typography gutterBottom variant="h5" component="h2">
                                                 File Lost Items
@@ -84,7 +119,8 @@ class LostAndFoundContent extends Component {
                                             </CardActions>
                                         </Card>
                                     </Grid>
-                                {/* Paper 2 */}
+
+                                {/* Paper 2: Content for viewing the reported Items in the university */}
                                 <Grid item xs={12} sm={6} md={4}>
                                          <Card className={classes.card}>
                                             <CardMedia
@@ -108,7 +144,8 @@ class LostAndFoundContent extends Component {
                                         </Card>
                                         
                                 </Grid>
-                                {/* Paper 3 */}
+
+                                {/* Paper 3: This if for the components of found items in the university led by the admin*/}
                                 <Grid item xs={12} sm={6} md={4}>
                                         <Card className={classes.card}>
                                             <CardMedia
@@ -145,6 +182,13 @@ class LostAndFoundContent extends Component {
 
 LostAndFoundContent.propTypes = {
     classes: PropTypes.object.isRequired,
+    laf: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(LostAndFoundContent);
+const mapStateToProps = state => ({
+    laf:state.laf,
+});
+
+export default connect(
+    mapStateToProps
+)(withStyles(styles)(LostAndFoundContent));

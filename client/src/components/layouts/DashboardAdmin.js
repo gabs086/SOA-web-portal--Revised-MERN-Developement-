@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+//Redux components
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,8 +17,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,10 +25,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-
-//Redux components
-import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
+import AnnouncementIcon from '@material-ui/icons/Announcement';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import PublishIcon from '@material-ui/icons/Publish';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import EventIcon from '@material-ui/icons/Event';
 
 const drawerWidth = 240;
 
@@ -206,31 +210,74 @@ function DashboardAdmin(props) {
                 </div>
 
                 <Divider />
-                {/* Item List 1 */}
+                {/* Calendars and Events */}
                 <List>
 
                     <ListItem button>
-                        <ListItemIcon><InboxIcon /></ListItemIcon>
-                        <ListItemText>List 1</ListItemText>
+                        <ListItemIcon><EventIcon /></ListItemIcon>
+                        <ListItemText>Calendar</ListItemText>
+                    </ListItem>
+
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AnnouncementIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Announce Events" />
+                    </ListItem>
+                            
+                </List>
+                    
+                    <Divider />
+                {/* Organization List, Accounts registration */}
+                <List>
+
+                    <ListItem button>
+                        <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                        <ListItemText>Organization List</ListItemText>
+                    </ListItem>
+
+                </List>
+
+                <Divider />
+                {/* Requested Activities and file uploading */}
+                <List>
+
+                    <ListItem button>
+                        <ListItemIcon>
+                            <ListAltIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Requested Activities" />
+                    </ListItem>
+{/* 
+                    This component will be just one for :
+                    -Uploading of Files for student organizations and students to download
+                    - POsting and Approving of Reports submitted by Student Organization */}
+                    <ListItem button>
+                        <ListItemIcon>
+                            <PublishIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Files and Reports" />
+                    </ListItem>
+
+                    <Divider />
+
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AssignmentIndIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="ID Replacement" />
                     </ListItem>
 
                 </List>
 
                 <Divider />
 
-                {/* Item List 2 */}
+                {/* Logout Option */}
                 <List>
-                    <ListItem button>
-                        <ListItemIcon><MailIcon /></ListItemIcon>
-                        <ListItemText>List 2</ListItemText>
-                    </ListItem>
-                </List>
-                <Divider />
-
-                {/* Item List 2 */}
-                <List>
-                    <ListItem button onClick={onModalLogoutClick}>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                    <ListItem style={{ color: "red" }} button onClick={onModalLogoutClick}>
+                        <ListItemIcon>
+                            <ExitToAppIcon color="error" />
+                            </ListItemIcon>
                         <ListItemText>Logout</ListItemText>
                     </ListItem>
                 </List>

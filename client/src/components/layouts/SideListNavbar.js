@@ -8,14 +8,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-
 import HomeIcon from '@material-ui/icons/Home';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import Collapse from '@material-ui/core/Collapse';
-import StarBorder from '@material-ui/icons/StarBorder';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import EventIcon from '@material-ui/icons/Event';
 
@@ -98,9 +95,9 @@ class SideListNavbar extends Component {
                         <List component="div" disablePadding>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
-                                <StarBorder />
+                                <LocalActivityIcon />
                             </ListItemIcon>
-                            <ListItemText inset primary="Sample" />
+                            <ListItemText primary="Sample" />
                             </ListItem>
                         </List>
                         </Collapse>

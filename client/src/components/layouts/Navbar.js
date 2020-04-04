@@ -239,7 +239,7 @@ class Navbar extends Component {
 
                             onKeyDown={this.toggleDrawer('right', false)}
                         >
-                            <SideListNavbar class={classes.list}/>
+                            <SideListNavbar class={classes.list} onClick={this.onModalLogoutClick} />
                         </div>
 
                         </Drawer>

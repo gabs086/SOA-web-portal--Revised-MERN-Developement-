@@ -115,7 +115,7 @@ class SideListNavbar extends Component {
                         <ListItemText primary="Downloadable Files" />
                     </ListItem>
 
-                    <ListItem style={{ color: "red" }}>
+                    <ListItem style={{ color: "red" }} button onClick={this.props.onClick}>
                         <ListItemIcon>
                             <PowerSettingsNewIcon color="error"/>
                         </ListItemIcon>

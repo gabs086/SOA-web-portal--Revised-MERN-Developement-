@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+//Redux components
+import { connect } from "react-redux";
+
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,8 +10,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
-
+//Components
 import Navbar from '../layouts/Navbar';
+import SuccessMsg from './SuccessMsg';
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -50,13 +54,31 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables() {
+function LostItemReports(props) {
   const classes = useStyles();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+        if(reason === 'clickaway'){
+            return
+        }
+        setOpen(false);
+  }
+
+  useEffect(() => {
+    if(props.laf.lost){
+        setOpen(true)
+    }
+  }, []);
 
   return (
 
     <div>
+        {/* Message confirmation */}
+         <SuccessMsg open={open} onClose={handleClose}/>
 
+    {/* Main Component  */}
     <Navbar />
 
     <Container style={{paddingTop: 20}}>
@@ -91,3 +113,9 @@ export default function CustomizedTables() {
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+    laf:state.laf,
+});
+
+export default connect(mapStateToProps)(LostItemReports)

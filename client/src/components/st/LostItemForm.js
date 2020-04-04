@@ -125,7 +125,7 @@ class LostItemForm extends Component {
        this.getDepartments();
 
        if(this.props.laf.lost){
-        this.props.history.push("/st/lostandfoundpage");
+        this.props.history.push('/st/reportslist');
        }
     }
 
@@ -162,7 +162,7 @@ class LostItemForm extends Component {
     static getDerivedStateFromProps(props, state) {
         // For passing value of props, like the above componentDidMount
         if(props.laf.lost){
-            props.history.push("/st/lostandfoundpage");
+            props.history.push('/st/reportslist');
            }
         // Passing the error props
         if (props.errors) {

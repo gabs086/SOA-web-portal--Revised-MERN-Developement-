@@ -254,7 +254,7 @@ class Navbar extends Component {
     }
 }
 
-Navbar.proptTypes = {
+Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
     //Logout Func from the authActions
     logoutUser: PropTypes.func.isRequired,

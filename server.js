@@ -4,6 +4,9 @@ const session = require('express-session');
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const http = require("http");
+//Requiring socket.IO
+const socketIO = require("socket.io");
 
 //API Routes
 const users = require("./routes/api/users");
@@ -13,6 +16,9 @@ const departments = require('./routes/api/departments');
 
 //Router
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
+
 //Sessions
 let sess = {
     secret: 'soa-portal-secret',
@@ -43,13 +49,27 @@ const port = process.env.PORT || 5000;
 app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
+app.use(passport.initialize());
 // Routes
 app.use("/api/users", users);
 app.use("/api/laf", laf);
 app.use("/api/campuses", campuses);
 app.use("/api/departments", departments);
 
-app.listen(port, () => console.log(`Server is running in port ${port}`));
+
+//Getttinng the connection
+io.on('connection', socket => {
+    console.log(`New client connected ${socket.id}`);
+
+      //To check if the user is connected
+      socket.on('disconnect', _ => {
+        console.log('user disconnected');
+    });
+});
+
+server.listen(port, () => console.log(`Server is running in port ${port}`));
+
+module.exports = io;
 
 
 

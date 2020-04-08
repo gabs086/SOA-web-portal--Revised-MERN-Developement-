@@ -16,6 +16,7 @@
 
 const express = require('express');
 const router = express.Router();
+const io = require('../../server')
 
 const LafReports = require('../../models/laf.model');
 
@@ -29,8 +30,14 @@ router.get('/getreportlostitem', async (req, res) => {
     const lafreport = await LafReports.findAll();
     
         try{
-            if(lafreport)
+            if(lafreport){
                 res.json(lafreport);
+                io.on('connection', socket =>{
+                    // socket.emit
+                })
+                
+            }
+                
         }
         catch(err){
                 res.status(500).json(err);

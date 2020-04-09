@@ -58,8 +58,6 @@ const styles = {
     }
 }
 
-let socket;
-
 class Index extends React.Component {
     
     constructor(props) {

@@ -45,22 +45,6 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
-//Getttinng the connection
-io.on('connection', socket => {
-    console.log(`New client connected ${socket.id}`);
-
-      //To check if the user is connected
-      socket.on('disconnect', _ => {
-        console.log('user disconnected');
-    });
-});
-
-//Declaring socket.io so it can becalled in other route files
-app.use((req,res,next) => {
-    req.io = io;
-    next();
-});
-
 // Routes
 app.use("/api/users", users);
 app.use("/api/laf", laf);

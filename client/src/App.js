@@ -61,7 +61,7 @@ function App() {
           {/* Student Route Pages  */}
           <PrivateRoute exact path="/st" component={StudentIndex} />
           <PrivateRoute exact path="/st/lostandfoundpage" component={LostAndFoundContent} />
-          <PrivateRoute exact path="/st/reportlostitem" component={LostItemForm} />
+          <PrivateRoute exact path="/st/lostandfoundpage/reportlostitem" component={LostItemForm} />
           <PrivateRoute exact path="/st/reportslist" component={LostItemReports} />
           {/* Student Organization Route Pages  */}
           <PrivateRoute exact path="/org" component={OrgIndex} />

@@ -1,5 +1,4 @@
 import React from 'react';
-import socketIOClient from 'socket.io-client';
 
 import indexhead from './img/indexhead.jpg';
 
@@ -79,11 +78,7 @@ class Index extends React.Component {
             errors: {},
 
             showPassword: false,
-            //Endpoint of the server for connection of socket.IO
-            endpoint: 'http://localhost:5000/'
         }
-
-        socket = socketIOClient(this.state.endpoint);
 
     }
 
@@ -268,4 +263,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { loginUser }
-)(withStyles(styles)(Index, {socket}));
+)(withStyles(styles)(Index));

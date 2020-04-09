@@ -1,5 +1,7 @@
 import {
-    ADD_LOST_REPORT
+    ADD_LOST_REPORT,
+    GET_LOST_REPORTS,
+    REPORT_LOADING
 } from '../actions/types';
 
 // Initial State 
@@ -19,6 +21,11 @@ export default function (state = initialState, action){
                 reports: [action.payload, ...state.reports]
                 
             };
+        case REPORT_LOADING:
+            return {
+                ...state,
+                loading: true
+            }
         default: 
             return state;
     }

@@ -16,23 +16,16 @@
 
 const express = require('express');
 const router = express.Router();
-const io = require('../../server')
 
 const LafReports = require('../../models/laf.model');
 
 const validateLostAndFoundInput = require('../../validation/laf');
-
-router.get('/', async (req, res) => {
-    console.log(req.io);
-})
 
 //@rout GET api/laf/getreportlostitem
 //@desc GET all reports in lost and found;
 //@access PUBLIC
 router.get('/getreportlostitem', async (req, res) => {
     const lafreport = await LafReports.findAll();
-
-    const io  = req.io;
     
         try{
             if(lafreport) res.json(lafreport);

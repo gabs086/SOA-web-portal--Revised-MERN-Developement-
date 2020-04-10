@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
+import { getLostReport } from '../../actions/lafActions';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
+import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
@@ -17,9 +18,21 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Container from '@material-ui/core/Container';
+import Skeleton from '@material-ui/lab/Skeleton';
 //Components
 import Navbar from '../layouts/Navbar';
 import SuccessMsg from './SuccessMsg';
+
+//Header of the Table
+const StyledTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: 'rgb(138, 28, 28)',
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
 const useStyles1 = makeStyles(theme => ({
   root: {
@@ -87,27 +100,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-//Data samples dis will be the function for my data gathering
-function createData(name, calories, fat) {
-  return { name, calories, fat };
-}
-
-const rows = [
-  createData('Cupcake', 305, 3.7),
-  createData('Donut', 452, 25.0),
-  createData('Eclair', 262, 16.0),
-  createData('Frozen yoghurt', 159, 6.0),
-  createData('Gingerbread', 356, 16.0),
-  createData('Honeycomb', 408, 3.2),
-  createData('Ice cream sandwich', 237, 9.0),
-  createData('Jelly Bean', 375, 0.0),
-  createData('KitKat', 518, 26.0),
-  createData('Lollipop', 392, 0.2),
-  createData('Marshmallow', 318, 0),
-  createData('Nougat', 360, 19.0),
-  createData('Oreo', 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
 const useStyles2 = makeStyles({
   root: {
     width: '100%',
@@ -120,16 +112,14 @@ const useStyles2 = makeStyles({
   },
 });
 
-// Main Component 
+// Main Component   console.log(props.laf.reports);
 function LostItemReports(props) {
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [open, setOpen] = useState(false);
-  const [data, getReports] = useState([])
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
+  const [loading, setLoading] = useState(true)
+  
   //Success handlin message 
   const handleClose = (event, reason) => {
     if(reason === 'clickaway'){
@@ -139,18 +129,16 @@ function LostItemReports(props) {
   }
 
   //Data fetching for getting the lost reports
-  useEffect(() => {
-    const fetchData = async _ => {
-      const res = await axios.get('/api/laf/getreportlostitem');
-      getReports(res.data)
-    }
-
-    fetchData();
-    
-  }, [])
+  // useEffect(() => {
+  //   props.getLostReport();
+  //   setLoading(false);
+  // }, [])
 
   // Gets an effect in the component if the lost state in the laf prop is true 
   useEffect(() => {
+    props.getLostReport();
+    setLoading(false);
+
   if(props.laf.lost){
       setOpen(true)
   }
@@ -166,9 +154,14 @@ function LostItemReports(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  //Array of the reports in the lost item reports 
+  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
 
-  console.log(props)
-  console.log(data)
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
+  // console.log(props.laf.reports);
+  console.log(rows);
+  // console.log(loading);
 
   return (
     <div>
@@ -182,19 +175,58 @@ function LostItemReports(props) {
       <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-label="custom pagination table">
+        {/* Table Head of the datas  */}
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Student name</StyledTableCell>
+            <StyledTableCell align="left">SR-Code</StyledTableCell>
+            <StyledTableCell align="left">College Year</StyledTableCell>
+            <StyledTableCell align="left">Campus</StyledTableCell>
+            <StyledTableCell align="left">Department</StyledTableCell>
+            <StyledTableCell align="left">Student course</StyledTableCell>
+            <StyledTableCell align="left">Lost Item Details</StyledTableCell>
+            <StyledTableCell align="left">Contact Details</StyledTableCell>
+            <StyledTableCell align="left">Report Status</StyledTableCell>
+          </TableRow>
+        </TableHead>
+
+      {/* Body for displaying the reports */}
             <TableBody>
-              {(rowsPerPage > 0
-                ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                : rows
-              ).map(row => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
+              { loading && rows.length === 0
+                ? 
+                <TableRow>
+                  <Skeleton variant="text" />
+                  <Skeleton variant="circle" width={40} height={40} />
+                  <Skeleton variant="rect" width={210} height={118} />
                 </TableRow>
-              ))}
+                :   
+                <Fragment>
+                {
+                  (rowsPerPage > 0
+                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : rows
+                  ).map(row => (
+                    <TableRow key={row.name}>
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="left">{row.src}</TableCell>
+                      <TableCell align="left">{row.yr}</TableCell>
+                      <TableCell align="left">{row.campus}</TableCell>
+                      <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.course}</TableCell>
+                      <TableCell align="left">{row.details}</TableCell>
+                      <TableCell align="left">{row.contact}</TableCell>
+                      {
+                        row.status === 'Unfound/Unclaimed'
+                        ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
+                        : <TableCell align="left">{row.status}</TableCell>
+                      }
+                    </TableRow>
+                  ))
+                }
+                </Fragment>
+              }
 
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
@@ -236,4 +268,7 @@ const mapStateToProps = state => ({
   laf:state.laf,
 });
 
-export default connect(mapStateToProps)(LostItemReports)
+//Dipatch proptypes(React Hooks) 
+const mapDispatchToProps = { getLostReport };
+
+export default connect(mapStateToProps, mapDispatchToProps)(LostItemReports)

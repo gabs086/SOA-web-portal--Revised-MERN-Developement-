@@ -20,7 +20,13 @@ export default function (state = initialState, action){
                 lost: true,
                 reports: [action.payload, ...state.reports]
                 
-            };
+            }
+        case GET_LOST_REPORTS:
+            return {
+                ...state,
+                reports: action.payload,
+                loading: false
+            }
         case REPORT_LOADING:
             return {
                 ...state,

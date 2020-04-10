@@ -106,6 +106,10 @@ const useStyles2 = makeStyles( theme => ({
   root: {
     width: '100%',
   },
+  root2: {
+    width: '100%',
+    paddingBottom: '10px',
+  },
   table: {
     minWidth: 500,
   },
@@ -173,6 +177,10 @@ function LostItemReports(props) {
     <Navbar />
 
     <Container style={{paddingTop: 20}}>
+      <Paper className={classes.root2}>
+      wkwkw
+      </Paper>
+
       <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-label="custom pagination table">

@@ -25,6 +25,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+
 import Link from '@material-ui/core/Link';
 
 //Footer
@@ -168,7 +169,23 @@ class Index extends React.Component {
                     </Typography>
 
                         <form className={classes.form} noValidate onSubmit={this.onSubmit}>
-                            <TextField
+                            {/* Username handling */}
+                            {   errors.username || errors.usernotfound
+                                ?
+                                <TextField
+                                margin="normal"
+                                error
+                                required
+                                fullWidth
+                                id="username"
+                                label="Username"
+                                name="username"
+                                autoFocus
+                                onChange={this.handleChange("username")}
+                                helperText={errors.username || errors.usernotfound}
+                            />
+                                :
+                                <TextField
                                 margin="normal"
                                 required
                                 fullWidth
@@ -177,42 +194,68 @@ class Index extends React.Component {
                                 name="username"
                                 autoFocus
                                 onChange={this.handleChange("username")}
+                               
                             />
-                            <span style={{ color: "red" }}>
-                                {errors.username}
-                                {errors.usernotfound}
-                            </span>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                id="password"
-                                type={this.state.showPassword ? 'text' : 'password'}
-                                value={password}
-                                onChange={this.handleChange('password')}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={this.handleMouseDownPassword}
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                            {/* Errors Showing */}
-                            <span style={{ color: "red" }}>
-                                {errors.password}
-                                {errors.passwordincorrect}
-                            </span>
+                            }
+                                {/* Password handling */}
+                            {   errors.password || errors.passwordincorrect
+                                ? 
+                                <TextField
+                                error
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    id="password"
+                                    type={this.state.showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={this.handleChange('password')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    edge="end"
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={this.handleMouseDownPassword}
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    helperText={errors.password || errors.passwordincorrect}
+                                />
+                                :
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    id="password"
+                                    type={this.state.showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={this.handleChange('password')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    edge="end"
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={this.handleMouseDownPassword}
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            }
                             <br></br>
+
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"

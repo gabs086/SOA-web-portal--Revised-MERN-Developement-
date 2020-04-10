@@ -18,7 +18,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Container from '@material-ui/core/Container';
-import Skeleton from '@material-ui/lab/Skeleton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 //Components
 import Navbar from '../layouts/Navbar';
 import SuccessMsg from './SuccessMsg';
@@ -34,6 +34,7 @@ const StyledTableCell = withStyles(theme => ({
   },
 }))(TableCell);
 
+// Style for TablePaginationActions Component 
 const useStyles1 = makeStyles(theme => ({
   root: {
     flexShrink: 0,
@@ -100,7 +101,8 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const useStyles2 = makeStyles({
+// Style for the LostItemReports Component 
+const useStyles2 = makeStyles( theme => ({
   root: {
     width: '100%',
   },
@@ -110,7 +112,15 @@ const useStyles2 = makeStyles({
   tableWrapper: {
     overflowX: 'auto',
   },
-});
+  spinner: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
+    marginTop: '50px',
+    height: '50px'
+  }
+}));
 
 // Main Component   console.log(props.laf.reports);
 function LostItemReports(props) {
@@ -128,14 +138,9 @@ function LostItemReports(props) {
     setOpen(false);
   }
 
-  //Data fetching for getting the lost reports
-  // useEffect(() => {
-  //   props.getLostReport();
-  //   setLoading(false);
-  // }, [])
-
   // Gets an effect in the component if the lost state in the laf prop is true 
   useEffect(() => {
+    // Action for fetching the datas in lafActions
     props.getLostReport();
     setLoading(false);
 
@@ -158,10 +163,6 @@ function LostItemReports(props) {
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-  // console.log(props.laf.reports);
-  console.log(rows);
-  // console.log(loading);
 
   return (
     <div>
@@ -192,14 +193,17 @@ function LostItemReports(props) {
 
       {/* Body for displaying the reports */}
             <TableBody>
-              { loading && rows.length === 0
+              { loading || rows.length === 0
                 ? 
+                //When the data is still loading
                 <TableRow>
-                  <Skeleton variant="text" />
-                  <Skeleton variant="circle" width={40} height={40} />
-                  <Skeleton variant="rect" width={210} height={118} />
+                  <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                    <CircularProgress color="secondary" /><br/>
+                    <span>Loading ...</span>
+                  </TableCell>
                 </TableRow>
                 :   
+                //Data to be displayed when the data is fetched
                 <Fragment>
                 {
                   (rowsPerPage > 0
@@ -237,6 +241,7 @@ function LostItemReports(props) {
             <TableFooter>
               <TableRow>
 
+                {/* Table Pagination controls  */}
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                   colSpan={3}

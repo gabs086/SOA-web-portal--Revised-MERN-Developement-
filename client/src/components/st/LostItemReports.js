@@ -19,6 +19,9 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+
 //Components
 import Navbar from '../layouts/Navbar';
 import SuccessMsg from './SuccessMsg';
@@ -108,7 +111,7 @@ const useStyles2 = makeStyles( theme => ({
   },
   root2: {
     width: '100%',
-    paddingBottom: '10px',
+    paddingBottom: '2 0px',
   },
   table: {
     minWidth: 500,
@@ -129,10 +132,19 @@ const useStyles2 = makeStyles( theme => ({
 // Main Component   console.log(props.laf.reports);
 function LostItemReports(props) {
   const classes = useStyles2();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  // Pagination Controls 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // Selection and Search state 
+  const [search, setSearch] = useState('');
+  const [campuses, getCampuses] = useState([]);
+
+  // Success message handling state 
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true)
+
+  // Loading for fetching datas 
+  const [loading, setLoading] = useState(true);
   
   //Success handlin message 
   const handleClose = (event, reason) => {
@@ -163,6 +175,11 @@ function LostItemReports(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handleChange = e => {
+    setSearch(e.target.value)
+    console.log(e.target.value)
+  };
   //Array of the reports in the lost item reports 
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
 
@@ -177,10 +194,30 @@ function LostItemReports(props) {
     <Navbar />
 
     <Container style={{paddingTop: 20}}>
+      {/* Search bar  */}
       <Paper className={classes.root2}>
-      wkwkw
+
+        <FormControl fullWidth>
+          <TextField
+              id="standard-select-currency-native"
+              select
+              label="Search by campus"
+              value={search}
+              onChange={handleChange}
+              SelectProps={{
+                native: true,
+              }}
+            >
+              <option>Search by Campus...</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </TextField>
+          </FormControl>
+
       </Paper>
 
+            <br/>
       <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-label="custom pagination table">

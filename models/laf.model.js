@@ -53,7 +53,7 @@ module.exports = db.sequelize.define(
             type: Sequelize.INTEGER
         },
         created_at: {
-            type: Sequelize.DATEONLY,
+            type: Sequelize.DATE,
             defaultValue: Sequelize.NOW
         }
     }, {

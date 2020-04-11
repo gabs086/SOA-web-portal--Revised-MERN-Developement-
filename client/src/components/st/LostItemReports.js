@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { connect } from "react-redux";
 import { getLostReport } from '../../actions/lafActions';
 
@@ -145,6 +146,7 @@ function LostItemReports(props) {
 
   // Loading for fetching datas 
   const [loading, setLoading] = useState(true);
+  const [loadingCampuses, setLoadingCampuses] = useState(false);
   
   //Success handlin message 
   const handleClose = (event, reason) => {
@@ -154,17 +156,35 @@ function LostItemReports(props) {
     setOpen(false);
   }
 
-  // Gets an effect in the component if the lost state in the laf prop is true 
+    // Gets an effect in the component if the lost state in the laf prop is true 
+    useEffect(() => {
+      if(props.laf.lost){
+        setOpen(true)
+    }
+     
+    }, [props.laf.lost]);
+
+  useEffect( _ => {
+    const fetchCampuses = async _ => {
+      setLoadingCampuses(true);
+
+      const res = await axios.get('/api/campuses');
+      getCampuses(res.data);
+      setLoadingCampuses(false);
+    }
+
+    fetchCampuses();
+  }, []);
+
   useEffect(() => {
-    // Action for fetching the datas in lafActions
-    props.getLostReport();
-    setLoading(false);
+  // / Action for fetching the datas in lafActions
+  props.getLostReport();
+   setLoading(false);  
 
-  if(props.laf.lost){
-      setOpen(true)
-  }
-  }, [props.laf.lost]);
-
+    return () => {
+      props.getLostReport();
+    }
+  }, [])
 
   //Getting the pages, Material UI Funcs
   const handleChangePage = (event, newPage) => {
@@ -176,9 +196,9 @@ function LostItemReports(props) {
     setPage(0);
   };
 
+  // Search Filtering function that filters the table
   const handleChange = e => {
-    setSearch(e.target.value)
-    console.log(e.target.value)
+    setSearch(e.target.value);
   };
   //Array of the reports in the lost item reports 
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))

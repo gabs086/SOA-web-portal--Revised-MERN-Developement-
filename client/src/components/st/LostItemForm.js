@@ -125,7 +125,7 @@ class LostItemForm extends Component {
        this.getDepartments();
 
        if(this.props.laf.lost){
-        this.props.history.push('/st/reportslist');
+        this.props.history.push('/st/lostandfoundpage/reportslist');
        }
     }
 
@@ -162,7 +162,7 @@ class LostItemForm extends Component {
     static getDerivedStateFromProps(props, state) {
         // For passing value of props, like the above componentDidMount
         if(props.laf.lost){
-            props.history.push('/st/reportslist');
+            props.history.push('/st/lostandfoundpage/reportslist');
            }
         // Passing the error props
         if (props.errors) {
@@ -175,6 +175,7 @@ class LostItemForm extends Component {
         if(this.state.contactValue === 'phone'){
             contactTextField  = 
             <TextField
+            required
             id='contact'
             label="Contact Number"
             name='contact'
@@ -192,6 +193,7 @@ class LostItemForm extends Component {
         if(this.state.contactValue === 'email'){
             contactTextField = 
             <TextField
+                required
                 id="contact"
                 name="contact"
                 label="E-Mail"
@@ -199,7 +201,7 @@ class LostItemForm extends Component {
                 className={this.props.formControl}
                 value={this.state.contact}
                 autoComplete="contact"
-                type='email'
+                type="email"
                 onChange={this.handleChange}
             />
         }
@@ -413,7 +415,7 @@ class LostItemForm extends Component {
 
                                 <Grid>
                                    { contactTextField }
-                                   <span style={{ color: "red" }}>
+                            <span style={{ color: "red" }}>
                                 {errors.contact}
                             </span>
                                 </Grid>

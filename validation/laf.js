@@ -55,10 +55,10 @@ const validateLostAndFoundInput = data => {
     if(Validator.isEmpty(contact)){
         errors.contact = "Please include your contact details";
     }
-
-    if(!Validator.isEmail(contact) && !Validator.isInt(contact)){
-            errors.contact = "Your contact must be an email or a phone number you have";
-        }
+        
+    if(!(Validator.isEmail(contact)) && !(Validator.isInt(contact))){
+        errors.contact = "Your contact must be an email or a phone number you have";
+    }
        
     return { errors, isValid: isEmpty(errors) };
 

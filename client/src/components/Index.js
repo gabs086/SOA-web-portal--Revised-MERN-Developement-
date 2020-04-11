@@ -1,6 +1,7 @@
 import React from 'react';
 
 import indexhead from './img/indexhead.jpg';
+import indexnewpic from './img/indexnewpic.png';
 
 //PropTypes and actions
 import PropTypes from 'prop-types';
@@ -69,7 +70,8 @@ class Index extends React.Component {
 
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
-
+        // Magic for setting the img true 
+        this.setPicNew = this.setPicNew.bind(this);
 
         this.state = {
             username: '',
@@ -77,6 +79,7 @@ class Index extends React.Component {
             errors: {},
 
             showPassword: false,
+            setPic: true,
         }
 
     }
@@ -97,6 +100,12 @@ class Index extends React.Component {
             }
 
         }
+    }
+
+    setPicNew() {
+        this.setState(state => ({
+            setPic: !state.setPic
+        }));
     }
 
     handleClickShowPassword() {
@@ -154,15 +163,22 @@ class Index extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { password, showPassword, errors } = this.state;
+        const { password, showPassword, errors, setPic} = this.state;
         const handleClickShowPassword = this.handleClickShowPassword;
+        const setPicNew = this.setPicNew;
         return (
             <div className={classes.root}>
                 <Container component="main" maxWidth="sm">
                     <CssBaseline /> {/* krung krung sa css baseline hahaha*/}
                     <div className={classes.paper}>
 
-                        <img src={indexhead} alt="SOA Web Portal" />
+                        <a onClick={setPicNew}>
+                            {
+                                setPic 
+                                ?  <img src={indexnewpic} alt="SOA Web Portal" />
+                                :  <img src={indexhead} alt="SOA Web Portal" />                                
+                            }
+                        </a>
 
                         <Typography component="h1" variant="h5">
                             Sign In

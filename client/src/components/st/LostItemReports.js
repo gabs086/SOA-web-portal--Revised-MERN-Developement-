@@ -22,6 +22,7 @@ import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 //Components
 import Navbar from '../layouts/Navbar';
@@ -67,7 +68,7 @@ function TablePaginationActions(props) {
   const handleLastPageButtonClick = event => {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
-
+  // Table Pagination Component 
   return (
     <div className={classes.root}>
       <IconButton
@@ -161,23 +162,21 @@ function LostItemReports(props) {
       if(props.laf.lost){
         setOpen(true)
     }
-     
     }, [props.laf.lost]);
-
-  useEffect( _ => {
-    const fetchCampuses = async _ => {
-      const res = await axios.get('/api/campuses');
-      getCampuses(res.data);
-      setLoadingCampuses(false);
-    }
-    fetchCampuses();
-  }, []);
 
   useEffect(() => {
   // / Action for fetching the datas in lafActions
   props.getLostReport();
    setLoading(false);  
 
+  const fetchCampuses = async _ => {
+  const res = await axios.get('/api/campuses');
+    getCampuses(res.data);
+    setLoadingCampuses(false);
+  }
+
+  fetchCampuses();
+    // Cleansing, unmounting win the component already mounts
     return () => {
       props.getLostReport();
     }
@@ -231,7 +230,7 @@ function LostItemReports(props) {
                   :
 
                   <Fragment>
-                      <option>Search by Campus...</option>
+                      <option></option>
                       {campuses.map((campus,id) => {
                         return(
                         <option key={id} value={campus.campusname}>{campus.campusname}</option>
@@ -267,8 +266,8 @@ function LostItemReports(props) {
             <TableBody>
               { loading || rows.length === 0
                 ? 
-                //When the data is still loading
-                <TableRow>
+                  //When the data is still loading
+                  <TableRow>
                   <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
                     <CircularProgress color="secondary" /><br/>
                     <span>Loading ...</span>
@@ -278,10 +277,16 @@ function LostItemReports(props) {
                 //Data to be displayed when the data is fetched
                 <Fragment>
                 {
+                   search === '' ?
+                   <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                   <ArrowUpwardIcon /><br></br>
+                   Pls search at the top to filter by campus...
+                 </TableCell>
+                  :
                   (rowsPerPage > 0
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
-                  ).map(row => (
+                  ).filter(row => row.campus === search).map(row => (
                     <TableRow key={row.name}>
                       <TableCell component="th" scope="row">
                         {row.name}

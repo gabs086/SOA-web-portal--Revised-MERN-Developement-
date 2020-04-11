@@ -146,7 +146,7 @@ function LostItemReports(props) {
 
   // Loading for fetching datas 
   const [loading, setLoading] = useState(true);
-  const [loadingCampuses, setLoadingCampuses] = useState(false);
+  const [loadingCampuses, setLoadingCampuses] = useState(true);
   
   //Success handlin message 
   const handleClose = (event, reason) => {
@@ -166,13 +166,10 @@ function LostItemReports(props) {
 
   useEffect( _ => {
     const fetchCampuses = async _ => {
-      setLoadingCampuses(true);
-
       const res = await axios.get('/api/campuses');
       getCampuses(res.data);
       setLoadingCampuses(false);
     }
-
     fetchCampuses();
   }, []);
 
@@ -228,10 +225,20 @@ function LostItemReports(props) {
                 native: true,
               }}
             >
-              <option>Search by Campus...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
+              {   loadingCampuses 
+              ?
+                  <option></option> 
+                  :
+
+                  <Fragment>
+                      <option>Search by Campus...</option>
+                      {campuses.map((campus,id) => {
+                        return(
+                        <option key={id} value={campus.campusname}>{campus.campusname}</option>
+                        )
+                      })}
+                  </Fragment>
+              }
             </TextField>
           </FormControl>
 

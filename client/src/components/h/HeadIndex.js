@@ -4,7 +4,9 @@ import DashBoardHead from '../layouts/DashboardHead';
 function HeadIndex(props){
         return (
             <div>
-                <DashBoardHead />
+                <DashBoardHead>
+                    
+                </DashBoardHead>
             </div>
         )
 }

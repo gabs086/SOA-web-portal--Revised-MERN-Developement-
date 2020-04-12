@@ -14,8 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import Badge from '@material-ui/core/Badge';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -24,6 +23,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import EventIcon from '@material-ui/icons/Event';
+import AnnouncementIcon from '@material-ui/icons/Announcement';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import FindReplaceIcon from '@material-ui/icons/FindReplace';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
 //Redux components
 import { connect } from "react-redux";
@@ -156,8 +161,6 @@ function DashboardHead(props) {
                 </DialogActions>
             </Dialog>
 
-
-
             {/* Dashboard  */}
             <CssBaseline />
             <AppBar
@@ -213,30 +216,69 @@ function DashboardHead(props) {
                 <List>
 
                     <ListItem button>
-                        <ListItemIcon><InboxIcon /></ListItemIcon>
-                        <ListItemText>List 1</ListItemText>
+                        <ListItemIcon><EventIcon /></ListItemIcon>
+                        <ListItemText>Calendar</ListItemText>
+                    </ListItem>
+
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AnnouncementIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Announce Events" />
                     </ListItem>
 
                 </List>
 
                 <Divider />
 
-                {/* Item List 2 */}
                 <List>
                     <ListItem button>
-                        <ListItemIcon><MailIcon /></ListItemIcon>
-                        <ListItemText>List 2</ListItemText>
+                        <ListItemIcon><FindReplaceIcon /></ListItemIcon>
+                        <ListItemText primary="Lost and Found" />
                     </ListItem>
+                </List>
+                
+                <Divider />
+
+                {/* Item List 2 */}
+                <List>
+
+                    <ListItem button>
+                        <ListItemIcon>
+                        
+                            <FormatListBulletedIcon />
+                       
+                            </ListItemIcon>
+                        <ListItemText>Organization List</ListItemText>
+                    </ListItem>
+
+                    <ListItem button>
+                        <ListItemIcon>
+                                {/* //For notifications of Requested Activities  */}
+                            <Badge badgeContent={0} color="primary">
+                                <ListAltIcon />
+                            </Badge>
+                        </ListItemIcon>
+                        <ListItemText primary="Requested Activities" />
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemIcon>
+                            <AssessmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Activity Assessment" />
+                    </ListItem>
+
                 </List>
 
                 <Divider />
 
                 {/* Item List 2 */}
                 <List>
-                    <ListItem button onClick={onModalLogoutClick}>
-                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                    <ListItem style={{ color: "red" }} button onClick={onModalLogoutClick}>
+                        <ListItemIcon><ExitToAppIcon color="error" /></ListItemIcon>
                         <ListItemText>Logout</ListItemText>
-                    </ListItem>
+                    </ListItem> 
                 </List>
             </Drawer>
 

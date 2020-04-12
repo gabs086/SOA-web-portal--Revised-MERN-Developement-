@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import DashBoardHead from '../layouts/DashboardHead';
 
-export class HeadIndex extends Component {
-    render() {
+function HeadIndex(props){
         return (
             <div>
                 <DashBoardHead />
             </div>
         )
-    }
 }
 
 export default HeadIndex;

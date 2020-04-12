@@ -14,7 +14,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Badge from '@material-ui/core/Badge';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -33,6 +32,9 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 //Redux components
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+
+//Link Components
+import ListItemLink from './ListItemLink';
 
 const drawerWidth = 240;
 
@@ -132,6 +134,7 @@ function DashboardHead(props) {
 
     //Name of user
     const { user } = props.auth;
+
     return (
         <div className={classes.root}>
             {/* Modal  */}
@@ -215,27 +218,30 @@ function DashboardHead(props) {
                 {/* Item List 1 */}
                 <List>
 
-                    <ListItem button>
-                        <ListItemIcon><EventIcon /></ListItemIcon>
-                        <ListItemText>Calendar</ListItemText>
-                    </ListItem>
+                    <ListItemLink 
+                    to="/h" 
+                    primary="Calendar" 
+                    icon={<EventIcon />}
+                    />
 
-                    <ListItem button>
-                        <ListItemIcon>
-                            <AnnouncementIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Announce Events" />
-                    </ListItem>
+                    <ListItemLink 
+                    to="/link2" 
+                    primary="Announce Events"
+                    icon={<AnnouncementIcon />}                    
+                    />
 
                 </List>
 
                 <Divider />
 
                 <List>
-                    <ListItem button>
-                        <ListItemIcon><FindReplaceIcon /></ListItemIcon>
-                        <ListItemText primary="Lost and Found" />
-                    </ListItem>
+
+                    <ListItemLink 
+                    to="/link3"
+                    primary="Lost and Found"
+                    icon={<FindReplaceIcon />}
+                    />
+
                 </List>
                 
                 <Divider />
@@ -243,31 +249,24 @@ function DashboardHead(props) {
                 {/* Item List 2 */}
                 <List>
 
-                    <ListItem button>
-                        <ListItemIcon>
-                        
-                            <FormatListBulletedIcon />
-                       
-                            </ListItemIcon>
-                        <ListItemText>Organization List</ListItemText>
-                    </ListItem>
+                    <ListItemLink 
+                    to="/link4"
+                    primary="Organization List"
+                    icon={<FormatListBulletedIcon />}
+                    />
 
-                    <ListItem button>
-                        <ListItemIcon>
-                                {/* //For notifications of Requested Activities  */}
-                            <Badge badgeContent={0} color="primary">
-                                <ListAltIcon />
-                            </Badge>
-                        </ListItemIcon>
-                        <ListItemText primary="Requested Activities" />
-                    </ListItem>
+                    <ListItemLink 
+                    to="/link5"
+                    primary="Requested Activities"
+                    icon={<ListAltIcon />}
+                    count={4}
+                    />
 
-                    <ListItem>
-                        <ListItemIcon>
-                            <AssessmentIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Activity Assessment" />
-                    </ListItem>
+                    <ListItemLink
+                    to="/link6"
+                    primary="Activity Assessment"
+                    icon={<AssessmentIcon />}
+                     />
 
                 </List>
 

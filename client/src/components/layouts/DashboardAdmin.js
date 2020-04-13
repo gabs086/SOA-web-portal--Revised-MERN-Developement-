@@ -32,6 +32,9 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import EventIcon from '@material-ui/icons/Event';
 
+//Link Components
+import ListItemLink from './ListItemLink';
+
 const drawerWidth = 240;
 
 const Transition = props => {
@@ -213,17 +216,17 @@ function DashboardAdmin(props) {
                 {/* Calendars and Events */}
                 <List>
 
-                    <ListItem button>
-                        <ListItemIcon><EventIcon /></ListItemIcon>
-                        <ListItemText>Calendar</ListItemText>
-                    </ListItem>
+                    <ListItemLink 
+                        to="/ad"
+                        primary="Calendar"
+                        icon={<EventIcon />}
+                    />
 
-                    <ListItem button>
-                        <ListItemIcon>
-                            <AnnouncementIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Announce Events" />
-                    </ListItem>
+                    <ListItemLink 
+                        to="/link2"
+                        primary="Announce Events"
+                        icon={<AnnouncementIcon />}
+                    />
                             
                 </List>
                     
@@ -231,10 +234,11 @@ function DashboardAdmin(props) {
                 {/* Organization List, Accounts registration */}
                 <List>
 
-                    <ListItem button>
-                        <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
-                        <ListItemText>Organization List</ListItemText>
-                    </ListItem>
+                    <ListItemLink 
+                        to="/link3"
+                        primary="organization List"
+                        icon={<FormatListBulletedIcon />}
+                    />
 
                 </List>
 
@@ -242,32 +246,32 @@ function DashboardAdmin(props) {
                 {/* Requested Activities and file uploading */}
                 <List>
 
-                    <ListItem button>
-                        <ListItemIcon>
-                            <ListAltIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Requested Activities" />
-                    </ListItem>
+                    <ListItemLink 
+                        to="/link4"
+                        primary="Requested Activities"
+                        icon={<ListAltIcon />}
+                        count={4}
+                    />
 {/* 
                     This component will be just one for :
                     -Uploading of Files for student organizations and students to download
                     - POsting and Approving of Reports submitted by Student Organization */}
-                    <ListItem button>
-                        <ListItemIcon>
-                            <PublishIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Files and Reports" />
-                    </ListItem>
+
+                    <ListItemLink 
+                        to="/link5"
+                        primary="Files and Reports"
+                        icon={<PublishIcon />}
+                    />
 
                     <Divider />
 
                     {/* ID Replacement Components  */}
-                    <ListItem button>
-                        <ListItemIcon>
-                            <AssignmentIndIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="ID Replacement" />
-                    </ListItem>
+
+                    <ListItemLink 
+                        to="/link6"
+                        primary="ID Replacement"
+                        icon={<AssignmentIndIcon />}
+                    />
 
                 </List>
 

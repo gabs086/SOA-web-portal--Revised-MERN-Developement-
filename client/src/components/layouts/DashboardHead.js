@@ -237,7 +237,7 @@ function DashboardHead(props) {
                 <List>
 
                     <ListItemLink 
-                    to="/link3"
+                    to="/h/lostandfound"
                     primary="Lost and Found"
                     icon={<FindReplaceIcon />}
                     />

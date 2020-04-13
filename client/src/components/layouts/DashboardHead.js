@@ -256,7 +256,7 @@ function DashboardHead(props) {
                     />
 
                     <ListItemLink 
-                    to="/link5"
+                    to="/h/requestedactivities"
                     primary="Requested Activities"
                     icon={<ListAltIcon />}
                     count={4}

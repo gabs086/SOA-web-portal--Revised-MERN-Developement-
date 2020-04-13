@@ -20,7 +20,7 @@ function HeadIndex(props){
             <div>
                 <DashBoardHead>
                      <Paper className={classes.root}>
-                        
+                            Calendar Component Here
                      </Paper>
                 </DashBoardHead>
             </div>

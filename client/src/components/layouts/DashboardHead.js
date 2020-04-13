@@ -225,7 +225,7 @@ function DashboardHead(props) {
                     />
 
                     <ListItemLink 
-                    to="/link2" 
+                    to="/h/announceevent" 
                     primary="Announce Events"
                     icon={<AnnouncementIcon />}                    
                     />

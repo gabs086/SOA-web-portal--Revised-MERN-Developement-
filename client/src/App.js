@@ -17,6 +17,7 @@ import LostItemReports from './components/st/LostItemReports';
 import OrgIndex from './components/org/OrgIndex';
 
 import HeadIndex from './components/h/HeadIndex';
+import AnnounceEvent from './components/h/AnnounceEvents';
 
 import AdminIndex from './components/ad/AdminIndex';
 
@@ -68,6 +69,7 @@ function App() {
 
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />
+          <PrivateRoute exact path="/h/announceevent" component={AnnounceEvent} />
 
           {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />

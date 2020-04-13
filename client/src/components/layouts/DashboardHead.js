@@ -263,7 +263,7 @@ function DashboardHead(props) {
                     />
 
                     <ListItemLink
-                    to="/link6"
+                    to="/h/activityassessment"
                     primary="Activity Assessment"
                     icon={<AssessmentIcon />}
                      />

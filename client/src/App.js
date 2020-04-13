@@ -21,6 +21,7 @@ import AnnounceEvent from './components/h/AnnounceEvents';
 import LostAndFound from './components/h/LostAndFound';
 import OrgList from './components/h/OrgList';
 import RequestedActivities from './components/h/RequestedActivities';
+import ActivityAssessment from './components/h/ActivityAssessment';
 
 import AdminIndex from './components/ad/AdminIndex';
 
@@ -76,6 +77,7 @@ function App() {
           <PrivateRoute exact path="/h/lostandfound" component={LostAndFound} />
           <PrivateRoute exact path="/h/organizationlist" component={OrgList} />
           <PrivateRoute exact path="/h/requestedactivities" component={RequestedActivities} />
+          <PrivateRoute exact path="/h/activityassessment" component={ActivityAssessment} />
 
           {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />

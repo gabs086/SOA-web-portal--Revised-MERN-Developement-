@@ -1,16 +1,31 @@
-import React, { Component } from 'react';
+import React from 'react';
+
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
+//Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
 
-export class AdminIndex extends Component {
-    render() {
+const styles = theme => ({
+    root: {
+        ...theme.mixins.gutters(),
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+});
+
+function AdminIndex(props){
+        const classes = props;
         return (
             <div>
                 <DashboardAdmin>
-                    Sample Children using react hook
+                    <Paper className={classes.root}>
+                        Calendar Component Here
+                    </Paper>
                 </DashboardAdmin>
             </div>
         )
-    }
+    
 }
 
-export default AdminIndex;
+export default withStyles(styles)(AdminIndex);

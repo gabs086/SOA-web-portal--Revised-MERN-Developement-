@@ -28,6 +28,7 @@ import ActivityAssessment from './components/h/ActivityAssessment';
 // SOA Admin Dashboard Components
 import AdminIndex from './components/ad/AdminIndex';
 import AnnounceEvents from './components/ad/AnnounceEvents';
+import OrgListAdmin from './components/ad/OrgListAdmin';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -86,6 +87,7 @@ function App() {
           {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />
           <PrivateRoute exact path="/ad/announceevent" component={AnnounceEvents} />
+          <PrivateRoute exact path="/ad/organizationlist" component={OrgListAdmin} />
         </Switch>
 
       </Router>

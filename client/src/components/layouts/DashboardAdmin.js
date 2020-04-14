@@ -235,7 +235,7 @@ function DashboardAdmin(props) {
                 <List>
 
                     <ListItemLink 
-                        to="/link3"
+                        to="/ad/organizationlist"
                         primary="Organization List"
                         icon={<FormatListBulletedIcon />}
                     />

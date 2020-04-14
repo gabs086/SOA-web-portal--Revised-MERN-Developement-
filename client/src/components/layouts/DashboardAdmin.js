@@ -258,7 +258,7 @@ function DashboardAdmin(props) {
                     - POsting and Approving of Reports submitted by Student Organization */}
 
                     <ListItemLink 
-                        to="/link5"
+                        to="/ad/filesandreports"
                         primary="Files and Reports"
                         icon={<PublishIcon />}
                     />

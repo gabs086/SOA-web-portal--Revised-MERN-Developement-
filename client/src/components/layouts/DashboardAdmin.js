@@ -223,7 +223,7 @@ function DashboardAdmin(props) {
                     />
 
                     <ListItemLink 
-                        to="/link2"
+                        to="/ad/announceevent"
                         primary="Announce Events"
                         icon={<AnnouncementIcon />}
                     />
@@ -236,7 +236,7 @@ function DashboardAdmin(props) {
 
                     <ListItemLink 
                         to="/link3"
-                        primary="organization List"
+                        primary="Organization List"
                         icon={<FormatListBulletedIcon />}
                     />
 

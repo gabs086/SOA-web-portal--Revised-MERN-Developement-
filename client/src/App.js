@@ -8,14 +8,16 @@ import store from "./store";
 
 //Components
 import Index from './components/Index';
-
+// Student Dashboard Components
 import StudentIndex from './components/st/StudentIndex';
 import LostAndFoundContent from './components/st/LostAndFoundContent';
 import LostItemForm from './components/st/LostItemForm';
 import LostItemReports from './components/st/LostItemReports';
 
+// Student Organization Dashboard Components
 import OrgIndex from './components/org/OrgIndex';
 
+// SOA Head Dashboard Components
 import HeadIndex from './components/h/HeadIndex';
 import AnnounceEvent from './components/h/AnnounceEvents';
 import LostAndFound from './components/h/LostAndFound';
@@ -23,7 +25,9 @@ import OrgList from './components/h/OrgList';
 import RequestedActivities from './components/h/RequestedActivities';
 import ActivityAssessment from './components/h/ActivityAssessment';
 
+// SOA Admin Dashboard Components
 import AdminIndex from './components/ad/AdminIndex';
+import AnnounceEvents from './components/ad/AnnounceEvents';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -81,6 +85,7 @@ function App() {
 
           {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />
+          <PrivateRoute exact path="/ad/announceevent" component={AnnounceEvents} />
         </Switch>
 
       </Router>

@@ -268,7 +268,7 @@ function DashboardAdmin(props) {
                     {/* ID Replacement Components  */}
 
                     <ListItemLink 
-                        to="/link6"
+                        to="/ad/idreplacement"
                         primary="ID Replacement"
                         icon={<AssignmentIndIcon />}
                     />

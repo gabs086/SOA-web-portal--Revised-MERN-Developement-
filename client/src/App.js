@@ -31,6 +31,7 @@ import AnnounceEvents from './components/ad/AnnounceEvents';
 import OrgListAdmin from './components/ad/OrgListAdmin';
 import RequestedActivitesAdmin from './components/ad/RequestedActivitiesAdmin';
 import FilesAndReports from './components/ad/FilesAndReports';
+import IDReplacement from './components/ad/IDReplacement';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -92,6 +93,7 @@ function App() {
           <PrivateRoute exact path="/ad/organizationlist" component={OrgListAdmin} />
           <PrivateRoute exact path="/ad/requestedactivities" component={RequestedActivitesAdmin} />
           <PrivateRoute exact path="/ad/filesandreports" component={FilesAndReports} />
+          <PrivateRoute exact path="/ad/idreplacement" component={IDReplacement} />
         </Switch>
 
       </Router>

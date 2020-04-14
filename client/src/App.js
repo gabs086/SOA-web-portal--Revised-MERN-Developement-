@@ -29,6 +29,7 @@ import ActivityAssessment from './components/h/ActivityAssessment';
 import AdminIndex from './components/ad/AdminIndex';
 import AnnounceEvents from './components/ad/AnnounceEvents';
 import OrgListAdmin from './components/ad/OrgListAdmin';
+import RequestedActivitesAdmin from './components/ad/RequestedActivitiesAdmin';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -88,6 +89,7 @@ function App() {
           <PrivateRoute exact path="/ad" component={AdminIndex} />
           <PrivateRoute exact path="/ad/announceevent" component={AnnounceEvents} />
           <PrivateRoute exact path="/ad/organizationlist" component={OrgListAdmin} />
+          <PrivateRoute exact path="/ad/requestedactivities" component={RequestedActivitesAdmin} />
         </Switch>
 
       </Router>

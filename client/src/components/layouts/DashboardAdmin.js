@@ -247,7 +247,7 @@ function DashboardAdmin(props) {
                 <List>
 
                     <ListItemLink 
-                        to="/link4"
+                        to="/ad/requestedactivities"
                         primary="Requested Activities"
                         icon={<ListAltIcon />}
                         count={4}

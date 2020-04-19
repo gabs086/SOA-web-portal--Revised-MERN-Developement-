@@ -20,6 +20,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import Typography from '@material-ui/core/Typography';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
@@ -162,56 +163,75 @@ function LostAndFound(props) {
   };
 
     return (
-        <DashBoardHead>
-            <Paper className={classes.root}>
+    <DashBoardHead>
+          <Typography variant="h4" gutterBottom>
+            Reports today
+          </Typography>
+          
+      <Paper className={classes.root}>
 
                 {/* Table for the today reports will be here */}
-                <div className={classes.tableWrapper}>
-        <Table className={classes.table} aria-label="custom pagination table">
-          <TableBody>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map(row => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-              </TableRow>
-            ))}
+           <div className={classes.tableWrapper}>
+              <Table className={classes.table} aria-label="custom pagination table">
 
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
+                <TableHead>
+                  <TableRow>
+                      <StyledTableCell>Name</StyledTableCell>
+                      <StyledTableCell align="left">Calories</StyledTableCell>
+                      <StyledTableCell align="left">Fat</StyledTableCell>
+                  </TableRow>
+                </TableHead>
 
-          {/* Pagination Actions  */}
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                colSpan={3}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { 'aria-label': 'rows per page' },
-                  native: true,
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
-      </Paper>
+                <TableBody>
+                 {(rowsPerPage > 0
+                   ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                   : rows
+                  ).map(row => (
+                   <TableRow key={row.name}>
+                     <TableCell component="th" scope="row">
+                       {row.name}
+                     </TableCell>
+                     <TableCell align="right">{row.calories}</TableCell>
+                     <TableCell align="right">{row.fat}</TableCell>
+                   </TableRow>
+                 ))}
+
+                 {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+
+                {/* Pagination Actions  */}
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                      colSpan={3}
+                      count={rows.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      SelectProps={{
+                        inputProps: { 'aria-label': 'rows per page' },
+                        native: true,
+                      }}
+                      onChangePage={handleChangePage}
+                      onChangeRowsPerPage={handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActions}
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>
+
+            </div>
+        </Paper>
                 <br/>
+
+                <Typography variant="h4" gutterBottom>
+                  All Reports
+                </Typography>
+
                 <LostAndFoundTable2 />
 
             </DashBoardHead>

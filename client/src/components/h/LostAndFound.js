@@ -21,7 +21,11 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
+// Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
+
+// Table 2 component 
+import LostAndFoundTable2 from './LostAndFoundTable2';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -34,7 +38,7 @@ const StyledTableCell = withStyles(theme => ({
     },
   }))(TableCell);
 
-  // Style for TablePaginationActions Component 
+// Style for TablePaginationActions Component 
 const useStyles1 = makeStyles(theme => ({
   root: {
     flexShrink: 0,
@@ -43,6 +47,7 @@ const useStyles1 = makeStyles(theme => ({
 }));
 
 // Table Functions for table pagination 
+// Table one 
 function TablePaginationActions(props) {
     const classes = useStyles1();
     const theme = useTheme();
@@ -100,6 +105,8 @@ function TablePaginationActions(props) {
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
   };
+
+
 
 // Style of the main Component 
 const styles = theme => ({
@@ -181,6 +188,8 @@ function LostAndFound(props) {
               </TableRow>
             )}
           </TableBody>
+
+          {/* Pagination Actions  */}
           <TableFooter>
             <TableRow>
               <TablePagination
@@ -202,56 +211,10 @@ function LostAndFound(props) {
         </Table>
       </div>
       </Paper>
+                <br/>
+                <LostAndFoundTable2 />
 
-      {/* Table for all records will be here  */}
-      <br />
-      <Paper className={classes.root}>
-
-                {/* Table for the today reports will be here */}
-                <div className={classes.tableWrapper}>
-        <Table className={classes.table} aria-label="custom pagination table">
-          <TableBody>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map(row => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-              </TableRow>
-            ))}
-
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                colSpan={3}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { 'aria-label': 'rows per page' },
-                  native: true,
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
-      </Paper>
-        </DashBoardHead>
+            </DashBoardHead>
     )
 }
 

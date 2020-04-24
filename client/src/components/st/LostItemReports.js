@@ -168,7 +168,7 @@ function LostItemReports(props) {
   // / Action for fetching the datas in lafActions
   props.getLostReport();
    setLoading(false);  
-
+  //  Change the way of how to execute the function immidiately 
   const fetchCampuses = (async _ => {
   const res = await axios.get('/api/campuses');
     getCampuses(res.data);

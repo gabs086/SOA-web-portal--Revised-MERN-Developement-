@@ -162,6 +162,22 @@ function LostAndFound(props) {
     setPage(0);
   };
 
+  const date = new Date();
+  const year = date.getFullYear()
+  const day = date.getDate();
+  const month = date.getMonth();
+  const dayString = `${day}`;
+  // Month Array because it has a index that starts in 0
+  const monthArr = [
+    1,2,3,4,5,6,7,8,9,10,11,10
+  ];
+  // and use it to get the current month today 
+  const monthString = `${monthArr[month]}`;
+  // Padstart Prototype in JavaScript method pads the current string with another string (multiple times, if needed) until the resulting string reaches the given length. The padding is applied from the start of the current string.
+  // This will be the reference for the getting the Date of the reports 
+  const dateToday = `${year}-${monthString.padStart(2, '0')}-${dayString.padStart(2, '0')}`;
+  const dateDate = new Date(`${dateToday}`);
+
     return (
     <DashBoardHead>
           <Typography variant="h4" gutterBottom>

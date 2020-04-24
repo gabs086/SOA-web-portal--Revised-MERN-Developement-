@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { getLostReport } from '../../actions/lafActions';
 
 import { withStyles, makeStyles, useTheme,} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -223,5 +225,12 @@ const useStyles1 = makeStyles(theme => ({
       );
   }
   
-  export default withStyles(styles)(LostAndFoundTable2);
+const mapStateToProps = state => ({
+    laf: state.laf
+  });
+
+  //Dipatch proptypes(React Hooks) 
+const mapDispatchToProps = { getLostReport };
+
+  export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LostAndFoundTable2));
   

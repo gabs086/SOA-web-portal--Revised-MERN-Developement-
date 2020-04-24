@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { getLostReport } from '../../actions/lafActions';
 
 import { withStyles, makeStyles, useTheme,} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -150,7 +152,7 @@ function LostAndFound(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
    // Loading for fetching datas 
-   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
@@ -162,7 +164,15 @@ function LostAndFound(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  
+  useEffect( _ => {
+    
+    return () => {
 
+    }
+  });
+
+  //Date Methods Filtering
   const date = new Date();
   const year = date.getFullYear()
   const day = date.getDate();
@@ -179,6 +189,7 @@ function LostAndFound(props) {
   const dateToday = `${year}-${monthString.padStart(2, '0')}-${dayString.padStart(2, '0')}`;
   const dateDate = new Date(`${dateToday}`);
 
+  
     return (
     <DashBoardHead>
           <Typography variant="h4" gutterBottom>
@@ -254,5 +265,11 @@ function LostAndFound(props) {
             </DashBoardHead>
     )
 }
+const mapStateToProps = state => ({
+  laf: state.laf
+});
 
-export default withStyles(styles)(LostAndFound);
+//Dipatch proptypes(React Hooks) 
+const mapDispatchToProps = { getLostReport };
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LostAndFound));

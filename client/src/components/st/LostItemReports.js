@@ -169,13 +169,12 @@ function LostItemReports(props) {
   props.getLostReport();
    setLoading(false);  
 
-  const fetchCampuses = async _ => {
+  const fetchCampuses = (async _ => {
   const res = await axios.get('/api/campuses');
     getCampuses(res.data);
     setLoadingCampuses(false);
-  }
+  })();
 
-  fetchCampuses();
     // Cleansing, unmounting win the component already mounts
     return () => {
       props.getLostReport();

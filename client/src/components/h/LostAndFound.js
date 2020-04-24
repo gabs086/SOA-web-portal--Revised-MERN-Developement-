@@ -165,12 +165,12 @@ function LostAndFound(props) {
     setPage(0);
   };
   
+  // Fetch the datas of lost item reports through reducer 
   useEffect( _ => {
-    
-    return () => {
+    props.getLostReport();
+    setLoading(false);
 
-    }
-  });
+  },[]);
 
   //Date Methods Filtering
   const date = new Date();
@@ -189,7 +189,6 @@ function LostAndFound(props) {
   const dateToday = `${year}-${monthString.padStart(2, '0')}-${dayString.padStart(2, '0')}`;
   const dateDate = new Date(`${dateToday}`);
 
-  
     return (
     <DashBoardHead>
           <Typography variant="h4" gutterBottom>

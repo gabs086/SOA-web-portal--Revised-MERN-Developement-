@@ -160,7 +160,15 @@ const useStyles1 = makeStyles(theme => ({
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
     };
-  
+
+    // Fetch the datas of lost item reports through reducer 
+  useEffect( _ => {
+    props.getLostReport();
+    setLoading(false);
+
+  },[]);
+
+
       return (
       <Fragment>
         <Paper className={classes.root}>

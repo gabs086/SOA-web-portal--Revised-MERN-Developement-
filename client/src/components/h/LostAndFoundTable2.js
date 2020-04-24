@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles, makeStyles, useTheme,} from '@material-ui/core/styles';
@@ -141,9 +141,12 @@ const useStyles1 = makeStyles(theme => ({
   
   function LostAndFoundTable2(props) {
       const classes = props;
-  
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    // Table pagination Actions states
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+      // Loading for fetching datas 
+    const [loading, setLoading] = useState(true);
   
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   

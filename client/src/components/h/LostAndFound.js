@@ -221,7 +221,7 @@ function LostAndFound(props) {
                   (rowsPerPage > 0
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
-                  ).map(row => (
+                  ).filter(row => (moment(row.created_at).format('YYYY-MM-DD')) === dateFilter ).map(row => (
                     <TableRow>
                       <TableCell component="th" scope="row">
                         {row.name}

@@ -173,21 +173,12 @@ function LostAndFound(props) {
   },[]);
 
   //Date Methods Filtering
-  const date = new Date();
-  const year = date.getFullYear()
-  const day = date.getDate();
-  const month = date.getMonth();
-  const dayString = `${day}`;
-  // Month Array because it has a index that starts in 0
-  const monthArr = [
-    1,2,3,4,5,6,7,8,9,10,11,10
-  ];
-  // and use it to get the current month today 
-  const monthString = `${monthArr[month]}`;
-  // Padstart Prototype in JavaScript method pads the current string with another string (multiple times, if needed) until the resulting string reaches the given length. The padding is applied from the start of the current string.
-  // This will be the reference for the getting the Date of the reports 
-  const dateToday = `${year}-${monthString.padStart(2, '0')}-${dayString.padStart(2, '0')}`;
-  const dateDate = new Date(`${dateToday}`);
+  let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+  today = yyyy + '-' + mm + '-' + dd;
 
     return (
     <DashBoardHead>
@@ -203,9 +194,16 @@ function LostAndFound(props) {
 
                 <TableHead>
                   <TableRow>
-                      <StyledTableCell>Name</StyledTableCell>
-                      <StyledTableCell align="left">Calories</StyledTableCell>
-                      <StyledTableCell align="left">Fat</StyledTableCell>
+                    <StyledTableCell>Student name</StyledTableCell>
+                    <StyledTableCell align="left">SR-Code</StyledTableCell>
+                    <StyledTableCell align="left">College Year</StyledTableCell>
+                    <StyledTableCell align="left">Campus</StyledTableCell>
+                    <StyledTableCell align="left">Department</StyledTableCell>
+                    <StyledTableCell align="left">Student course</StyledTableCell>
+                    <StyledTableCell align="left">Lost Item Details</StyledTableCell>
+                    <StyledTableCell align="left">Contact Details</StyledTableCell>
+                    <StyledTableCell align="left">Report Status</StyledTableCell>
+                    <StyledTableCell align="left">Actions</StyledTableCell>
                   </TableRow>
                 </TableHead>
 

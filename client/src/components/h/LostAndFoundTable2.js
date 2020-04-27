@@ -168,6 +168,13 @@ const useStyles1 = makeStyles(theme => ({
 
   },[]);
 
+  //Date Methods Filtering
+  let today = new Date();
+   const dd = String(today.getDate()).padStart(2, '0');
+   const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+   const yyyy = today.getFullYear();
+
+ today = yyyy + '-' + mm + '-' + dd;
 
       return (
       <Fragment>
@@ -179,9 +186,16 @@ const useStyles1 = makeStyles(theme => ({
 
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>Name</StyledTableCell>
-                      <StyledTableCell align="left">Calories</StyledTableCell>
-                      <StyledTableCell align="left">Fat</StyledTableCell>
+                      <StyledTableCell>Student name</StyledTableCell>
+                      <StyledTableCell align="left">SR-Code</StyledTableCell>
+                      <StyledTableCell align="left">College Year</StyledTableCell>
+                      <StyledTableCell align="left">Campus</StyledTableCell>
+                      <StyledTableCell align="left">Department</StyledTableCell>
+                      <StyledTableCell align="left">Student course</StyledTableCell>
+                      <StyledTableCell align="left">Lost Item Details</StyledTableCell>
+                      <StyledTableCell align="left">Contact Details</StyledTableCell>
+                      <StyledTableCell align="left">Report Status</StyledTableCell>
+                      <StyledTableCell align="left">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
 

@@ -178,6 +178,7 @@ const useStyles1 = makeStyles(theme => ({
                       <StyledTableCell align="left">Lost Item Details</StyledTableCell>
                       <StyledTableCell align="left">Contact Details</StyledTableCell>
                       <StyledTableCell align="left">Report Status</StyledTableCell>
+                      <StyledTableCell align="left">Date Reported</StyledTableCell>
                       <StyledTableCell align="left">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>

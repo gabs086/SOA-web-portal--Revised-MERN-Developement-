@@ -154,9 +154,15 @@ function LostAndFound(props) {
 
   //Array of the reports in the lost item reports 
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
-  
+
    //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
+  // const dateObj = data => {
+  //   const d = new Date(data);
+  //   const year = new Intl.DateTimeFormat('en', { year : 'numeric'}).format(d);
+  //   const month = new Intl.DateTimeFormat('en', { year : 'numeric'}).format(d);
+  // };
 
   //Date Methods Filtering
   let today = new Date();
@@ -189,6 +195,7 @@ function LostAndFound(props) {
                     <StyledTableCell align="left">Lost Item Details</StyledTableCell>
                     <StyledTableCell align="left">Contact Details</StyledTableCell>
                     <StyledTableCell align="left">Report Status</StyledTableCell>
+                    <StyledTableCell align="left">Date Reported</StyledTableCell>
                     <StyledTableCell align="left">Actions</StyledTableCell>
                   </TableRow>
                 </TableHead>
@@ -228,7 +235,8 @@ function LostAndFound(props) {
                         ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
                         : <TableCell align="left">{row.status}</TableCell>
                       }
-                      <TableCell>Claimed | Found</TableCell>
+                      <TableCell align="left">{row.created_at}</TableCell>
+                      <TableCell align="left">Claimed | Found</TableCell>
                     </TableRow>
                   ))
                 }

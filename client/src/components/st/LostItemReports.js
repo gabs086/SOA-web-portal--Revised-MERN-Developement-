@@ -198,6 +198,7 @@ function LostItemReports(props) {
   //Array of the reports in the lost item reports 
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
 
+  //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (

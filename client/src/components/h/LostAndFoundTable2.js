@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { getLostReport } from '../../actions/lafActions';
 
+import moment from 'moment';
+
 import { withStyles, makeStyles, useTheme,} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,9 +19,10 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Container from '@material-ui/core/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -157,7 +160,8 @@ const useStyles1 = makeStyles(theme => ({
    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
    const yyyy = today.getFullYear();
 
- today = yyyy + '-' + mm + '-' + dd;
+  today = yyyy + '-' + mm + '-' + dd;
+  const dateFilter = moment(today).format('YYYY-MM-DD');
 
       return (
       <Fragment>
@@ -183,26 +187,55 @@ const useStyles1 = makeStyles(theme => ({
                     </TableRow>
                 </TableHead>
 
-                    <TableBody>
-                      {(rowsPerPage > 0
-                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : rows
-                      ).map(row => (
-                        <TableRow key={row.name}>
-                          <TableCell component="th" scope="row">
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="right">{row.calories}</TableCell>
-                          <TableCell align="right">{row.fat}</TableCell>
-                        </TableRow>
-                      ))}
-          
-                      {emptyRows > 0 && (
-                        <TableRow style={{ height: 53 * emptyRows }}>
-                          <TableCell colSpan={6} />
-                        </TableRow>
-                      )}
-                    </TableBody>
+                <TableBody>
+              { loading || rows.length === 0
+                ? 
+                  //When the data is still loading
+                  <TableRow>
+                  <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                    <CircularProgress color="secondary" /><br/>
+                    <span>Loading ...</span>
+                  </TableCell>
+                </TableRow>
+                :   
+                //Data to be displayed when the data is fetched
+                <Fragment>
+                {
+                
+                  (rowsPerPage > 0
+                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : rows
+                  ).map(row => (
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="left">{row.src}</TableCell>
+                      <TableCell align="left">{row.yr}</TableCell>
+                      <TableCell align="left">{row.campus}</TableCell>
+                      <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.course}</TableCell>
+                      <TableCell align="left">{row.details}</TableCell>
+                      <TableCell align="left">{row.contact}</TableCell>
+                      {
+                        row.status === 'Unfound/Unclaimed'
+                        ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
+                        : <TableCell align="left">{row.status}</TableCell>
+                      }
+                      <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
+                      <TableCell align="left">Claimed | Found</TableCell>
+                    </TableRow>
+                  ))
+                }
+                </Fragment>
+              }
+
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
           
                     {/* Pagination Actions  */}
                     <TableFooter>

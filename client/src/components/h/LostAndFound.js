@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { getLostReport } from '../../actions/lafActions';
 
+import moment from 'moment';
+
 import { withStyles, makeStyles, useTheme,} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,9 +20,9 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Container from '@material-ui/core/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -171,6 +173,7 @@ function LostAndFound(props) {
     const yyyy = today.getFullYear();
 
   today = yyyy + '-' + mm + '-' + dd;
+  const dateFilter = moment(today).format('YYYY-MM-DD');
 
     return (
     <DashBoardHead>
@@ -219,7 +222,7 @@ function LostAndFound(props) {
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
                   ).map(row => (
-                    <TableRow key={row.name}>
+                    <TableRow>
                       <TableCell component="th" scope="row">
                         {row.name}
                       </TableCell>
@@ -235,7 +238,7 @@ function LostAndFound(props) {
                         ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
                         : <TableCell align="left">{row.status}</TableCell>
                       }
-                      <TableCell align="left">{row.created_at}</TableCell>
+                      <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
                       <TableCell align="left">Claimed | Found</TableCell>
                     </TableRow>
                   ))

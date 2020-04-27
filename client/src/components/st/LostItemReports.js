@@ -287,7 +287,7 @@ function LostItemReports(props) {
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
                   ).filter(row => row.campus === search).map(row => (
-                    <TableRow key={row.name}>
+                    <TableRow>
                       <TableCell component="th" scope="row">
                         {row.name}
                       </TableCell>

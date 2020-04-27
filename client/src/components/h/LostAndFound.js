@@ -221,26 +221,35 @@ function LostAndFound(props) {
                   (rowsPerPage > 0
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
-                  ).filter(row => (moment(row.created_at).format('YYYY-MM-DD')) === dateFilter ).map(row => (
+                  ).filter(row => (
+                      (moment(row.created_at).format('YYYY-MM-DD')) === dateFilter)
+                    )
+                  .map(row => (
+                    row.created_at === moment(dateFilter).format('YYY-MM-DD')
+                    ?
                     <TableRow>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="left">{row.src}</TableCell>
-                      <TableCell align="left">{row.yr}</TableCell>
-                      <TableCell align="left">{row.campus}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">{row.course}</TableCell>
-                      <TableCell align="left">{row.details}</TableCell>
-                      <TableCell align="left">{row.contact}</TableCell>
-                      {
-                        row.status === 'Unfound/Unclaimed'
-                        ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
-                        : <TableCell align="left">{row.status}</TableCell>
-                      }
-                      <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
-                      <TableCell align="left">Claimed | Found</TableCell>
+                    <TableCell>No data For today</TableCell>
                     </TableRow>
+                    :
+                  <TableRow>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">{row.src}</TableCell>
+                  <TableCell align="left">{row.yr}</TableCell>
+                  <TableCell align="left">{row.campus}</TableCell>
+                  <TableCell align="left">{row.department}</TableCell>
+                  <TableCell align="left">{row.course}</TableCell>
+                  <TableCell align="left">{row.details}</TableCell>
+                  <TableCell align="left">{row.contact}</TableCell>
+                  {
+                    row.status === 'Unfound/Unclaimed'
+                    ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
+                    : <TableCell align="left">{row.status}</TableCell>
+                  }
+                  <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
+                  <TableCell align="left">Claimed | Found</TableCell>
+                  </TableRow>
                   ))
                 }
                 </Fragment>

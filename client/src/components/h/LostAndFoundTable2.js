@@ -148,11 +148,8 @@ const useStyles1 = makeStyles(theme => ({
 
   },[]);
 
-  //Array of the reports in the lost item reports 
-  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
-
-  //Empty row that says the rows for pagination
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  // This is the props for getting the details of the user 
+  const auth = props.auth;
 
   //Date Methods Filtering
   let today = new Date();
@@ -162,6 +159,12 @@ const useStyles1 = makeStyles(theme => ({
 
   today = yyyy + '-' + mm + '-' + dd;
   const dateFilter = moment(today).format('YYYY-MM-DD');
+
+  //Array of the reports in the lost item reports 
+  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1)) .filter(row => ( moment(row.created_at).format('YYYY-MM-DD') !== dateFilter && auth.user.campus === row.campus ) );
+
+  //Empty row that says the rows for pagination
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
       return (
       <Fragment>
@@ -188,7 +191,7 @@ const useStyles1 = makeStyles(theme => ({
                 </TableHead>
 
                 <TableBody>
-              { loading || rows.length === 0
+              { loading 
                 ? 
                   //When the data is still loading
                   <TableRow>
@@ -198,36 +201,50 @@ const useStyles1 = makeStyles(theme => ({
                   </TableCell>
                 </TableRow>
                 :   
-                //Data to be displayed when the data is fetched
+
                 <Fragment>
-                {
-                
-                  (rowsPerPage > 0
-                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : rows
-                  ).map(row => (
+                  {
+                    rows.length === 0
+                    ?
                     <TableRow>
-                      <TableCell component="th" scope="row">
-                        {row.name}
+                      <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                        <span>No Report for today</span>
                       </TableCell>
-                      <TableCell align="left">{row.src}</TableCell>
-                      <TableCell align="left">{row.yr}</TableCell>
-                      <TableCell align="left">{row.campus}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">{row.course}</TableCell>
-                      <TableCell align="left">{row.details}</TableCell>
-                      <TableCell align="left">{row.contact}</TableCell>
-                      {
-                        row.status === 'Unfound/Unclaimed'
-                        ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
-                        : <TableCell align="left">{row.status}</TableCell>
-                      }
-                      <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
-                      <TableCell align="left">Claimed | Found</TableCell>
                     </TableRow>
-                  ))
-                }
-                </Fragment>
+                    :
+                      //Data to be displayed when the data is fetched
+                      <Fragment>
+                      {
+                      
+                        (rowsPerPage > 0
+                          ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                          : rows
+                        )
+                        .map(row => (
+                          <TableRow>
+                            <TableCell component="th" scope="row">
+                              {row.name}
+                            </TableCell>
+                            <TableCell align="left">{row.src}</TableCell>
+                            <TableCell align="left">{row.yr}</TableCell>
+                            <TableCell align="left">{row.campus}</TableCell>
+                            <TableCell align="left">{row.department}</TableCell>
+                            <TableCell align="left">{row.course}</TableCell>
+                            <TableCell align="left">{row.details}</TableCell>
+                            <TableCell align="left">{row.contact}</TableCell>
+                            {
+                              row.status === 'Unfound/Unclaimed'
+                              ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
+                              : <TableCell align="left">{row.status}</TableCell>
+                            }
+                            <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
+                            <TableCell align="left">Claimed | Found</TableCell>
+                          </TableRow>
+                        ))
+                      }
+                      </Fragment>
+                  }
+                </Fragment> 
               }
 
               {emptyRows > 0 && (
@@ -265,7 +282,8 @@ const useStyles1 = makeStyles(theme => ({
   }
   
 const mapStateToProps = state => ({
-    laf: state.laf
+    laf: state.laf,
+    auth: state.auth
   });
 
   //Dipatch proptypes(React Hooks) 

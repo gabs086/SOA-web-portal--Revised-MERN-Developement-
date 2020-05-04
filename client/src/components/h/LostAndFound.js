@@ -22,10 +22,6 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
@@ -127,7 +123,7 @@ const styles = theme => ({
     },
 });
 
-
+// Main component 
 function LostAndFound(props) {
     const classes = props;
     // Table pagination Actions states
@@ -154,18 +150,6 @@ function LostAndFound(props) {
 
   },[]);
 
-  //Array of the reports in the lost item reports 
-  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
-
-   //Empty row that says the rows for pagination
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-  // const dateObj = data => {
-  //   const d = new Date(data);
-  //   const year = new Intl.DateTimeFormat('en', { year : 'numeric'}).format(d);
-  //   const month = new Intl.DateTimeFormat('en', { year : 'numeric'}).format(d);
-  // };
-
   //Date Methods Filtering
   let today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -173,7 +157,21 @@ function LostAndFound(props) {
     const yyyy = today.getFullYear();
 
   today = yyyy + '-' + mm + '-' + dd;
+  //This variable is used to f
   const dateFilter = moment(today).format('YYYY-MM-DD');
+
+  // This is the props for getting the details of the user 
+  const auth = props.auth;
+
+  //Array of the reports in the lost item reports 
+  //The array is now sorted that it only accepts data that is reported today and if the the campus of the user is equal to the campus or the report.
+  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1)).filter(row => 
+    ( moment(row.created_at).format('YYYY-MM-DD') === dateFilter && auth.user.campus === row.campus)
+  );
+
+   //Empty row that says the rows for pagination
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  
 
     return (
     <DashBoardHead>
@@ -205,32 +203,36 @@ function LostAndFound(props) {
 
                {/* Body for displaying the reports */}
             <TableBody>
-              { loading || rows.length === 0
+              { loading 
                 ? 
-                  //When the data is still loading
+                //  If the loading state is still true, this preloader will be displayed
                   <TableRow>
                   <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
                     <CircularProgress color="secondary" /><br/>
                     <span>Loading ...</span>
                   </TableCell>
                 </TableRow>
-                :   
-                //Data to be displayed when the data is fetched
+                :    
+                // Else if the rows variable with the array of reports have the no data
+                // This component will be displayed
+                <Fragment>
+                  {
+                  rows.length === 0
+                    ?
+                    <TableRow>
+                    <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                      <span>No Report for today</span>
+                    </TableCell>
+                  </TableRow>
+                    :
+                      //Then if the rows variable has a data, the date will be presented in the table
                 <Fragment>
                 {
                   (rowsPerPage > 0
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
-                  ).filter(row => (
-                      (moment(row.created_at).format('YYYY-MM-DD')) === dateFilter)
-                    )
+                  )
                   .map(row => (
-                    row.created_at === moment(dateFilter).format('YYY-MM-DD')
-                    ?
-                    <TableRow>
-                    <TableCell>No data For today</TableCell>
-                    </TableRow>
-                    :
                   <TableRow>
                   <TableCell component="th" scope="row">
                     {row.name}
@@ -251,8 +253,11 @@ function LostAndFound(props) {
                   <TableCell align="left">Claimed | Found</TableCell>
                   </TableRow>
                   ))
+                 }
+                </Fragment>
                 }
                 </Fragment>
+  
               }
 
               {emptyRows > 0 && (
@@ -297,7 +302,8 @@ function LostAndFound(props) {
     )
 }
 const mapStateToProps = state => ({
-  laf: state.laf
+  laf: state.laf,
+  auth: state.auth
 });
 
 //Dipatch proptypes(React Hooks) 

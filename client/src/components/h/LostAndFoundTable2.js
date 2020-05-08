@@ -20,6 +20,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -232,7 +233,14 @@ const useStyles1 = makeStyles(theme => ({
                               : <TableCell align="left">{row.status}</TableCell>
                             }
                             <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
-                            <TableCell align="left">Claimed | Found</TableCell>
+                            <TableCell align="left">
+
+                           { /*These buttons will be the actions for declaring the report claimed or found */}
+                            <Button variant="contained" color="primary">Set as claimed</Button>
+                            |
+                            <Button variant="contained" color="primary">Set as found</Button>
+
+                            </TableCell>
                           </TableRow>
                         ))
                       }

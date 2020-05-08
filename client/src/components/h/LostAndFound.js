@@ -225,7 +225,7 @@ function LostAndFound(props) {
                     </TableCell>
                   </TableRow>
                     :
-                      //Then if the rows variable has a data, the date will be presented in the table
+                //Then if the rows variable has a data, the date will be presented in the table
                 <Fragment>
                 {
                   (rowsPerPage > 0
@@ -233,6 +233,7 @@ function LostAndFound(props) {
                     : rows
                   )
                   .map(row => (
+                    // The row where all the datas will be displayed 
                   <TableRow>
                   <TableCell component="th" scope="row">
                     {row.name}
@@ -251,7 +252,12 @@ function LostAndFound(props) {
                   }
                   <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
                   <TableCell align="left">
-                    Claimed | Found
+                   { /*These buttons will be the actions for declaring the report claimed or found */}
+
+                    <Button color="primary">Set as claimed</Button>
+                    |
+                    <Button color="primary">Set as found</Button>
+
                     </TableCell>
                   </TableRow>
                   ))

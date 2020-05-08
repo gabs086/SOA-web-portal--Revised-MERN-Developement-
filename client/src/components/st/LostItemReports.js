@@ -169,7 +169,7 @@ function LostItemReports(props) {
   props.getLostReport();
    setLoading(false);  
   //  Change the way of how to execute the function immidiately 
-  const fetchCampuses = (async _ => {
+  (async _ => {
   const res = await axios.get('/api/campuses');
     getCampuses(res.data);
     setLoadingCampuses(false);
@@ -179,7 +179,7 @@ function LostItemReports(props) {
     return () => {
       props.getLostReport();
     }
-  }, [])
+  },[])
 
   //Getting the pages, Material UI Funcs
   const handleChangePage = (event, newPage) => {

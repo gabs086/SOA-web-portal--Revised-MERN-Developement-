@@ -172,7 +172,7 @@ class Index extends React.Component {
                     <CssBaseline /> {/* krung krung sa css baseline hahaha*/}
                     <div className={classes.paper}>
 
-                        <a onClick={setPicNew}>
+                        <a href="#" onClick={setPicNew}>
                             {
                                 setPic 
                                 ?  <img src={indexnewpic} alt="SOA Web Portal" />

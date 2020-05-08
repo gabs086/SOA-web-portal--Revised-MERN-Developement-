@@ -21,12 +21,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Container from '@material-ui/core/Container';
-
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
   head: {

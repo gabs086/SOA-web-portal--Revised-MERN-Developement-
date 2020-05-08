@@ -21,7 +21,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Button from '@material-ui/core/Button';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
@@ -250,7 +250,9 @@ function LostAndFound(props) {
                     : <TableCell align="left">{row.status}</TableCell>
                   }
                   <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
-                  <TableCell align="left">Claimed | Found</TableCell>
+                  <TableCell align="left">
+                    Claimed | Found
+                    </TableCell>
                   </TableRow>
                   ))
                  }

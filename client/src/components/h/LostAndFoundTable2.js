@@ -136,6 +136,20 @@ const useStyles1 = makeStyles(theme => ({
       setPage(0);
     };
 
+    //Action for Claimed and Found
+    // The function button for setting the data into found 
+    const setAsFound = e => {
+      e.preventDefault();
+      console.log("Found");
+    };
+
+    // The function button for setting the data into found 
+    const setAsClaimed = e => {
+      e.preventDefault();
+      console.log("Claimed");
+    }
+
+
     // Fetch the datas of lost item reports through reducer 
   useEffect( _ => {
     props.getLostReport();
@@ -156,7 +170,8 @@ const useStyles1 = makeStyles(theme => ({
   const dateFilter = moment(today).format('YYYY-MM-DD');
 
   //Array of the reports in the lost item reports 
-  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1)) .filter(row => ( moment(row.created_at).format('YYYY-MM-DD') !== dateFilter && auth.user.campus === row.campus ) );
+  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+  .filter(row => ( moment(row.created_at).format('YYYY-MM-DD') !== dateFilter && auth.user.campus === row.campus ) );
 
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -236,9 +251,9 @@ const useStyles1 = makeStyles(theme => ({
                             <TableCell align="left">
 
                            { /*These buttons will be the actions for declaring the report claimed or found */}
-                            <Button variant="contained" color="primary">Set as claimed</Button>
+                            <Button onClick={setAsClaimed} variant="contained" color="primary">Set as claimed</Button>
                             |
-                            <Button variant="contained" color="primary">Set as found</Button>
+                            <Button onClick={setAsFound} variant="contained" color="primary">Set as found</Button>
 
                             </TableCell>
                           </TableRow>

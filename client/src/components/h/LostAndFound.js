@@ -143,6 +143,19 @@ function LostAndFound(props) {
     setPage(0);
   };
   
+  //Action for Claimed and Found
+    // The function button for setting the data into found 
+  const setAsFound = e => {
+      e.preventDefault();
+      console.log("Found");
+    };
+
+    // The function button for setting the data into found 
+  const setAsClaimed = e => {
+      e.preventDefault();
+      console.log("Claimed");
+    };
+
   // Fetch the datas of lost item reports through reducer 
   useEffect( _ => {
     props.getLostReport();
@@ -172,6 +185,7 @@ function LostAndFound(props) {
    //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
+  console.log(props);
 
     return (
     <DashBoardHead>
@@ -252,11 +266,11 @@ function LostAndFound(props) {
                   }
                   <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
                   <TableCell align="left">
-                   { /*These buttons will be the actions for declaring the report claimed or found */}
-
-                    <Button color="primary">Set as claimed</Button>
-                    |
-                    <Button color="primary">Set as found</Button>
+                   
+                      { /*These buttons will be the actions for declaring the report claimed or found */}
+                      <Button onClick={setAsClaimed} variant="contained" color="primary">Set as claimed</Button>
+                      |
+                       <Button onClick={setAsFound} variant="contained" color="primary">Set as found</Button>
 
                     </TableCell>
                   </TableRow>

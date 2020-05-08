@@ -35,7 +35,6 @@ router.get('/getreportlostitem', async (req, res) => {
         }
 });
 
-
 //@rout POST api/laf/reportlostitem
 //@desc Report lost item via lost item report form
 //@access  Public
@@ -80,5 +79,44 @@ router.post('/reportlostitem', (req,res) => {
 
 });
 
+//@route POST /api/laf/setasfounditem/:id
+//@desc Update the lost item report status to "Found, Not claimed" Status.
+//@access SOA Heads Only
+router.post('/setasfounditem/:id', (req,res) => {
+
+    const id = req.params.id;
+
+    LafReports.findByPk(id) 
+    .then(reports => {
+            reports.status = req.body.status;
+
+            reports.save()
+            .then(_ => res.json('Report has been set to found status'))
+            .catch(err => res.status(500).json(`Error: ${err}`));
+    })
+    .catch(err => res.status(500).json(err));
+}); 
+
+//@route POST /api/laf/setasclaimeditem/:id
+//@desc Update the lost item report status to "Found and Claimed" status
+//@access SOA Heads only
+router.post('/setasclaimeditem/:id', async (req,res) => {
+   
+    const id = req.params.id;
+
+    const reports = await LafReports.findByPk(id);
+    try{
+       if(reports){
+            reports.status = req.body.status;
+
+            reports.save()
+            .then( _ => res.json('Report has been set to claimed status'))
+            .catch(err => res.status(500).json(`Error: ${err}`))
+        } 
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
+});
 
 module.exports = router;

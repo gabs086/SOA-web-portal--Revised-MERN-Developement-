@@ -21,6 +21,11 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -124,6 +129,13 @@ const useStyles1 = makeStyles(theme => ({
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
+    //Dialog Confirmation Action state for statuses of each report
+    // State for Found button 
+    const [open, setOpen] = useState(false);
+    //State for Claimed button
+    const [open1, setOpen1] = useState(false);
+
+
       // Loading for fetching datas 
     const [loading, setLoading] = useState(true);
   
@@ -140,15 +152,22 @@ const useStyles1 = makeStyles(theme => ({
     // The function button for setting the data into found 
     const setAsFound = e => {
       e.preventDefault();
-      console.log("Found");
+      setOpen(true);
     };
 
     // The function button for setting the data into found 
     const setAsClaimed = e => {
       e.preventDefault();
-      console.log("Claimed");
-    }
+      setOpen1(true);
+    };
 
+     const handleClose = () => {
+      setOpen(false);
+    };
+
+    const handleClose1 = () => {
+      setOpen1(false);
+    };
 
     // Fetch the datas of lost item reports through reducer 
   useEffect( _ => {
@@ -178,6 +197,56 @@ const useStyles1 = makeStyles(theme => ({
 
       return (
       <Fragment>
+
+        {/*Dialogue message for confirmation if the report will be set as "Found, Not Claimed" or 
+          "Found and Claimed" status*/}
+        {/* Dialog Message box for the Found action button*/}
+           <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{'Set to "Found, Not Claimed" Status?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure that this lost report is found?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Disagree
+                </Button>
+                <Button onClick={handleClose} color="primary" autoFocus>
+                  Agree
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+          {/* Dialog Message box for the Claimed action button*/}
+           <Dialog
+              open={open1}
+              onClose={handleClose1}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{'Set to "Found and Claimed" Report'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure that this lost report is claimed?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose1} color="primary">
+                  Disagree
+                </Button>
+                <Button onClick={handleClose1} color="primary" autoFocus>
+                  Agree
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+
         <Paper className={classes.root}>
   
               {/* Table for the today reports will be here */}

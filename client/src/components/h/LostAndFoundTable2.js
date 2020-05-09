@@ -214,11 +214,11 @@ const useStyles1 = makeStyles(theme => ({
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                  Disagree
+                <Button onClick={handleClose} color="primary" variant="outlined" autoFocus>
+                  Yes
                 </Button>
-                <Button onClick={handleClose} color="primary" autoFocus>
-                  Agree
+                   <Button onClick={handleClose} color="secondary" variant="outlined">
+                  Cancel
                 </Button>
               </DialogActions>
             </Dialog>
@@ -230,18 +230,18 @@ const useStyles1 = makeStyles(theme => ({
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">{'Set to "Found and Claimed" Report'}</DialogTitle>
+              <DialogTitle id="alert-dialog-title">{'Set to Found and Claimed" Report'}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                   Are you sure that this lost report is claimed?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose1} color="primary">
-                  Disagree
+               <Button onClick={handleClose1} color="primary" variant="outlined" autoFocus>
+                  Yes
                 </Button>
-                <Button onClick={handleClose1} color="primary" autoFocus>
-                  Agree
+                <Button onClick={handleClose1} color="secondary" variant="outlined">
+                  Cancel
                 </Button>
               </DialogActions>
             </Dialog>

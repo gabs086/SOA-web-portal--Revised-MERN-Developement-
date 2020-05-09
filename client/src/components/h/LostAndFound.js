@@ -167,14 +167,14 @@ function LostAndFound(props) {
   
   //Action for Claimed and Found
     // The function button for setting the data into found 
-  const setAsFound = e => {
-       e.preventDefault();
+  const setAsFound = id => {
+       console.log(id);
       setOpen(true);
     };
 
     // The function button for setting the data into found 
-  const setAsClaimed = e => {
-      e.preventDefault();
+  const setAsClaimed = id => {
+      console.log(id);
       setOpen1(true);
     };
 
@@ -327,7 +327,7 @@ function LostAndFound(props) {
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
                   )
-                  .map(row => (
+                  .map((row, id) => (
                     // The row where all the datas will be displayed 
                   <TableRow>
                   <TableCell component="th" scope="row">

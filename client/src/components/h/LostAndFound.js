@@ -22,6 +22,11 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
@@ -132,6 +137,11 @@ function LostAndFound(props) {
    // Loading for fetching datas 
   const [loading, setLoading] = useState(true);
 
+ //Dialog Confirmation Action state for statuses of each report
+  // State for Found button 
+  const [open, setOpen] = useState(false);
+  //State for Claimed button
+  const [open1, setOpen1] = useState(false);
 
 
   const handleChangePage = (event, newPage) => {
@@ -146,14 +156,22 @@ function LostAndFound(props) {
   //Action for Claimed and Found
     // The function button for setting the data into found 
   const setAsFound = e => {
-      e.preventDefault();
-      console.log("Found");
+       e.preventDefault();
+      setOpen(true);
     };
 
     // The function button for setting the data into found 
   const setAsClaimed = e => {
       e.preventDefault();
-      console.log("Claimed");
+      setOpen1(true);
+    };
+
+  const handleClose = () => {
+      setOpen(false);
+    };
+
+  const handleClose1 = () => {
+      setOpen1(false);
     };
 
   // Fetch the datas of lost item reports through reducer 
@@ -189,6 +207,56 @@ function LostAndFound(props) {
 
     return (
     <DashBoardHead>
+
+    {/*Dialogue message for confirmation if the report will be set as "Found, Not Claimed" or 
+          "Found and Claimed" status*/}
+        {/* Dialog Message box for the Found action button*/}
+           <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{'Set to "Found, Not Claimed" Status?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure that this lost report is found?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary" variant="outlined" autoFocus>
+                  Yes
+                </Button>
+                   <Button onClick={handleClose} color="secondary" variant="outlined">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+          {/* Dialog Message box for the Claimed action button*/}
+           <Dialog
+              open={open1}
+              onClose={handleClose1}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{'Set to Found and Claimed" Report'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure that this lost report is claimed?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+               <Button onClick={handleClose1} color="primary" variant="outlined" autoFocus>
+                  Yes
+                </Button>
+                <Button onClick={handleClose1} color="secondary" variant="outlined">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+
           <Typography variant="h4" gutterBottom>
             Reports today
           </Typography>

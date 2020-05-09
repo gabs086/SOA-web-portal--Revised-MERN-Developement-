@@ -35,12 +35,12 @@ export const addLostReport = lostReports => dispatch => {
 
 // Set the id of the data to found status 
 export const setReportToFound = id => {
-    console.log('Set as found');
+    console.log(`Set as found with id ${id}`);
 }
 
 // Set the id of the data to claimed status 
 export const setReportToClaimed = id => {
-    console.log('Set as Claimed');
+    console.log(`Set as Claimed with id ${id}`);
 }
 
 export const setReportLoading = _ => {

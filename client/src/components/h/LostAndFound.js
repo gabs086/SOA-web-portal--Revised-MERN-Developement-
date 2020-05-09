@@ -155,16 +155,6 @@ function LostAndFound(props) {
     setPage(0);
   };
 
-  // setters for the setting the found and claimed action to true 
-  const setFoundToTrue = _ => {
-    setFound(true);
-    setOpen(false);
-  }
-  const setClaimedToTrue = _ => {
-    setClaimed(true);
-    setOpen1(false);
-  }
-  
   //Action for Claimed and Found
     // The function button for setting the data into found 
   const setAsFound = id => {
@@ -215,8 +205,8 @@ function LostAndFound(props) {
    //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
-  console.log(props);
-  console.log(found, claimed);
+  // console.log(props);
+  // console.log(found, claimed);
 
     return (
     <DashBoardHead>
@@ -237,7 +227,7 @@ function LostAndFound(props) {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={setFoundToTrue} color="primary" variant="outlined" autoFocus>
+                <Button onClick={handleClose} color="primary" variant="outlined" autoFocus>
                   Yes
                 </Button>
                    <Button onClick={handleClose} color="secondary" variant="outlined">
@@ -260,7 +250,7 @@ function LostAndFound(props) {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-               <Button onClick={setClaimedToTrue} color="primary" variant="outlined" autoFocus>
+               <Button onClick={handleClose1} color="primary" variant="outlined" autoFocus>
                   Yes
                 </Button>
                 <Button onClick={handleClose1} color="secondary" variant="outlined">
@@ -349,9 +339,9 @@ function LostAndFound(props) {
                   <TableCell align="left">
                    
                       { /*These buttons will be the actions for declaring the report claimed or found */}
-                      <Button onClick={setAsClaimed} variant="contained" color="primary">Set as claimed</Button>
+                      <Button variant="contained" color="primary">Set as claimed</Button>
                       |
-                       <Button onClick={setAsFound} variant="contained" color="primary">Set as found</Button>
+                       <Button variant="contained" color="primary">Set as found</Button>
 
                     </TableCell>
                   </TableRow>

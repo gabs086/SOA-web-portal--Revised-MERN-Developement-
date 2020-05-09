@@ -2,7 +2,8 @@ import {
     ADD_LOST_REPORT,
     GET_LOST_REPORTS,
     REPORT_LOADING,
-
+    SET_REPORT_TO_FOUND ,
+    SET_REPORT_TO_CLAIMED 
 } from '../actions/types';
 
 // Initial State 
@@ -20,19 +21,27 @@ export default function (state = initialState, action){
                 ...state,
                 lost: true,
                 reports: [action.payload, ...state.reports]
-                
-            }
+            };
+        // Reducers for making the data set to found or claimed
+        case SET_REPORT_TO_FOUND:
+        case SET_REPORT_TO_CLAIMED:
+            return{
+                ...state,
+                reports: state.reports.map((report,i) => i === 1 ? {...report, status: action.payload} 
+                    : report)
+            };
+
         case GET_LOST_REPORTS:
             return {
                 ...state,
                 reports: action.payload,
                 loading: false
-            }
+            };
         case REPORT_LOADING:
             return {
                 ...state,
                 loading: true
-            }
+            };
         default: 
             return state;
     }

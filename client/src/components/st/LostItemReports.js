@@ -23,6 +23,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import Button from '@material-ui/core/Button';
 
 //Components
 import Navbar from '../layouts/Navbar';
@@ -45,6 +46,7 @@ const useStyles1 = makeStyles(theme => ({
     flexShrink: 0,
     marginLeft: theme.spacing(2.5),
   },
+
 }));
 
 // Table Functions for table pagination 
@@ -128,6 +130,9 @@ const useStyles2 = makeStyles( theme => ({
     },
     marginTop: '50px',
     height: '50px'
+  },
+  reportButton: {
+    marginTop:15,
   }
 }));
 
@@ -339,6 +344,13 @@ function LostItemReports(props) {
           </Table>
         </div>
       </Paper>
+
+
+      <Button className={classes.reportButton} variant="contained" color="primary" href="/st/lostandfoundpage/reportlostitem">
+        Report Again
+      </Button>
+
+
     </Container>
 
     </div>

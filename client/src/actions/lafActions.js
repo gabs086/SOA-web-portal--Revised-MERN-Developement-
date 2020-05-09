@@ -33,6 +33,16 @@ export const addLostReport = lostReports => dispatch => {
     }));   
 }
 
+// Set the id of the data to found status 
+export const setReportToFound = id => {
+    console.log('Set as found');
+}
+
+// Set the id of the data to claimed status 
+export const setReportToClaimed = id => {
+    console.log('Set as Claimed');
+}
+
 export const setReportLoading = _ => {
     return { type: REPORT_LOADING }
 }

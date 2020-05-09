@@ -1,7 +1,8 @@
 import {
     ADD_LOST_REPORT,
     GET_LOST_REPORTS,
-    REPORT_LOADING
+    REPORT_LOADING,
+
 } from '../actions/types';
 
 // Initial State 

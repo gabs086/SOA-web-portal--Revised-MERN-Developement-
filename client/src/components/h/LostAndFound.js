@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getLostReport } from '../../actions/lafActions';
+import { getLostReport, setReportToFound, setReportToClaimed } from '../../actions/lafActions';
 
 import moment from 'moment';
 
@@ -143,6 +143,8 @@ function LostAndFound(props) {
   //State for Claimed button
   const [open1, setOpen1] = useState(false);
 
+  const [found, setFound] = useState(false);
+  const [claimed, setClaimed] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -152,6 +154,16 @@ function LostAndFound(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  // setters for the setting the found and claimed action to true 
+  const setFoundToTrue = _ => {
+    setFound(true);
+    setOpen(false);
+  }
+  const setClaimedToTrue = _ => {
+    setClaimed(true);
+    setOpen1(false);
+  }
   
   //Action for Claimed and Found
     // The function button for setting the data into found 
@@ -204,6 +216,7 @@ function LostAndFound(props) {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
   console.log(props);
+  console.log(found, claimed);
 
     return (
     <DashBoardHead>
@@ -224,7 +237,7 @@ function LostAndFound(props) {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose} color="primary" variant="outlined" autoFocus>
+                <Button onClick={setFoundToTrue} color="primary" variant="outlined" autoFocus>
                   Yes
                 </Button>
                    <Button onClick={handleClose} color="secondary" variant="outlined">
@@ -247,7 +260,7 @@ function LostAndFound(props) {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-               <Button onClick={handleClose1} color="primary" variant="outlined" autoFocus>
+               <Button onClick={setClaimedToTrue} color="primary" variant="outlined" autoFocus>
                   Yes
                 </Button>
                 <Button onClick={handleClose1} color="secondary" variant="outlined">

@@ -1,11 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { withRouter } from "react-router";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { getLostReport, setReportToFound, setReportToClaimed } from '../../actions/lafActions';
+import { setReportToFound, setReportToClaimed } from '../../actions/lafActions';
 
+import axios from 'axios';
 import moment from 'moment';
 
 import { withStyles, makeStyles, useTheme,} from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -22,11 +25,10 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
+//Other Components
+import FoundSuccessMsg from './FoundSuccessMsg';
+import ClaimedSuccessMsg from './ClaimedSuccessMsg';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
@@ -52,6 +54,17 @@ const useStyles1 = makeStyles(theme => ({
     marginLeft: theme.spacing(2.5),
   },
 }));
+
+//Colored button for The Claimed Action
+const ClaimedButton = withStyles((theme) => ({
+  root: {
+    // color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+}))(Button);
 
 // Table Functions for table pagination 
 // Table one 
@@ -134,17 +147,18 @@ function LostAndFound(props) {
     // Table pagination Actions states
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    const [reports, getReports] = useState([]);
    // Loading for fetching datas 
   const [loading, setLoading] = useState(true);
 
- //Dialog Confirmation Action state for statuses of each report
-  // State for Found button 
-  const [open, setOpen] = useState(false);
-  //State for Claimed button
-  const [open1, setOpen1] = useState(false);
-
+  // State for the confirmation message component
   const [found, setFound] = useState(false);
   const [claimed, setClaimed] = useState(false);
+
+  //statements for the action to be submitted as data for found and claimed actions
+  const [foundData, ] = useState('Found, Not Claimed');
+  const [claimedData, ] = useState('Found and Claimed');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -158,28 +172,63 @@ function LostAndFound(props) {
   //Action for Claimed and Found
     // The function button for setting the data into found 
   const setAsFound = id => {
-       console.log(id);
-      setOpen(true);
+      
+      if(window.confirm("Are you sure this report item is now found?") ){
+         const updateStatusFound = {
+            status: foundData
+          };
+
+          props.setReportToFound(id, updateStatusFound);
+          setFound(true);
+      }
+ 
     };
 
     // The function button for setting the data into found 
   const setAsClaimed = id => {
-      console.log(id);
-      setOpen1(true);
-    };
+    if(window.confirm("Are you sure this report item is now claimed?")){
+        const updateStatusClaimed = {
+          status: claimedData
+        };
 
-  const handleClose = () => {
-      setOpen(false);
-    };
+        props.setReportToClaimed(id, updateStatusClaimed);
+        setClaimed(true);
+      }
+        };
 
-  const handleClose1 = () => {
-      setOpen1(false);
-    };
+    //Success handlin message 
+  const handlingCloseAction = (event, reason) => {
+    if(reason === 'clickaway'){
+        return
+    }
+    setFound(false);
+  };
 
-  // Fetch the datas of lost item reports through reducer 
+    //Success handlin message 
+  const handlingCloseAction1 = (event, reason) => {
+    if(reason === 'clickaway'){
+        return
+    }
+    setClaimed(false);
+  };
+  
+// Fuction expression for getting all the reports in the database 
+  const fetchReports = async _ => {
+    const res = await axios.get('/api/laf/getreportlostitem');
+      getReports(res.data);
+      setLoading(false);
+  };
+   
   useEffect( _ => {
-    props.getLostReport();
-    setLoading(false);
+   // an Interval that fetches the reports and renders every 2secs. 
+// It will update the component whether if theres changes or not 
+    const id = setInterval(_ => {
+      fetchReports();
+    }, 2000);
+
+    return _ => {
+      clearInterval(id);
+    }
 
   },[]);
 
@@ -198,67 +247,19 @@ function LostAndFound(props) {
 
   //Array of the reports in the lost item reports 
   //The array is now sorted that it only accepts data that is reported today and if the the campus of the user is equal to the campus or the report.
-  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1)).filter(row => 
+  const rows = reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1)).filter(row => 
     ( moment(row.created_at).format('YYYY-MM-DD') === dateFilter && auth.user.campus === row.campus)
   );
 
    //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-  
-  // console.log(props);
-  // console.log(found, claimed);
 
     return (
     <DashBoardHead>
 
-    {/*Dialogue message for confirmation if the report will be set as "Found, Not Claimed" or 
-          "Found and Claimed" status*/}
-        {/* Dialog Message box for the Found action button*/}
-           <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">{'Set to "Found, Not Claimed" Status?'}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Are you sure that this lost report is found?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} color="primary" variant="outlined" autoFocus>
-                  Yes
-                </Button>
-                   <Button onClick={handleClose} color="secondary" variant="outlined">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-
-          {/* Dialog Message box for the Claimed action button*/}
-           <Dialog
-              open={open1}
-              onClose={handleClose1}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">{'Set to Found and Claimed" Report'}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Are you sure that this lost report is claimed?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-               <Button onClick={handleClose1} color="primary" variant="outlined" autoFocus>
-                  Yes
-                </Button>
-                <Button onClick={handleClose1} color="secondary" variant="outlined">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-
+    {/* Confirmation messages */}
+    <FoundSuccessMsg open={found} onClose={handlingCloseAction}/>
+    <ClaimedSuccessMsg open={claimed} onClose={handlingCloseAction1}/>
 
           <Typography variant="h4" gutterBottom>
             Reports today
@@ -306,7 +307,7 @@ function LostAndFound(props) {
                     ?
                     <TableRow>
                     <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
-                      <span>No Report for today</span>
+                        <span>No Report for today ? Refresh the page after 5 mins to see what's up</span>
                     </TableCell>
                   </TableRow>
                     :
@@ -333,16 +334,48 @@ function LostAndFound(props) {
                   {
                     row.status === 'Unfound/Unclaimed'
                     ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
-                    : <TableCell align="left">{row.status}</TableCell>
+                    : 
+                      <Fragment>
+                        {
+                          row.status === 'Found, Not Claimed'
+                          ?
+                          <TableCell align="left" style={{ color: 'blue'}}>{row.status}</TableCell>
+                          :
+                           <TableCell align="left" style={{ color: 'green'}}>{row.status}</TableCell>
+                        }
+                      </Fragment>
+                   
                   }
                   <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
                   <TableCell align="left">
                    
                       { /*These buttons will be the actions for declaring the report claimed or found */}
-                      <Button variant="contained" color="primary">Set as claimed</Button>
-                      |
-                       <Button variant="contained" color="primary">Set as found</Button>
-
+                      {
+                        row.status === 'Unfound/Unclaimed'
+                        ?
+                        <Fragment>
+                         <Button onClick={ _ => setAsFound(row.id)} variant="contained" color="primary">Set as found</Button>
+                            |
+                          <ClaimedButton onClick={ _ => setAsClaimed(row.id)} variant="contained" color="primary">
+                          Set as claimed
+                          </ClaimedButton>
+                        </Fragment>
+                        :
+                        <Fragment>
+                        {
+                          row.status === 'Found, Not Claimed'
+                            ?
+                           <ClaimedButton onClick={ _ => setAsClaimed(row.id)} variant="contained" color="primary">
+                            Set as claimed
+                            </ClaimedButton>
+                          :
+                           <Fragment>
+                               Report Closed
+                            </Fragment>
+                        }
+                        </Fragment>
+                      }
+                     
                     </TableCell>
                   </TableRow>
                   ))
@@ -393,13 +426,16 @@ function LostAndFound(props) {
 
             </DashBoardHead>
     )
-}
+};
+
+ LostAndFound.propTypes = {
+      history: PropTypes.object.isRequired,
+    };
 const mapStateToProps = state => ({
-  laf: state.laf,
-  auth: state.auth
+  auth: state.auth,
 });
 
-//Dipatch proptypes(React Hooks) 
-const mapDispatchToProps = { getLostReport };
+const mapDispatchToProps = { setReportToFound, setReportToClaimed };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LostAndFound));
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(LostAndFound)));

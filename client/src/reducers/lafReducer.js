@@ -12,6 +12,7 @@ const initialState = {
     found: false,
     reports: [],
     loading: false,
+    error: false,
 }
 
 export default function (state = initialState, action){
@@ -24,10 +25,23 @@ export default function (state = initialState, action){
             };
         // Reducers for making the data set to found or claimed
         case SET_REPORT_TO_FOUND:
+            return{
+                ...state,
+                reports: state.reports.map((report,i) => i === 1 ? 
+                    {
+                        ...report, 
+                    status: action.payload,
+                      } 
+                    : report)
+            };
         case SET_REPORT_TO_CLAIMED:
             return{
                 ...state,
-                reports: state.reports.map((report,i) => i === 1 ? {...report, status: action.payload} 
+                reports: state.reports.map((report,i) => i === 1 ? 
+                    {
+                        ...report, 
+                        status: action.payload,
+                    } 
                     : report)
             };
 
@@ -35,7 +49,7 @@ export default function (state = initialState, action){
             return {
                 ...state,
                 reports: action.payload,
-                loading: false
+                loading: false,
             };
         case REPORT_LOADING:
             return {

@@ -171,18 +171,22 @@ function LostItemReports(props) {
 
   useEffect(() => {
   // / Action for fetching the datas in lafActions
-  props.getLostReport();
-   setLoading(false);  
-  //  Change the way of how to execute the function immidiately 
+  const id = setInterval( _ =>{
+      props.getLostReport();
+      setLoading(false);  
+
+   //  Change the way of how to execute the function immidiately 
   (async _ => {
   const res = await axios.get('/api/campuses');
     getCampuses(res.data);
     setLoadingCampuses(false);
   })();
 
+  }, 2000);
+
     // Cleansing, unmounting win the component already mounts
     return () => {
-      props.getLostReport();
+      clearInterval(id);
     }
   },[])
 
@@ -201,10 +205,13 @@ function LostItemReports(props) {
     setSearch(e.target.value);
   };
   //Array of the reports in the lost item reports 
+  //Amd filters it by chosen campus
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+    .filter(row => row.campus === search)
 
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
 
   return (
     <div>
@@ -269,7 +276,7 @@ function LostItemReports(props) {
 
       {/* Body for displaying the reports */}
             <TableBody>
-              { loading || rows.length === 0
+              { loading 
                 ? 
                   //When the data is still loading
                   <TableRow>
@@ -282,7 +289,7 @@ function LostItemReports(props) {
                 //Data to be displayed when the data is fetched
                 <Fragment>
                 {
-                   search === '' ?
+                   search === '' || rows.length === 0 ?
                    <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
                    <ArrowUpwardIcon /><br></br>
                    Pls search at the top to filter by campus...
@@ -291,7 +298,7 @@ function LostItemReports(props) {
                   (rowsPerPage > 0
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
-                  ).filter(row => row.campus === search).map(row => (
+                  ).map(row => (
                     <TableRow>
                       <TableCell component="th" scope="row">
                         {row.name}
@@ -304,9 +311,21 @@ function LostItemReports(props) {
                       <TableCell align="left">{row.details}</TableCell>
                       <TableCell align="left">{row.contact}</TableCell>
                       {
+                        // In this component, if the status is Unfound/Uclaimed 
+                        // The color text of the status will be red
                         row.status === 'Unfound/Unclaimed'
                         ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
-                        : <TableCell align="left">{row.status}</TableCell>
+                        : 
+                        <Fragment>
+                        {
+                          // Elss if the status is Found, Not Claimed 
+                          // The color text of the status will be bluse
+                          row.status === 'Found, Not Claimed'
+                          ? <TableCell align="left" style={{ color: 'blue' }}>{row.status}</TableCell>
+                          //Else it will be green 
+                          : <TableCell align="left" style={{ color: 'green' }}>{row.status}</TableCell>
+                        }
+                        </Fragment>
                       }
                     </TableRow>
                   ))

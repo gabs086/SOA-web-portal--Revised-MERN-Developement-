@@ -17,6 +17,7 @@ const initialState = {
 
 export default function (state = initialState, action){
     switch(action.type){
+        // Reducer for adding a lost item report 
         case ADD_LOST_REPORT:
             return {
                 ...state,
@@ -44,7 +45,7 @@ export default function (state = initialState, action){
                     } 
                     : report)
             };
-
+        // Reducer for getting all the data reports 
         case GET_LOST_REPORTS:
             return {
                 ...state,

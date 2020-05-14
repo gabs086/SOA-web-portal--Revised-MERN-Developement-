@@ -10,3 +10,12 @@
 // 7. Quantity of Officers 
 // 8. Org Description 
 // 9. Registering date 
+
+const express = require('express');
+const router = express.Router();
+
+const OrgDesc = require('../../models/orgdesc.model');
+
+
+
+module.exports = router;

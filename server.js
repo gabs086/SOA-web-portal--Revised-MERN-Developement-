@@ -7,7 +7,7 @@ const passport = require('passport');
 
 //API Routes
 const users = require("./routes/api/users");
-const laf = require('./routes/api/laf');
+const lost = require('./routes/api/lost');
 const campuses = require('./routes/api/campuses');
 const departments = require('./routes/api/departments');
 
@@ -47,7 +47,7 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
-app.use("/api/laf", laf);
+app.use("/api/lost", lost);
 app.use("/api/campuses", campuses);
 app.use("/api/departments", departments);
 

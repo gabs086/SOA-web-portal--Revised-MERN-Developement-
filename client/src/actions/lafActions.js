@@ -12,7 +12,7 @@ import {
 // Function for getting all the data in lost item report 
 export const getLostReport = _ => dispatch => {
     dispatch(setReportLoading);
-    axios.get('/api/laf/getreportlostitem')
+    axios.get('/api/lost/getreportlostitem')
     .then(res => dispatch({
         type: GET_LOST_REPORTS,
         payload: res.data
@@ -22,7 +22,7 @@ export const getLostReport = _ => dispatch => {
 
 //Adding Data report to the reducer
 export const addLostReport = lostReports => dispatch => {
-    axios.post('/api/laf/reportlostitem', lostReports)
+    axios.post('/api/lost/reportlostitem', lostReports)
     .then(res =>
         dispatch({
             type: ADD_LOST_REPORT,
@@ -38,7 +38,7 @@ export const addLostReport = lostReports => dispatch => {
 
 //With Redux
 export const setReportToFound = (id, data) => dispatch => {
-    axios.post(`/api/laf/setasfounditem/${id}`, data)
+    axios.post(`/api/lost/setasfounditem/${id}`, data)
     .then(res => dispatch({
         type: SET_REPORT_TO_FOUND,
         payload:res.data
@@ -53,7 +53,7 @@ export const setReportToFound = (id, data) => dispatch => {
 // Set the id of the data to claimed status 
 // With Redux 
 export const setReportToClaimed = (id, data) => dispatch =>  {
-    axios.post(`/api/laf/setasclaimeditem/${id}`, data)
+    axios.post(`/api/lost/setasclaimeditem/${id}`, data)
     .then(res =>  dispatch({
          type: SET_REPORT_TO_CLAIMED,
          payload: res.data

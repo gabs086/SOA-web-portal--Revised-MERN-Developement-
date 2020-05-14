@@ -212,7 +212,7 @@ const ClaimedButton = withStyles((theme) => ({
 
 // Fuction expression for getting all the reports in the database 
    const fetchReports = async _ => {
-      const res = await axios.get('/api/laf/getreportlostitem');
+      const res = await axios.get('/api/lost/getreportlostitem');
           getReports(res.data);
           setLoading(false);
    };

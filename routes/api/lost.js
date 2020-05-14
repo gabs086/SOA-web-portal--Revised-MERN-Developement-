@@ -17,7 +17,7 @@
 const express = require('express');
 const router = express.Router();
 
-const LafReports = require('../../models/laf.model');
+const LostReports = require('../../models/lost.model');
 
 const validateLostAndFoundInput = require('../../validation/laf');
 
@@ -25,10 +25,10 @@ const validateLostAndFoundInput = require('../../validation/laf');
 //@desc GET all reports in lost and found;
 //@access PUBLIC
 router.get('/getreportlostitem', async (req, res) => {
-    const lafreport = await LafReports.findAll();
+    const lostreport = await LostReports.findAll();
     
         try{
-            if(lafreport) res.json(lafreport);
+            if(lostreport) res.json(lostreport);
         }
         catch(err){
                 res.status(500).json(err);
@@ -58,7 +58,7 @@ router.post('/reportlostitem', (req,res) => {
     const status = "Unfound/Unclaimed";
     const seen = 0;
 
-    const newLafReports = new LafReports({
+    const newLostReports = new LostReports({
         name,
         src,
         yr,
@@ -71,7 +71,7 @@ router.post('/reportlostitem', (req,res) => {
         seen
     });
 
-    newLafReports.save()
+    newLostReports.save()
     .then( _ =>{ 
         res.json('Reports Sent');
     })
@@ -86,7 +86,7 @@ router.post('/setasfounditem/:id', (req,res) => {
 
     const id = req.params.id;
 
-    LafReports.findByPk(id) 
+    LostReports.findByPk(id) 
     .then(reports => {
             reports.status = req.body.status;
 
@@ -97,14 +97,14 @@ router.post('/setasfounditem/:id', (req,res) => {
     .catch(err => res.status(500).json(err));
 }); 
 
-//@route POST /api/laf/setasclaimeditem/:id
+//@route POST /api/lost/setasclaimeditem/:id
 //@desc Update the lost item report status to "Found and Claimed" status
 //@access SOA Heads only
 router.post('/setasclaimeditem/:id', async (req,res) => {
    
     const id = req.params.id;
 
-    const reports = await LafReports.findByPk(id);
+    const reports = await LostReports.findByPk(id);
     try{
        if(reports){
             reports.status = req.body.status;

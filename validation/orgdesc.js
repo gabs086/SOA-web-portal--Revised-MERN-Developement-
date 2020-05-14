@@ -10,9 +10,9 @@ const validateOrgDesc = data => {
 	data.department = !isEmpty(data.department) ? data.department : ''; 
 	data.orgname = !isEmpty(data.orgname) ? data.orgname : '';
 	data.orgpresname = !isEmpty(data.orgpresname) ? data.orgpresname : '';
-	data.orgadvisername = !isEmpty(orgadvisername) ? data.orgadvisername : '';
-	data.quantitymembers = !isEmpty(quantitymembers) ? data.quantitymembers : '';
-	data.quantityofficers = !isEmpty(quantityofficers) ? data.quantityofficers : '';
+	data.orgadvisername = !isEmpty(data.orgadvisername) ? data.orgadvisername : '';
+	data.quantitymembers = !isEmpty(data.quantitymembers) ? data.quantitymembers : '';
+	data.quantityofficers = !isEmpty(data.quantityofficers) ? data.quantityofficers : '';
 
 	const campus = data.campus;
 	const department = data.department;

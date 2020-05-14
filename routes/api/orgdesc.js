@@ -35,7 +35,39 @@ router.get('/getorgdesc', async (req, res) => {
 //@route POST /api/orgdesc/gaddorganization
 //@DESC Add a STudent orgination in the system
 //@access Admin Only
-router.post('/');
+router.post('/addorganization', (req, res) => {
+	const { errors, isValid } = validateOrgDesc(req.body);
+
+	if(!isValid)
+		return  res.status(400).json(errors)
+
+	const campus = req.body.campus;
+	const department = req.body.department;
+	const orgname = req.body.orgname;
+	const orgpresname = req.body.orgpresname;
+	const orgadvisername = req.body.orgadvisername;
+	const quantitymembers = req.body.quantitymembers;
+	const quantityofficers = req.body.quantityofficers;
+	const description = req.body.description;
+
+	const newOrg = new OrgDesc({
+		campus,
+		department,
+		orgname,
+		orgpresname,
+		orgadvisername,
+		quantitymembers,
+		quantityofficers,
+		description
+	});
+
+	newOrg.save()
+	.then( _ => {
+		res.json('Organization Registered');
+	})
+	.catch(err => res.status(500).json(err));
+
+});
 
 
 module.exports = router;

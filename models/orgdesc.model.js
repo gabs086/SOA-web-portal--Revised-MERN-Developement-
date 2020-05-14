@@ -15,7 +15,7 @@ const Sequelize = require('sequelize');
 const db = require('../config/db');
 
 module.exports = db.sequelize.define(
-	'orgdesc',{
+	'orgdescs',{
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,

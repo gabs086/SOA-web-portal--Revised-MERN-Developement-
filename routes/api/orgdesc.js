@@ -16,6 +16,8 @@ const router = express.Router();
 
 const OrgDesc = require('../../models/orgdesc.model');
 
+const validateOrgDesc = require('../../validation/orgdesc');
+
 //@route GET /api/orgdesc/getorgdesc
 //@desc Get all the registered organizations data
 //@access Admin and Head only
@@ -29,6 +31,11 @@ router.get('/getorgdesc', async (req, res) => {
 		res.status(500).json(err);
 	}
 });
+
+//@route POST /api/orgdesc/gaddorganization
+//@DESC Add a STudent orgination in the system
+//@access Admin Only
+router.post('/');
 
 
 module.exports = router;

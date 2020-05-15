@@ -69,5 +69,47 @@ router.post('/addorganization', (req, res) => {
 
 });
 
+//@route POST /api/orgdesc/updateorganization/:id
+//@desc update the organization with its specific ID
+//@access Admin only
+
+router.post('/updateorganization/:id', (req, res) => {
+	const id = req.params.id;
+
+	// Validation handler 
+	const { errors, isValid } = validateOrgDesc(req.body);
+
+	const { campus, department, orgname, orgpresname, orgadvisername, quantitymembers, quantityofficers, description } = req.body;
+
+	if(!isValid)
+		return  res.status(400).json(errors);
+
+	// Search the id by the parameter id 
+	OrgDesc.findByPk(id)
+	.then(org => {
+
+		if(org.campus === campus && org.department === department && org.orgname === orgname && org.orgpresname === orgpresname && org.orgadvisername === orgadvisername && org.quantitymembers === quantitymembers && org.quantityofficers === quantityofficers && org.description === description){
+			errors.all = "No data have been change";
+
+			return res.status(400).json(errors);
+		} 
+		else {
+		org.campus = campus;
+		org.department = department;
+		org.orgname = orgname;
+		org.orgpresname = orgpresname;
+		org.orgadvisername = orgadvisername;
+		org.quantitymembers = quantitymembers;
+		org.quantityofficers = quantityofficers;
+		org.description = description;
+
+		org.save()
+		.then( _ => res.json('Update Successful'))
+		.catch(err => res.status(500).json(`Error: ${err}`));
+		}
+		
+	})
+	.catch(err => res.status(500).json(err));
+});
 
 module.exports = router;

@@ -87,7 +87,7 @@ router.post('/updateorganization/:id', (req, res) => {
 	// Search the id by the parameter id 
 	OrgDesc.findByPk(id)
 	.then(org => {
-
+			// if all the req are just equal in the data that has been fetched
 		if(org.campus === campus && org.department === department && org.orgname === orgname && org.orgpresname === orgpresname && org.orgadvisername === orgadvisername && org.quantitymembers === quantitymembers && org.quantityofficers === quantityofficers && org.description === description){
 			errors.all = "No data have been change";
 
@@ -110,6 +110,21 @@ router.post('/updateorganization/:id', (req, res) => {
 		
 	})
 	.catch(err => res.status(500).json(err));
+});
+
+//@route DELETE /api/orgdesc/deleteorganization/:id
+//@desc Delete a data of organization with it's specific ID
+//@Admin only
+router.delete('/deleteorganization/:id', (req, res) => {
+	const id = req.params.id;
+
+	OrgDesc.destroy({
+		where: {
+			id: id
+		}
+	})
+	.then( _ => res.json('Info Deleted'))
+	.catch(err => res.status(500).json(`Error: ${err}`));
 });
 
 module.exports = router;

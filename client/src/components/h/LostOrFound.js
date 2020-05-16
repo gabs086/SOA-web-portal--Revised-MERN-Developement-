@@ -86,7 +86,7 @@ const LostOrFound = (props) => {
                                                 </Typography>
                                             </CardContent>
                                             <CardActions>
-                                            <Button size="small" variant="outlined" color="secondary">
+                                            <Button href="/h/lostandfound/foundreports" size="small" variant="outlined" color="secondary">
                                                 Input Found Item Reports
                                                 </Button>
                                             </CardActions>

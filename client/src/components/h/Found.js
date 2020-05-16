@@ -23,6 +23,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
@@ -126,7 +127,7 @@ const styles = theme => ({
       },
   tableWrapper: {
         overflowX: 'auto',
-      },
+      }
 });
 
 const Found = (props) => {
@@ -299,7 +300,16 @@ const Found = (props) => {
                     </TableFooter>
                   </Table>
                </div>
+
+               
          </Paper>
+
+       	   <div style={{ paddingTop: '20px'}}>
+         		<Button href="#" size="small" variant="outlined" color="secondary">
+                   	Add Records
+                </Button>
+           </div>
+
      </DashBoardHead>
   )
 }

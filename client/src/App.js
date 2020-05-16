@@ -24,6 +24,7 @@ import LostAndFound from './components/h/LostAndFound';
 import OrgList from './components/h/OrgList';
 import RequestedActivities from './components/h/RequestedActivities';
 import ActivityAssessment from './components/h/ActivityAssessment';
+import LostOrFound from './components/h/LostOrFound';
 
 // SOA Admin Dashboard Components
 import AdminIndex from './components/ad/AdminIndex';
@@ -82,7 +83,9 @@ function App() {
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />
           <PrivateRoute exact path="/h/announceevent" component={AnnounceEvent} />
-          <PrivateRoute exact path="/h/lostandfound" component={LostAndFound} />
+          <PrivateRoute exact path="/h/lostandfound" component={LostOrFound} />
+          <PrivateRoute exact path="/h/lostandfound/lostreports" component={LostAndFound} />
+
           <PrivateRoute exact path="/h/organizationlist" component={OrgList} />
           <PrivateRoute exact path="/h/requestedactivities" component={RequestedActivities} />
           <PrivateRoute exact path="/h/activityassessment" component={ActivityAssessment} />

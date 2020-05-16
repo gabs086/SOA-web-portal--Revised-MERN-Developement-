@@ -25,6 +25,10 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import HomeIcon from '@material-ui/icons/Home';
+import FindReplaceIcon from '@material-ui/icons/FindReplace';
 
 //Other Components
 import FoundSuccessMsg from './FoundSuccessMsg';
@@ -139,6 +143,14 @@ const styles = theme => ({
     tableWrapper: {
       overflowX: 'auto',
     },
+    link: {
+    display: 'flex',
+  },
+   icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
 });
 
 // Main component 
@@ -260,6 +272,22 @@ function LostAndFound(props) {
     {/* Confirmation messages */}
     <FoundSuccessMsg open={found} onClose={handlingCloseAction}/>
     <ClaimedSuccessMsg open={claimed} onClose={handlingCloseAction1}/>
+
+    <Breadcrumbs aria-label="breadcrumb">
+        <Link color="inherit" href="/h/lostandfound" className={classes.link}>
+          <HomeIcon className={classes.icon} />
+          Menu
+        </Link>
+
+        <Link
+          color="textPrimary"
+          href="/h/lostandfound/lostreports"
+          aria-current="page"
+        >
+        <FindReplaceIcon className={classes.icon}/>
+          Lost Reports
+        </Link>
+    </Breadcrumbs>
 
           <Typography variant="h4" gutterBottom>
             Reports today

@@ -305,7 +305,7 @@ const Found = (props) => {
          </Paper>
 
        	   <div style={{ paddingTop: '20px'}}>
-         		<Button href="#" size="small" variant="outlined" color="secondary">
+         		<Button href="/h/lostandfound/foundreports/addfoundrecord" size="small" variant="outlined" color="secondary">
                    	Add Records
                 </Button>
            </div>

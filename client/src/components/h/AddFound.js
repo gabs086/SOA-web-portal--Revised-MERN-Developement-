@@ -215,7 +215,7 @@ const handleSubmit = e => {
                             {/* Campuses TextField */}
                             <FormControl fullWidth className={classes.formControl}>
 
-                            <InputLabel htmlFor="campus-simple">Campus</InputLabel>
+                            <InputLabel htmlFor="campus-simple">What Campus</InputLabel>
 
                                 <Select
                                     value={campus}
@@ -252,7 +252,7 @@ const handleSubmit = e => {
                                       format="MM/dd/yyyy"
                                       margin="normal"
                                       id="date-picker-inline"
-                                      label="Date picker inline"
+                                      label="When did the item found?"
                                       value={selectedDate}
                                       onChange={handleDateChange}
                                       KeyboardButtonProps={{

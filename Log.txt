@@ -8,10 +8,14 @@ Format:
 May 20,
 @ Creating a found model and route - (routes/api/found, models/found.model),
 
-  Creating a validation for found of the submition are empty - validation/found.js
+  @Creating a validation for found of the submition are empty - validation/found.js
 
-  Included the /api/found api endpoint in the server - 
+  @Included the /api/found api endpoint in the server - 
   server.js
 
-  Upgrade Sequelize Version in from 5.21.5 to 5.21.10
+  @Upgrade Sequelize Version in from 5.21.5 to 5.21.10
   - package.json
+
+  @Apply the routes in the client
+  	> @ Creating a reducer for Found reports
+  		-client/action/types.js

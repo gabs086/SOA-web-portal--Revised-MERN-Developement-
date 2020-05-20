@@ -3,7 +3,9 @@ import {
     GET_LOST_REPORTS,
     REPORT_LOADING,
     SET_REPORT_TO_FOUND ,
-    SET_REPORT_TO_CLAIMED 
+    SET_REPORT_TO_CLAIMED,
+    GET_FOUND_REPORTS,
+    ADD_FOUND_REPORT
 } from '../actions/types';
 
 // Initial State 
@@ -52,6 +54,20 @@ export default function (state = initialState, action){
                 reports: action.payload,
                 loading: false,
             };
+
+        //Case Statements for Found Reports
+        case GET_FOUND_REPORTS:
+            return {
+                ...state,
+                reports: action.payload,
+                loading: false,
+            };
+        case ADD_FOUND_REPORT: 
+            return  {
+                ...state,
+                found: true,
+                reports: [action.payload, ...state.reports]
+            }
         case REPORT_LOADING:
             return {
                 ...state,

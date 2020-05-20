@@ -31,8 +31,8 @@ router.get('/getreportfounditem', async (req, res) => {
 });
 
 //@route POST /api/found/addfoundreport
-//@route Submit the entered input data for found form in the head
-//@desc SOA Head only
+//@desc Submit the entered input data for found form in the head
+//@access SOA Head only
 router.post('/addfoundreport', (req,res) => {
 	const { errors, isValid } = validateFoundReports(req.body);
 
@@ -57,6 +57,21 @@ router.post('/addfoundreport', (req,res) => {
 	.catch(err => res.status(500).json(err));
 
 
+});
+
+//@route DELETE /api/found/deletefoundreport/:id
+//@desc Delete a found report with its specific data
+//@access SOA Head Only
+router.delete('/deletefoundreport/:id', (req, res) => {
+	const id = req.params.id;
+
+	FoundReports.destroy({
+		where: {
+			id:id
+		}
+	})
+	.then( _ => res.json('Found Report Deleted'))
+	.catch(err => res.status(500).json(`Error: ${err}`));
 });
 
 module.exports = router;

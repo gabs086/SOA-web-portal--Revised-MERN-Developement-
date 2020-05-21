@@ -166,7 +166,6 @@ class Index extends React.Component {
         const { password, showPassword, errors, setPic} = this.state;
         const handleClickShowPassword = this.handleClickShowPassword;
         const setPicNew = this.setPicNew;
-        console.log(this.props);
         return (
             <div className={classes.root}>
                 <Container component="main" maxWidth="sm">

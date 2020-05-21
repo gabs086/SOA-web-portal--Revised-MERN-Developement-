@@ -162,7 +162,7 @@ class LostAndFoundContent extends Component {
                                                 </Typography>
                                             </CardContent>
                                             <CardActions>
-                                            <Button size="small" variant="outlined" color="secondary">
+                                            <Button href="/st/lostandfoundpage/foundreportslist" size="small" variant="outlined" color="secondary">
                                                 View Found Item Reports
                                                 </Button>
                                             </CardActions>

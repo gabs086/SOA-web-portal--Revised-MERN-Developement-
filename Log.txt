@@ -36,3 +36,7 @@ May 20,
 4:36 PM
 	- Implementing the delete action button in found process
 	- Delete Action Implemented in  the SOA Head Found page
+
+7:35 PM
+@ Setting the found table component for student page
+	-putting a snackbar in reports list in students page

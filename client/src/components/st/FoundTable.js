@@ -1,10 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, {Fragment, useEffect, useState }from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { connect } from "react-redux";
-import { getLostReport } from '../../actions/lafActions';
 
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import ListIcon from '@material-ui/icons/List';
+import HomeIcon from '@material-ui/icons/List';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,20 +21,14 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import Button from '@material-ui/core/Button';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
-import HomeIcon from '@material-ui/icons/Home';
-import FindReplaceIcon from '@material-ui/icons/FindReplace';
 
 //Components
 import Navbar from '../layouts/Navbar';
-import SuccessMsg from './SuccessMsg';
+
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -112,6 +109,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
+
 // Style for the LostItemReports Component 
 const useStyles2 = makeStyles( theme => ({
   root: {
@@ -138,7 +136,7 @@ const useStyles2 = makeStyles( theme => ({
   reportButton: {
     marginTop:15,
   },
-    link: {
+   link: {
     display: 'flex',
   },
    icon: {
@@ -148,61 +146,29 @@ const useStyles2 = makeStyles( theme => ({
   },
 }));
 
-// Main Component   console.log(props.laf.reports);
-function LostItemReports(props) {
-  const classes = useStyles2();
-  // Pagination Controls 
+
+ function FoundTable(props){
+ 	const classes = useStyles2();
+ 	  // Pagination State
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // Selection and Search state 
-  const [search, setSearch] = useState('');
-  const [campuses, getCampuses] = useState([]);
+  	const [search, setSearch] = useState('');
 
-  // Success message handling state 
-  const [open, setOpen] = useState(false);
+ 	// State for the campuses 
+ 	const [campuses, getCampuses] = useState([]);
+  	const [loadingCampuses, setLoadingCampuses] = useState(true);
 
-  // Loading for fetching datas 
-  const [loading, setLoading] = useState(true);
-  const [loadingCampuses, setLoadingCampuses] = useState(true);
-  
-  //Success handlin message 
-  const handleClose = (event, reason) => {
-    if(reason === 'clickaway'){
-        return
-    }
-    setOpen(false);
-  }
+  	// State for gettin the found reports 
+  	const [reports, getReports] = useState([]);
+  	const [loading, setLoading] = useState(true);
 
-    // Gets an effect in the component if the lost state in the laf prop is true 
-    useEffect(() => {
-      if(props.laf.lost){
-        setOpen(true)
-    }
-    }, [props.laf.lost]);
+ 	// Search Filtering function that filters the table
+	  const handleChange = e => {
+	    setSearch(e.target.value);
+	  };
 
-  useEffect(() => {
-  // / Action for fetching the datas in lafActions
-  const id = setInterval( _ =>{
-      props.getLostReport();
-      setLoading(false);  
-
-   //  Change the way of how to execute the function immidiately 
-  (async _ => {
-  const res = await axios.get('/api/campuses');
-    getCampuses(res.data);
-    setLoadingCampuses(false);
-  })();
-
-  }, 2000);
-
-    // Cleansing, unmounting win the component already mounts
-    return () => {
-      clearInterval(id);
-    }
-  },[])
-
-  //Getting the pages, Material UI Funcs
+	//Getting the pages, Material UI Funcs
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -212,49 +178,61 @@ function LostItemReports(props) {
     setPage(0);
   };
 
-  // Search Filtering function that filters the table
-  const handleChange = e => {
-    setSearch(e.target.value);
-  };
-  //Array of the reports in the lost item reports 
-  //Amd filters it by chosen campus
-  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
-    .filter(row => row.campus === search)
+ 	useEffect( _ => {
+
+ 	const id = setInterval( _ => {
+
+	//  Change the way of how to execute the function immidiately 
+	  (async _ => {
+	  const res = await axios.get('/api/campuses');
+	    getCampuses(res.data);
+	    setLoadingCampuses(false);
+
+	   const res2 = await axios.get('/api/found/getreportfounditem');
+	   	getReports(res2.data);
+	   	setLoading(false);
+	  })();
+
+ 	}, 2000);
+
+ 	return _ => {
+ 		clearInterval(id);
+ 	}
+
+
+ 	},[]);
+
+ 	const rows = reports.sort((a,b) =>(a.created_at > b.created_at ? -1 : 1))
+ 		.filter(row => row.campus === search);
 
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-
+ 	
   return (
     <div>
-      {/* Message confirmation */}
-      <SuccessMsg open={open} onClose={handleClose}/>
+    		
+    	<Navbar />
 
-    {/* Main Component  */}
-    <Navbar />
+    		 <Container style={{paddingTop: 20}}>
 
+	    		<Breadcrumbs aria-label="breadcrumb">
+			        <Link color="inherit" href="/st/lostandfoundpage" className={classes.link}>
+			          <HomeIcon className={classes.icon} />
+			          Menu
+			        </Link>
 
-
-    <Container style={{paddingTop: 20}}>
-
-     <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href="/st/lostandfoundpage" className={classes.link}>
-          <HomeIcon className={classes.icon} />
-          Menu
-        </Link>
-
-        <Link
-          color="textPrimary"
-          href="/st/lostandfoundpage/reportslist"
-          aria-current="page"
-        >
-        <FindReplaceIcon className={classes.icon}/>
-          Lost Reports
-        </Link>
-    </Breadcrumbs>
+			        <Link
+			          color="textPrimary"
+			          href="/st/lostandfoundpage/foundreportslist"
+			          aria-current="page"
+			        >
+			        <ListIcon className={classes.icon}/>
+			          Lost Reports
+			        </Link>
+			    </Breadcrumbs>
 
 
-      {/* Search bar  */}
+			    	{/* Search bar  */}
       <Paper className={classes.root2}>
 
         <FormControl fullWidth>
@@ -287,22 +265,18 @@ function LostItemReports(props) {
 
       </Paper>
 
-            <br/>
-      <Paper className={classes.root}>
+    		<br />
+
+    	 	{/* Table Records for found */}
+    	 	 <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-label="custom pagination table">
         {/* Table Head of the datas  */}
         <TableHead>
           <TableRow>
-            <StyledTableCell>Student name</StyledTableCell>
-            <StyledTableCell align="left">SR-Code</StyledTableCell>
-            <StyledTableCell align="left">College Year</StyledTableCell>
-            <StyledTableCell align="left">Campus</StyledTableCell>
-            <StyledTableCell align="left">Department</StyledTableCell>
-            <StyledTableCell align="left">Student course</StyledTableCell>
-            <StyledTableCell align="left">Lost Item Details</StyledTableCell>
-            <StyledTableCell align="left">Contact Details</StyledTableCell>
-            <StyledTableCell align="left">Report Status</StyledTableCell>
+            <StyledTableCell>Found Item Detail</StyledTableCell>
+            <StyledTableCell align="left">Date when the item is found</StyledTableCell>
+            <StyledTableCell align="left">At what campus</StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -333,32 +307,10 @@ function LostItemReports(props) {
                   ).map(row => (
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        {row.name}
+                        {row.founditem}
                       </TableCell>
-                      <TableCell align="left">{row.src}</TableCell>
-                      <TableCell align="left">{row.yr}</TableCell>
+                      <TableCell align="left">{row.date}</TableCell>
                       <TableCell align="left">{row.campus}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">{row.course}</TableCell>
-                      <TableCell align="left">{row.details}</TableCell>
-                      <TableCell align="left">{row.contact}</TableCell>
-                      {
-                        // In this component, if the status is Unfound/Uclaimed 
-                        // The color text of the status will be red
-                        row.status === 'Unfound/Unclaimed'
-                        ? <TableCell align="left" style={{ color: 'red' }}>{row.status}</TableCell>
-                        : 
-                        <Fragment>
-                        {
-                          // Elss if the status is Found, Not Claimed 
-                          // The color text of the status will be bluse
-                          row.status === 'Found, Not Claimed'
-                          ? <TableCell align="left" style={{ color: 'blue' }}>{row.status}</TableCell>
-                          //Else it will be green 
-                          : <TableCell align="left" style={{ color: 'green' }}>{row.status}</TableCell>
-                        }
-                        </Fragment>
-                      }
                     </TableRow>
                   ))
                 }
@@ -396,24 +348,9 @@ function LostItemReports(props) {
         </div>
       </Paper>
 
-
-      <Button className={classes.reportButton} variant="contained" color="primary" href="/st/lostandfoundpage/reportlostitem">
-        Report Again
-      </Button>
-
-
-    </Container>
-
+ </Container>
     </div>
   );
-}
+};
 
-
-const mapStateToProps = state => ({
-  laf:state.laf,
-});
-
-//Dipatch proptypes(React Hooks) 
-const mapDispatchToProps = { getLostReport };
-
-export default connect(mapStateToProps, mapDispatchToProps)(LostItemReports)
+export default FoundTable;

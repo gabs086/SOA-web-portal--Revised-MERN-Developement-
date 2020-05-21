@@ -19,3 +19,20 @@ May 20,
   @Apply the routes in the client
   	> @ Creating a reducer for Found reports
   		-client/action/types.js
+  		- client/reducers/lafReducer.js
+
+  	  @ Created a action for getting and adding found reports with reducers
+  	  	- client/action/lafActions.js
+
+ May 21,
+ @ Finished LostItemForm component (working)
+ 	- AddFound.js
+
+ @Created Reducers and action for found process
+ 	- lafReducer.js
+ 	- lafActions.js
+
+
+4:36 PM
+	- Implementing the delete action button in found process
+	- Delete Action Implemented in  the SOA Head Found page

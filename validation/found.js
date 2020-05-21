@@ -21,7 +21,7 @@ const validateFoundReports = data => {
 			errors.findername = "Name of the finder is important";
 
 	if(Validator.isEmpty(founditem))
-			error.founditem = "Item Details is important";
+			errors.founditem = "Item Details is important";
 
 	if(Validator.isEmpty(campus))
 			errors.campus = "What campus the item is found";

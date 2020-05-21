@@ -1,7 +1,9 @@
-import React, { Fragment, useState } from 'react';
-
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import moment from 'moment';
+import { withRouter } from "react-router";
+import { getFoundReports, deleteFoundReport } from '../../actions/lafActions';
 
 import { withStyles, makeStyles, useTheme} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -24,9 +26,12 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // Dashboard Component  
 import DashBoardHead from '../layouts/DashboardHead';
+import FoundReportSuccessMsg from './FoundReportSuccessMsg';
+import FoundDeleteMsg from './FoundDeleteMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -137,11 +142,39 @@ const Found = (props) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    // Data State for getting the reports 
-    const [reports, getReports] = useState([]);
-
       // Loading for fetching datas 
     const [loading, setLoading] = useState(true);
+
+      // Success message handling state 
+  const [open, setOpen] = useState(false);
+
+  // FoundDeleteMsg component state 
+  const [open1 , setOpen1] = useState(false);
+
+    //Success handlin message 
+  const handleClose = (event, reason) => {
+    if(reason === 'clickaway'){
+        return
+    }
+    setOpen(false);
+  };
+
+   const handleClose1 = (event, reason) => {
+    if(reason === 'clickaway'){
+        return
+    }
+    setOpen1(false);
+  };
+
+  // Function for deleting a found data report with its specific id 
+  const deleteFoundReport = id => {
+
+    if(window.confirm("Are you sure to delete this records?")){
+      props.deleteFoundReport(id);
+      setOpen1(true)
+    }
+
+  };
 
      const handleChangePage = (event, newPage) => {
       setPage(newPage);
@@ -151,6 +184,28 @@ const Found = (props) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
     };
+
+    useEffect( _ => {
+      if(props.laf.found){
+        setOpen(true)
+      }
+    },[props.laf.found]);
+
+    useEffect( _ => {
+
+      const id = setInterval( _ => {
+
+      props.getFoundReports();
+      setLoading(false);
+
+      }, 2000) ;
+
+      return _ => {
+        clearInterval(id);
+      }
+
+    
+    }, [])
 
   // This is the props for getting the details of the user 
   const auth = props.auth;
@@ -165,14 +220,17 @@ const Found = (props) => {
   const dateFilter = moment(today).format('YYYY-MM-DD');
 
   //Array of the reports in the lost item reports 
-  const rows = reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
-  .filter(row => ( moment(row.created_at).format('YYYY-MM-DD') !== dateFilter && auth.user.campus === row.campus ) );
+  const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+  .filter(row => auth.user.campus === row.campus );
 
     //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
      <DashBoardHead>
+
+     <FoundDeleteMsg open={open1} onClose={handleClose1} />
+     <FoundReportSuccessMsg open={open} onClose={handleClose} />
 
       <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
         <Link color="inherit" href="/h/lostandfound" className={classes.link}>
@@ -203,17 +261,11 @@ const Found = (props) => {
 
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>Student name</StyledTableCell>
-                      <StyledTableCell align="left">SR-Code</StyledTableCell>
-                      <StyledTableCell align="left">College Year</StyledTableCell>
-                      <StyledTableCell align="left">Campus</StyledTableCell>
-                      <StyledTableCell align="left">Department</StyledTableCell>
-                      <StyledTableCell align="left">Student course</StyledTableCell>
-                      <StyledTableCell align="left">Lost Item Details</StyledTableCell>
-                      <StyledTableCell align="left">Contact Details</StyledTableCell>
-                      <StyledTableCell align="left">Report Status</StyledTableCell>
+                      <StyledTableCell>Name of Finder</StyledTableCell>
+                      <StyledTableCell align="left">Found Item</StyledTableCell>
+                      <StyledTableCell align="left">Campus of the found item</StyledTableCell>
                       <StyledTableCell align="left">Date Reported</StyledTableCell>
-                      <StyledTableCell align="left">Actions</StyledTableCell>
+                      <StyledTableCell align="left">Action</StyledTableCell>
                     </TableRow>
                 </TableHead>
 
@@ -249,20 +301,18 @@ const Found = (props) => {
                         )
                         .map(row => (
                           <TableRow>
-                            <TableCell component="th" scope="row">
-                              {row.name}
-                            </TableCell>
-                            <TableCell align="left">{row.src}</TableCell>
-                            <TableCell align="left">{row.yr}</TableCell>
+                            <TableCell component="th" scope="row">{row.findername}</TableCell>
+                            <TableCell align="left">{row.founditem}</TableCell>
                             <TableCell align="left">{row.campus}</TableCell>
-                            <TableCell align="left">{row.department}</TableCell>
-                            <TableCell align="left">{row.course}</TableCell>
-                            <TableCell align="left">{row.details}</TableCell>
-                            <TableCell align="left">{row.contact}</TableCell>
-                            <TableCell align="left">{row.status}</TableCell>
-                            <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
+                            <TableCell align="left">{row.date}</TableCell>
                             <TableCell align="left">
-                            		Actions buttons will be here
+                            	<IconButton 
+                              aria-label="delete" 
+                              color="secondary"
+                              onClick={ _ => deleteFoundReport(row.id)}
+                              >
+                                  <DeleteIcon />
+                                </IconButton>
                             </TableCell>
                           </TableRow>
                         ))
@@ -312,6 +362,17 @@ const Found = (props) => {
 
      </DashBoardHead>
   )
-}
+};
 
-export default withStyles(styles)(Found);
+Found.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+     laf: state.laf
+  });
+
+const mapDispatchToProps = { getFoundReports, deleteFoundReport };
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Found)));

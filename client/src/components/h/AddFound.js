@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { connect } from "react-redux";
 import moment from 'moment';
+import { withRouter } from "react-router";
+import { addFoundReports } from '../../actions/lafActions';
 
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker, } from '@material-ui/pickers';
@@ -75,10 +77,13 @@ function AddFound(props){
     // State for the campuses and its loading state
   const [campuses, getCampuses] = useState([]);
   const [loadingCampuses, setLoadingCampuses] = useState(true);
+  
+  // Error Handling 
+  const [errors, getErrors] = useState({});
  
   // Value States 
-  const [finderName ,setFinderName]  = useState('');
-  const [foundItem, setFoundItem] = useState('');
+  const [findername ,setFinderName]  = useState('');
+  const [founditem, setFoundItem] = useState('');
   const [campus, setCampus] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -86,20 +91,16 @@ function AddFound(props){
 
 // For Findername State 
 const handleFinderName = e => {
-        e.preventDefault();
     setFinderName(e.target.value);
 };
 
 // For FoundItem State
 const handleFoundItem = e => {
-        e.preventDefault();
     setFoundItem(e.target.value);
 }
 
 // For campus State 
 const handleCampus = e => {
-    e.preventDefault();
-
     setCampus(e.target.value);
 };
 
@@ -113,26 +114,50 @@ const handleSubmit = e => {
 
     e.preventDefault();
 
-    const dateData = moment(selectedDate).format('YYYY-MM-DD, h:mm:ss a');
+    const date = moment(selectedDate).format('YYYY-MM-DD, h:mm:ss a');
 
     const newFoundRecord = {
-        finderName,
-        foundItem,
+        findername,
+        founditem,
         campus,
-        dateData
+        date
     };
 
     console.log(newFoundRecord);
+
+    props.addFoundReports(newFoundRecord);
+    
 };
 
 
     useEffect( _ => {
+
+      const id = setInterval( _ => {
         (async _ => {
             const res = await axios.get('/api/campuses');
             getCampuses(res.data);
             setLoadingCampuses(false);
         })();
+      }, 2000);
+
+      return _ => {
+        clearInterval(id);
+      }
+       
     }, []);
+
+    // useEffect for getting the errors
+    useEffect( _ => {
+      if(props.errors){
+        getErrors(props.errors)
+      }
+    },[props.errors]);
+
+    useEffect( _ => {
+      if(props.laf.found){
+          props.history.push('/h/lostandfound/foundreports');
+      }
+    }, [props.laf.found]);
 
   return (
      <DashBoardHead>
@@ -186,7 +211,7 @@ const handleSubmit = e => {
                             {/* Ful Name Text Fiel  */}
                         <Grid item xs={12}>
                                 <TextField
-                                value={finderName}
+                                value={findername}
                                 onChange={handleFinderName}
                                     id="findername"
                                     name="findername"
@@ -194,12 +219,16 @@ const handleSubmit = e => {
                                     fullWidth
                                     autoComplete="findername"
                                 />
-                           
+                            
+                              <span style={{ color: "red" }}>
+                                {errors.findername}
+                            </span>
+
                                 </Grid>
 
                           <Grid item xs={12}>
                                 <TextField
-                                value={foundItem}
+                                value={founditem}
                                 onChange={handleFoundItem}
                                     id="founditem"
                                     name="founditem"
@@ -207,7 +236,9 @@ const handleSubmit = e => {
                                     fullWidth
                                     autoComplete="founditem"
                                 />
-                           
+                            <span style={{ color: "red" }}>
+                                {errors.founditem}
+                            </span>
                             </Grid>
 
                        { /* Campuses Selection */ }
@@ -240,6 +271,9 @@ const handleSubmit = e => {
                                 </Select>
 
                             </FormControl>
+                             <span style={{ color: "red" }}>
+                                {errors.campus}
+                            </span>
                         </Grid>
                                
                        { /* Date Selection */ }
@@ -249,7 +283,7 @@ const handleSubmit = e => {
                                     <KeyboardDatePicker
                                       disableToolbar
                                       variant="inline"
-                                      format="MM/dd/yyyy"
+                                      format="yyyy-MM-dd"
                                       margin="normal"
                                       id="date-picker-inline"
                                       label="When did the item found?"
@@ -261,13 +295,17 @@ const handleSubmit = e => {
                                     />
                             </MuiPickersUtilsProvider>
                           </FormControl>
+                           <span style={{ color: "red" }}>
+                                {errors.date}
+                            </span>
                         </Grid>
 
 
                          <Button
                                 type="submit"
-                                variant="contained"
-                                color="primary"
+                               size="small" 
+                               variant="outlined" 
+                               color="secondary"
                                 className={classes.submit}
                             >
                                 Add
@@ -291,7 +329,18 @@ const handleSubmit = e => {
 };
 
 AddFound.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+    laf:PropTypes.object.isRequired,
+    addFoundReports: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(AddFound);
+const mapStateToProps = state => ({
+  laf: state.laf,
+  errors: state.errors
+});
+
+const mapDispatchToProps = { addFoundReports };
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddFound)));

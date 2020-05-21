@@ -5,7 +5,8 @@ import {
     SET_REPORT_TO_FOUND ,
     SET_REPORT_TO_CLAIMED,
     GET_FOUND_REPORTS,
-    ADD_FOUND_REPORT
+    ADD_FOUND_REPORT,
+    DELETE_FOUND_REPORT 
 } from '../actions/types';
 
 // Initial State 
@@ -13,8 +14,7 @@ const initialState = {
     lost: false,
     found: false,
     reports: [],
-    loading: false,
-    error: false,
+    loading: false
 }
 
 export default function (state = initialState, action){
@@ -67,6 +67,12 @@ export default function (state = initialState, action){
                 ...state,
                 found: true,
                 reports: [action.payload, ...state.reports]
+            };
+        case DELETE_FOUND_REPORT:
+            return {
+                ...state,
+                reports: state.reports
+                            .filter(item => item.id !== action.payload)
             }
         case REPORT_LOADING:
             return {

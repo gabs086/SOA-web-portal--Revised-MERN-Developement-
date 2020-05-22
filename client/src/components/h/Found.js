@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import moment from 'moment';
 import { withRouter } from "react-router";
 import { getFoundReports, deleteFoundReport } from '../../actions/lafActions';
 
@@ -209,15 +208,6 @@ const Found = (props) => {
 
   // This is the props for getting the details of the user 
   const auth = props.auth;
-
-  //Date Methods Filtering
-  let today = new Date();
-   const dd = String(today.getDate()).padStart(2, '0');
-   const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-   const yyyy = today.getFullYear();
-
-  today = yyyy + '-' + mm + '-' + dd;
-  const dateFilter = moment(today).format('YYYY-MM-DD');
 
   //Array of the reports in the lost item reports 
   const rows = props.laf.reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))

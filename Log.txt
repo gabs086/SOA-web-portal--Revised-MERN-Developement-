@@ -43,5 +43,13 @@ May 20,
 	-Finish the Found data reports in st/FoundTable.js
 
 
-**** May 22, 
-	Work for the Organization Description components tomorrow
+May 22, 
+	Working for Org Description Components
+
+@Created a Org Table and Button Component 
+	-OrgListAdmin.js
+@Created a reducers for OrgDesc Component
+	-actions/types.js
+	-reducers/orgDescReducer.js
+@Created actions with reducers or OrgDesc Component
+	-actions/orgDescActions.js

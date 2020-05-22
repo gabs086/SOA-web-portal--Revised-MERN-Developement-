@@ -4,9 +4,11 @@ import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import lafReducer from './lafReducer';
+import orgDescReducer from './orgDescReducer'
 
 export default combineReducers({
     auth: authReducer,
     errors: errorReducer,
-    laf: lafReducer
+    laf: lafReducer,
+    orgDesc: orgDescReducer
 });

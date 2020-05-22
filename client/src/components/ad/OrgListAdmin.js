@@ -1,5 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import axios from 'axios';
+
+import { getOrgDesc } from '../../actions/orgDescActions';
 
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -151,7 +155,6 @@ const [searchDept, setSearchDept] = useState('');
 // Data Table Loading
 const [loading, setLoading] = useState(true);
 
-const [reports,] = useState([]);
 
   /////////////Evente Handlers/////////////////
 
@@ -173,9 +176,44 @@ const handleChangeDept = e => {
     setSearchDept(e.target.value);
 };
 
+// Component Effects 
+
+// useEffect for getting the campuses
+useEffect( _ => {
+
+    const id = setInterval( _ => {
+        (async _ => {
+            const res = await axios.get('/api/campuses');
+            getCampuses(res.data);
+            setLoadingCampuses(false)
+        })();
+    }, 2000)
+
+    return _ => {
+        clearInterval(id);
+    }
+
+},[]);
+
+// UseEffect for getting the organization records 
+useEffect( _ => {
+
+    const id = setInterval( _ => {
+
+        props.getOrgDesc();
+        setLoading(false)
+
+    }, 2000)
+
+    return _ => {
+        clearInterval(id);
+    }
+
+},[]);
+
   //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
-  const rows = reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+  const rows = props.orgDesc.records.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
     .filter(row => row.campus === searchCampus )
 
   //Empty row that says the rows for pagination
@@ -252,15 +290,15 @@ const handleChangeDept = e => {
                             {/* Table Head of the datas  */}
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Student name</StyledTableCell>
-                                <StyledTableCell align="left">SR-Code</StyledTableCell>
-                                <StyledTableCell align="left">College Year</StyledTableCell>
-                                <StyledTableCell align="left">Campus</StyledTableCell>
+                                <StyledTableCell>Campus</StyledTableCell>
                                 <StyledTableCell align="left">Department</StyledTableCell>
-                                <StyledTableCell align="left">Student course</StyledTableCell>
-                                <StyledTableCell align="left">Lost Item Details</StyledTableCell>
-                                <StyledTableCell align="left">Contact Details</StyledTableCell>
-                                <StyledTableCell align="left">Report Status</StyledTableCell>
+                                <StyledTableCell align="left">Organization Name</StyledTableCell>
+                                <StyledTableCell align="left">Org President Name</StyledTableCell>
+                                <StyledTableCell align="left">Org Adviser Name</StyledTableCell>
+                                <StyledTableCell align="left">Members Count</StyledTableCell>
+                                <StyledTableCell align="left">Officers Count</StyledTableCell>
+                                <StyledTableCell align="left">Organization Description</StyledTableCell>
+                                <StyledTableCell align="left">Actions</StyledTableCell>
                               </TableRow>
                             </TableHead>
 
@@ -291,15 +329,18 @@ const handleChangeDept = e => {
                                       ).map(row => (
                                         <TableRow>
                                           <TableCell component="th" scope="row">
-                                            {row.name}
+                                            {row.campus}
                                           </TableCell>
-                                          <TableCell align="left">{row.src}</TableCell>
-                                          <TableCell align="left">{row.yr}</TableCell>
-                                          <TableCell align="left">{row.campus}</TableCell>
                                           <TableCell align="left">{row.department}</TableCell>
-                                          <TableCell align="left">{row.course}</TableCell>
-                                          <TableCell align="left">{row.details}</TableCell>
-                                          <TableCell align="left">{row.contact}</TableCell>
+                                          <TableCell align="left">{row.orgname}</TableCell>
+                                          <TableCell align="left">{row.orgpresname}</TableCell>
+                                          <TableCell align="left">{row.orgadvisername}</TableCell>
+                                          <TableCell align="left">{row.quantitymembers}</TableCell>
+                                          <TableCell align="left">{row.quantityofficers}</TableCell>
+                                          <TableCell align="left">{row.description}</TableCell>
+                                          <TableCell align="left">
+                                                Action buttons will be here 
+                                          </TableCell>
                                         
                                         </TableRow>
                                       ))
@@ -343,6 +384,12 @@ const handleChangeDept = e => {
             </div>
         )
     
-}
+};
 
-export default withStyles(styles)(OrgListAdmin);
+const mapStateToProps = state => ({
+    orgDesc: state.orgDesc
+});
+
+const mapDisPatchToProps = { getOrgDesc };
+
+export default connect(mapStateToProps, mapDisPatchToProps)(withStyles(styles)(OrgListAdmin));

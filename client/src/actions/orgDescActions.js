@@ -14,9 +14,9 @@ export const setRecordLoading = _ => {
 
 // Function for getting all the record off all organization 
 export const getOrgDesc = _ => dispatch => {
-	dispatch(setReportLoading);
+	dispatch(setRecordLoading);
 	axios.get('/api/orgdesc/getorgdesc')
-	.then(res = > dispatch({
+	.then(res => dispatch({
 		type: GET_ORGDESC,
 		payload: res.data
 	}))
@@ -43,6 +43,6 @@ export const deleteOrgDesc = id => dispatch => {
 	.then( res => dispatch({
 		type: DELETE_ORGDESC,
 		payload: res.data
-	}));
+	}))	
 	.catch(err => console.log(err));
 };

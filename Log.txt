@@ -62,3 +62,11 @@ May 22,
 May 24,
 
 Working for the adding form of organizations
+	- OrgListAdmin.js
+
+Implemented delete action with redux
+	- OrgListAdmin.js
+
+Created a component for updating datas of organizations
+	- OrgUpdateForm.js
+	

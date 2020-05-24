@@ -53,3 +53,12 @@ May 22,
 	-reducers/orgDescReducer.js
 @Created actions with reducers or OrgDesc Component
 	-actions/orgDescActions.js
+@ Create a component for organization add records
+	-OrgAddForm.js
+
+
+**** May 23 Include states and work the addOrgDesc Action
+
+May 24,
+
+Working for the adding form of organizations

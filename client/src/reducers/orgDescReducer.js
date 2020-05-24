@@ -27,7 +27,7 @@ export default function (state = initialState, action){
 			return {
 				...state,
 				added: true,
-				records: [action.payload, ...state.reports]
+				records: [action.payload, ...state.records]
 			};
 		case DELETE_ORGDESC:
 			return {

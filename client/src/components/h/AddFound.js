@@ -66,7 +66,15 @@ const styles = theme => ({
       },
       close: {
           padding: theme.spacing() / 2,
-      }
+      },
+         link: {
+    display: 'flex',
+  },
+   icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
 });
 
 function AddFound(props){
@@ -122,8 +130,6 @@ const handleSubmit = e => {
         campus,
         date
     };
-
-    console.log(newFoundRecord);
 
     props.addFoundReports(newFoundRecord);
     

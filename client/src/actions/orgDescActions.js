@@ -8,9 +8,6 @@ import {
 	GET_ERRORS,
 } from './types';
 
-export const setRecordLoading = _ => {
-	return { type: RECORD_LOADING }
-};
 
 // Function for getting all the record off all organization 
 export const getOrgDesc = _ => dispatch => {
@@ -32,9 +29,9 @@ export const addOrgDesc = orgdesc => dispatch => {
 			payload: res.data
 		}))
 	.catch(err => dispatch({
-		type: GET_ERRORS,
-		payload: err.response.data
-	}));
+        type: GET_ERRORS,
+        payload: err.response.data,
+    }));   
 };
 
 // Function for deleting a specific data in the data table
@@ -45,4 +42,8 @@ export const deleteOrgDesc = id => dispatch => {
 		payload: res.data
 	}))	
 	.catch(err => console.log(err));
+};
+
+export const setRecordLoading = _ => {
+	return { type: RECORD_LOADING }
 };

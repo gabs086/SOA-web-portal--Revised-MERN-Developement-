@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import axios from 'axios';
 
 import { getOrgDesc } from '../../actions/orgDescActions';
@@ -29,6 +30,7 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
+import OrgAddFormSuccessMsg from './OrgAddFormSuccessMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -155,6 +157,8 @@ const [searchDept, setSearchDept] = useState('');
 // Data Table Loading
 const [loading, setLoading] = useState(true);
 
+//Success Message state
+const [open, setOpen] = useState(false);
 
   /////////////Evente Handlers/////////////////
 
@@ -175,6 +179,14 @@ const handleChangeCampuses = e => {
 const handleChangeDept = e => {
     setSearchDept(e.target.value);
 };
+
+ const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
 // Component Effects 
 
@@ -211,6 +223,11 @@ useEffect( _ => {
 
 },[]);
 
+useEffect( _ => {
+    if(props.orgDesc.added)
+        setOpen(true)
+},[props.orgDesc.added]);
+
   //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
   const rows = props.orgDesc.records.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
@@ -219,12 +236,18 @@ useEffect( _ => {
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-
         return (
             <div>
                 <DashboardAdmin>
 
-                    <Button className={classes.reportButton} variant="outlined" color="secondary">
+                <OrgAddFormSuccessMsg open={open} onClose={handleClose} />
+
+                    <Button 
+                        href="/ad/organizationlist/addrecord"
+                        className={classes.reportButton} 
+                        variant="outlined" 
+                        color="secondary"
+                        >
                         Add Record
                     </Button>
                     <br/>
@@ -386,8 +409,13 @@ useEffect( _ => {
     
 };
 
+OrgListAdmin.propTypes = { 
+    history: PropTypes.object.isRequired,
+    orgDesc: PropTypes.object.isRequired,
+};
+
 const mapStateToProps = state => ({
-    orgDesc: state.orgDesc
+    orgDesc: state.orgDesc,
 });
 
 const mapDisPatchToProps = { getOrgDesc };

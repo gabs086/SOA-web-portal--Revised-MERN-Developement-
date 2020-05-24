@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
 	GET_ORGDESC,
 	ADD_ORGDESC,
+	UPDATE_ORGDESC,
 	DELETE_ORGDESC,
 	RECORD_LOADING,
 	GET_ERRORS,
@@ -32,6 +33,19 @@ export const addOrgDesc = orgdesc => dispatch => {
         type: GET_ERRORS,
         payload: err.response.data,
     }));   
+};
+
+// Function for update an organization record
+export const updateOrgDesc = (id, orgdesc) => dispatch => {
+	axios.post(`/api/orgdesc/updateorganization/${id}`, orgdesc)
+	.then(res => dispatch({
+		type: UPDATE_ORGDESC,
+		payload: res.data
+	}))
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+	}));
 };
 
 // Function for deleting a specific data in the data table

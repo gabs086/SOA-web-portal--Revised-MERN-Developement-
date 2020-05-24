@@ -69,4 +69,5 @@ Implemented delete action with redux
 
 Created a component for updating datas of organizations
 	- OrgUpdateForm.js
-	
+
+Finished the CRUD Actions in Organization Records

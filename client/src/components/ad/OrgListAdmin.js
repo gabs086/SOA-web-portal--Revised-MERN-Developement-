@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { withRouter } from "react-router";
 import axios from 'axios';
 
 import { getOrgDesc, deleteOrgDesc } from '../../actions/orgDescActions';
@@ -31,11 +30,11 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
-import { green } from '@material-ui/core/colors';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
 import OrgAddFormSuccessMsg from './OrgAddFormSuccessMsg';
+import OrgUpdateFormSuccessMsg from './OrgUpdateFormSuccessMsg';
 import OrgListAdminDeleteMsg from './OrgListAdminDeleteMsg';
 
 //Header of the Table
@@ -166,6 +165,7 @@ const [loading, setLoading] = useState(true);
 //Success Message state
 const [open, setOpen] = useState(false);
 const [openDelete, setOpenDelete] = useState(false);
+const [openUpdate, setOpenUpdate] = useState(false);
 
   /////////////Evente Handlers/////////////////
 
@@ -200,6 +200,13 @@ const handleChangeDept = e => {
       return;
     }
     setOpenDelete(false)
+  };
+
+  const handleCloseUpdate = (event, reason) => {
+    if(reason === 'clickaway'){
+      return;
+    }
+    setOpenUpdate(false);
   };
 
   // Event for deleting a organization by specific id 
@@ -250,6 +257,11 @@ useEffect( _ => {
         setOpen(true)
 },[props.orgDesc.added]);
 
+useEffect( _ => {
+  if(props.orgDesc.updated)
+      setOpenUpdate(true)
+},[props.orgDesc.updated]);
+
   //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
   const rows = props.orgDesc.records.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
@@ -263,7 +275,8 @@ useEffect( _ => {
                 <DashboardAdmin>
 
                 <OrgAddFormSuccessMsg open={open} onClose={handleClose} />
-                <OrgAddFormSuccessMsg open={openDelete} onClose={handleCloseDelete} />
+                <OrgUpdateFormSuccessMsg open={openUpdate} onClose={handleCloseUpdate} />
+                <OrgListAdminDeleteMsg open={openDelete} onClose={handleCloseDelete} />
 
                     <Button 
                         href="/ad/organizationlist/addrecord"
@@ -390,7 +403,7 @@ useEffect( _ => {
                                           <TableCell align="left">
 
                                           <Tooltip title="Update" placement="top">
-                                             <IconButton aria-label="edit" color="primary">
+                                             <IconButton href={"/ad/organizationlist/updaterecord/" + row.id} aria-label="edit" color="primary">
                                               <EditIcon />
                                             </IconButton>
                                           </Tooltip>   

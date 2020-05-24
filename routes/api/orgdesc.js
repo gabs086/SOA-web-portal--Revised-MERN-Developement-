@@ -32,6 +32,19 @@ router.get('/getorgdesc', async (req, res) => {
 	}
 });
 
+//@route GET /api/orgdesc/getorgdesc/:id
+//@desc Get a registered organization data with its specific id
+//@access Admin only
+router.get('/getorgdesc/:id', (req, res) => {
+
+	const id = req.params.id;
+
+	OrgDesc.findByPk(id)
+	.then(org => res.json(org))
+	.catch(err => res.status(400).json(`Error: ${err}`));
+
+});
+
 //@route POST /api/orgdesc/gaddorganization
 //@DESC Add a STudent orgination in the system
 //@access Admin Only

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import moment from 'moment';
 import { withRouter } from "react-router";
 import axios from 'axios';
+import { updateOrgDesc } from '../../actions/orgDescActions';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -27,6 +28,7 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
+import OrgUpdateFormErrorMsg from './OrgUpdateFormErrorMsg';
 
 // Object Styles for the components 
 const styles = theme => ({
@@ -103,6 +105,7 @@ function OrgAddForm(props){
 
 	// Error MSG state
 	const [errors, getErrors] = useState({}); 
+	const [errorAll, setErrorAll] = useState(false);
 
 	////////////Event Handlers//////////////
 	// For campus State 
@@ -155,8 +158,16 @@ function OrgAddForm(props){
 
 		// props.addOrgDesc(newOrgRecord);
 
-		console.log(newOrgRecord)
+		props.updateOrgDesc(props.match.params.id,newOrgRecord)
 	};
+
+	 const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorAll(false);
+  };
 
 	///////////////Component Effects///////////////
 
@@ -175,24 +186,44 @@ function OrgAddForm(props){
 		}
 	},[]);
 
+	// useEffect for getting the data with its specific param id
+	useEffect( _ => {
+
+			(async _ => {
+				const res = await axios.get(`/api/orgdesc/getorgdesc/${props.match.params.id}`);
+					setCampus(res.data.campus);
+					setDept(res.data.department);
+					setOrgName(res.data.orgname);
+					setOrgPresName(res.data.orgpresname);
+					setOrgAdviserName(res.data.orgadvisername);
+					setQuantityMembers(res.data.quantitymembers);
+					setQuantityOfficers(res.data.quantityofficers);
+					setDescription(res.data.description);
+			})();
+	},[]);
+
 	//useEffect for getting the errors
 	useEffect( _ => {
 		if(props.errors){
 			getErrors(props.errors)
 		}
+
+		if(props.errors.all){
+			setErrorAll(true)
+		}
 	},[props.errors]);
 
 	// useEffect for a successfull adding of organization 
 	useEffect( _ => {
-		if(props.orgDesc.added){
+		if(props.orgDesc.updated){
 			props.history.push('/ad/organizationlist');	
 		}
-	},[props.orgDesc.added]);
-
-	console.log(props);
+	},[props.orgDesc.updated]);
 
 	return (
 		 <DashboardAdmin>
+
+		 <OrgUpdateFormErrorMsg open={errorAll} onClose={handleClose} errMsg={errors.all}  />
 
 		 	<Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
 		        <Link color="inherit" href="/ad/organizationlist" className={classes.link}>
@@ -202,7 +233,7 @@ function OrgAddForm(props){
 
 		        <Link
 		          color="textPrimary"
-		          href="/ad/organizationlist/addrecord"
+		          href={"/ad/organizationlist/updaterecord/" + props.match.params.id}
 		          aria-current="page"
 		          className={classes.link}
 		        >
@@ -378,6 +409,8 @@ function OrgAddForm(props){
 	                        			/>
 	                        		</Grid>
 
+	                        			
+
 	                        		<Button
 	                        			type="submit"
 	                        			variant="outlined"
@@ -408,6 +441,7 @@ OrgAddForm.propTypes = {
 	orgDesc: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired,
 	history: PropTypes.object.isRequired,
+	updateOrgDesc: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -415,6 +449,6 @@ const mapStateToProps = state => ({
 	errors: state.errors
 });
 
-const mapDispatchToProps = { }
+const mapDispatchToProps = { updateOrgDesc }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrgAddForm)));

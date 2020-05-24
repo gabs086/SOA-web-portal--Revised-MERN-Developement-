@@ -29,6 +29,20 @@ export default function (state = initialState, action){
 				added: true,
 				records: [action.payload, ...state.records]
 			};
+		case UPDATE_ORGDESC:
+			return { 
+				...state,
+				updated:true,
+				records: state.records.map((record, i) => i === 1 ?
+				{
+
+					record: action.payload,
+
+				}
+				: record
+					)
+				
+			};
 		case DELETE_ORGDESC:
 			return {
 				...state,

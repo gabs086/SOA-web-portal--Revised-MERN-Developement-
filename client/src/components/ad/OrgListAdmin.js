@@ -231,7 +231,7 @@ useEffect( _ => {
   //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
   const rows = props.orgDesc.records.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
-    .filter(row => row.campus === searchCampus )
+    .filter(row => row.campus === searchCampus)
 
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -340,7 +340,7 @@ useEffect( _ => {
                                     //Data to be displayed when the data is fetched
                                     <Fragment>
                                     {
-                                       (searchCampus === '' && searchDept === '') || rows.length === 0 ?
+                                       searchCampus === '' || rows.length === 0 ?
                                        <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
                                        <ArrowUpwardIcon /><br></br>
                                        Pls search at the top to filter by campus...
@@ -349,7 +349,10 @@ useEffect( _ => {
                                       (rowsPerPage > 0
                                         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         : rows
-                                      ).map(row => (
+                                      )
+                                      //Filter the row by what will be typed in the search filter for department then map the result
+                                      .filter(row => row.department.toLowerCase().search(searchDept.toLowerCase()) !== -1)
+                                      .map(row => (
                                         <TableRow>
                                           <TableCell component="th" scope="row">
                                             {row.campus}

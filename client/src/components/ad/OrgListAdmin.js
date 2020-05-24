@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import axios from 'axios';
 
-import { getOrgDesc } from '../../actions/orgDescActions';
+import { getOrgDesc, deleteOrgDesc } from '../../actions/orgDescActions';
 
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -28,9 +28,15 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
+import { green } from '@material-ui/core/colors';
+
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
 import OrgAddFormSuccessMsg from './OrgAddFormSuccessMsg';
+import OrgListAdminDeleteMsg from './OrgListAdminDeleteMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -159,6 +165,7 @@ const [loading, setLoading] = useState(true);
 
 //Success Message state
 const [open, setOpen] = useState(false);
+const [openDelete, setOpenDelete] = useState(false);
 
   /////////////Evente Handlers/////////////////
 
@@ -187,6 +194,21 @@ const handleChangeDept = e => {
 
     setOpen(false);
   };
+
+  const handleCloseDelete = (event, reason) => {
+    if(reason === 'clickaway'){
+      return;
+    }
+    setOpenDelete(false)
+  };
+
+  // Event for deleting a organization by specific id 
+const deleteOrganization = id => {
+  if(window.confirm("Are you sre to delete this organization?")){
+      props.deleteOrgDesc(id);
+      setOpenDelete(true)
+  }
+};
 
 // Component Effects 
 
@@ -241,6 +263,7 @@ useEffect( _ => {
                 <DashboardAdmin>
 
                 <OrgAddFormSuccessMsg open={open} onClose={handleClose} />
+                <OrgAddFormSuccessMsg open={openDelete} onClose={handleCloseDelete} />
 
                     <Button 
                         href="/ad/organizationlist/addrecord"
@@ -365,7 +388,20 @@ useEffect( _ => {
                                           <TableCell align="left">{row.quantityofficers}</TableCell>
                                           <TableCell align="left">{row.description}</TableCell>
                                           <TableCell align="left">
-                                                Action buttons will be here 
+
+                                          <Tooltip title="Update" placement="top">
+                                             <IconButton aria-label="edit" color="primary">
+                                              <EditIcon />
+                                            </IconButton>
+                                          </Tooltip>   
+
+                            
+                                          <Tooltip title="Delete" placement="top">
+                                             <IconButton aria-label="delete" color="secondary" onClick={ _ => deleteOrganization(row.id)}>
+                                              <DeleteIcon />
+                                            </IconButton>
+                                          </Tooltip>   
+                                                
                                           </TableCell>
                                         
                                         </TableRow>
@@ -421,6 +457,6 @@ const mapStateToProps = state => ({
     orgDesc: state.orgDesc,
 });
 
-const mapDisPatchToProps = { getOrgDesc };
+const mapDisPatchToProps = { getOrgDesc, deleteOrgDesc };
 
 export default connect(mapStateToProps, mapDisPatchToProps)(withStyles(styles)(OrgListAdmin));

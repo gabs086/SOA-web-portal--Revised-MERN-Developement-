@@ -71,3 +71,13 @@ Created a component for updating datas of organizations
 	- OrgUpdateForm.js
 
 Finished the CRUD Actions in Organization Records
+
+May 25
+
+	9:33 PM
+	@Created a model schema and route file for org registrations
+	- org.model.js
+	- org.js
+
+	@Creating a validation for registration route
+	-validation/registration.js

@@ -8,6 +8,7 @@ const keys = require('../../config/keys');
 
 //Validtion
 const validateLoginInput = require('../../validation/login');
+const validateRegisterInput = require('../../validation/registration');
 
 // Model
 const Users = require('../../models/user.model');
@@ -17,6 +18,11 @@ const Users = require('../../models/user.model');
 //@access Through Routes only
 
 router.post('/register', (req, res) => {
+
+    const { errors, isValid } = validateRegisterInput(req.body);
+
+    if(!isValid)
+        return res.status(400).json(errors);
 
     //Checking of similar username
     Users.findOne({ 
@@ -28,7 +34,7 @@ router.post('/register', (req, res) => {
             const today = new Date();
 
             if (user) {
-                return res.status(400).json({ username: "Username exist" })
+                return res.status(400).json({ username: "Username already exist" })
             }
             else {
 

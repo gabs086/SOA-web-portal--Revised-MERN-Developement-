@@ -10,8 +10,49 @@
 const express = require('express');
 const router = express.Router();
 
-const Org = require('../../models/org.model');
+const OrgAccnts = require('../../models/org.model');
 
-const OrgAccntReg = require('../../models/user.model');
+const validateOrgAccnts = require('../../validation/org');
+
+//@route GET /api/org/getorgaccnts
+//@desc GET all the account registered in the database
+//@access Admin only
+router.get('/getorgaccnts', async (req, res) => {
+
+	const orgAccnts = await OrgAccnts.findAll();
+
+	try{
+		if(orgAccnts) res.json(orgAccnts);
+	}
+	catch(err){
+		res.status(400).json(err);
+	};
+
+});
+
+//@route POST /api/org/registerorg
+//@desc Record the input that will serve as a registered accnt
+//@access Admin Only
+router.post('/registerorg',(req, res) => {
+	const { errors, isValid } = validateOrgAccnts(req.body);
+
+	if(!isValid)
+		return res.status(400).json(errors);
+
+	const { orgname, campus, username, password } = req.body;
+
+	const newOrgAccnts = new OrgAccnts({
+		orgname,
+		campus,
+		username,
+		password
+	});
+
+	newOrgAccnts.save()
+	.then( _ => res.json('Org Accnt Registered'))
+	.catch(err => res.status(500).json(err));
+
+});
+
 
 module.exports = router;

@@ -12,6 +12,7 @@ const found = require('./routes/api/found');
 const campuses = require('./routes/api/campuses');
 const departments = require('./routes/api/departments');
 const orgdesc = require('./routes/api/orgdesc');
+const org = require('./routes/api/org');
 
 //Router
 const app = express();
@@ -54,5 +55,6 @@ app.use("/api/found", found);
 app.use("/api/campuses", campuses);
 app.use("/api/departments", departments);
 app.use("/api/orgdesc", orgdesc);
+app.use("/api/org", org);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

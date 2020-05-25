@@ -81,3 +81,5 @@ May 25
 
 	@Creating a validation for registration route
 	-validation/registration.js
+	@Finished the rework of Register route
+	- routes/api/users.js

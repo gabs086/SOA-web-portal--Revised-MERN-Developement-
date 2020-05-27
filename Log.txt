@@ -88,3 +88,7 @@ May 27,
 
 	1:17 PM
 	@Creating the client side for registration of accnt for organizations
+		-OrgAccountList.js
+
+	@Finished the data table and Form components for user inputs of Organization Account Registration
+		- OrgAccountListAddForm.js

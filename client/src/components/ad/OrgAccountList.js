@@ -1,14 +1,17 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
 import axios from 'axios';
-
-import { getOrgDesc, deleteOrgDesc } from '../../actions/orgDescActions';
 
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import ViewListIcon from '@material-ui/icons/ViewList';
+
 import Button from '@material-ui/core/Button';
+
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 
@@ -27,15 +30,8 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import Tooltip from '@material-ui/core/Tooltip';
-
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
-import OrgAddFormSuccessMsg from './OrgAddFormSuccessMsg';
-import OrgUpdateFormSuccessMsg from './OrgUpdateFormSuccessMsg';
-import OrgListAdminDeleteMsg from './OrgListAdminDeleteMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -116,11 +112,11 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-
+// Style for the main Component 
 const styles = theme => ({
     root: {
         ...theme.mixins.gutters(),
-        paddingTop: theme.spacing(2),
+        paddingTop: theme.spacing(2 ),
         paddingBottom: theme.spacing(2),
     },
      root2: {
@@ -128,10 +124,18 @@ const styles = theme => ({
     paddingBottom: '2 0px',
       flexGrow: 1,
   },
+    link: {
+    display: 'flex',
+      },
+       icon: {
+        marginRight: theme.spacing(0.5),
+        width: 20,
+        height: 20,
+      },
     reportButton: {
     paddingTop:15,
-  },
-   formControl: {
+    },
+       formControl: {
         // margin: theme.spacing.unit,
         minWidth: '100% ',
       },
@@ -143,168 +147,104 @@ const styles = theme => ({
   },
 });
 
-function OrgListAdmin(props){
-    const classes = props;
+function OrgAccountList(props){
+        const classes = props;
 
-    //////////States/////////////
-      // Pagination Controls 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+        /////////States///////////
+         // Pagination Controls 
+      const [page, setPage] = useState(0);
+      const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    //Campus fetching states
-  const [campuses, getCampuses] = useState([]);
-  const [loadingCampuses, setLoadingCampuses] = useState(true);
+      const [reports,] = useState([]);
 
-    // Search State 
-const [searchCampus, setSearchCampus] = useState('');
-const [searchDept, setSearchDept] = useState('');
+      //Campus Fetching State
+      const [campuses, getCampuses] = useState([]);
+      const [loadingCampuses, setLoadingCampuses] = useState(true);
 
-// Data Table Loading
-const [loading, setLoading] = useState(true);
+      //Search State
+      const [searchCampus, setSearchCampus] = useState('');
 
-//Success Message state
-const [open, setOpen] = useState(false);
-const [openDelete, setOpenDelete] = useState(false);
-const [openUpdate, setOpenUpdate] = useState(false);
+        // Data Table Loading
+        const [loading, setLoading] = useState(true);
 
-  /////////////Evente Handlers/////////////////
+        ////////////Event Handlers/////////////
 
-  //Getting the pages, Material UI Funcs
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+          //Getting the pages, Material UI Funcs
+          const handleChangePage = (event, newPage) => {
+            setPage(newPage);
+          };
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+          const handleChangeRowsPerPage = event => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+          };
 
-const handleChangeCampuses = e => {
-    setSearchCampus(e.target.value);
-};
+          const handleChangeCampuses = e => {
+            setSearchCampus(e.target.value);
+          };
 
-const handleChangeDept = e => {
-    setSearchDept(e.target.value);
-};
+        /////////////Components Effect///////////////
 
- const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+        // useEffect for getting the campuses
+        useEffect( _ => {
 
-    setOpen(false);
-  };
+            const id = setInterval( _ => {
+                (async _ => {
+                    const res = await axios.get('/api/campuses');
+                    getCampuses(res.data);
+                    setLoadingCampuses(false)
+                })();
+            }, 2000)
 
-  const handleCloseDelete = (event, reason) => {
-    if(reason === 'clickaway'){
-      return;
-    }
-    setOpenDelete(false)
-  };
+            return _ => {
+                clearInterval(id);
+            }
 
-  const handleCloseUpdate = (event, reason) => {
-    if(reason === 'clickaway'){
-      return;
-    }
-    setOpenUpdate(false);
-  };
+        },[]);
 
-  // Event for deleting a organization by specific id 
-const deleteOrganization = id => {
-  if(window.confirm("Are you sre to delete this organization?")){
-      props.deleteOrgDesc(id);
-      setOpenDelete(true)
-  }
-};
 
-// Component Effects 
-
-// useEffect for getting the campuses
-useEffect( _ => {
-
-    const id = setInterval( _ => {
-        (async _ => {
-            const res = await axios.get('/api/campuses');
-            getCampuses(res.data);
-            setLoadingCampuses(false)
-        })();
-    }, 2000)
-
-    return _ => {
-        clearInterval(id);
-    }
-
-},[]);
-
-// UseEffect for getting the organization records 
-useEffect( _ => {
-
-    const id = setInterval( _ => {
-
-        props.getOrgDesc();
-        setLoading(false)
-
-    }, 2000)
-
-    return _ => {
-        clearInterval(id);
-    }
-
-},[]);
-
-useEffect( _ => {
-    if(props.orgDesc.added)
-        setOpen(true)
-},[props.orgDesc.added]);
-
-useEffect( _ => {
-  if(props.orgDesc.updated)
-      setOpenUpdate(true)
-},[props.orgDesc.updated]);
-
-  //Array of the reports in the lost item reports 
+          //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
-  const rows = props.orgDesc.records.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+  const rows = reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
     .filter(row => row.campus === searchCampus)
 
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
         return (
             <div>
                 <DashboardAdmin>
 
-                <OrgAddFormSuccessMsg open={open} onClose={handleClose} />
-                <OrgUpdateFormSuccessMsg open={openUpdate} onClose={handleCloseUpdate} />
-                <OrgListAdminDeleteMsg open={openDelete} onClose={handleCloseDelete} />
+                <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
+                    <Link color="inherit" href="/ad/organizationlist" className={classes.link}>
+                      <ViewListIcon className={classes.icon} />
+                      Menu
+                    </Link>
 
-                    <Button 
-                        href="/ad/organizationlist/addrecord"
+                    <Link
+                      color="textPrimary"
+                      href="/ad/organizationlist/accountlist"
+                      aria-current="page"
+                      className={classes.link}
+                    >
+                    <ListAltIcon className={classes.icon} />
+                      Account List
+                    </Link>
+                </Breadcrumbs>
+
+            {/* Button that will redirect to registering a account*/}
+                 <Button 
+                        href="/ad/organizationlist/accountlist/registerorg"
                         className={classes.reportButton} 
                         variant="outlined" 
                         color="secondary"
                         >
-                        Add Record
-                    </Button>
-                    &nbsp;
-                    <Button 
-                        href="/ad/organizationlist/accountlist"
-                        className={classes.reportButton} 
-                        variant="outlined" 
-                        color="primary"
-                        >
-                        Account List
+                        Regiter Account
                     </Button>
 
-                    <br/>
-                    <br/>
-
-                    {/* Form Filters */} 
-                    <Paper className={classes.root2}>
-
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                             <FormControl fullWidth>
+                {/* Search Component */}
+                <div  style={{paddingBottom: 10, paddingTop: 10}}>
+                    <Paper className={classes.root}>
+                         <FormControl fullWidth>
                                   <TextField
                                       id="standard-select-currency-native"
                                       select
@@ -331,31 +271,15 @@ useEffect( _ => {
                                       }
                                     </TextField>
                             </FormControl>
-                        </Grid>
-
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                id="searchDept"
-                                name="searchDept"
-                                label="Search by department"
-                                fullWidth
-                                className="classes.formControl"
-                                value={searchDept}
-                                autoComplete="searchDept"
-                                onChange={handleChangeDept}
-                             />
-                        </Grid>
-                    </Grid>
-                        
                     </Paper>
 
-                    <br /> 
+                </div>
 
-             {/* Table Component for the records of the organization descriptions */ }
+                {/* Data table Component */}
                     <Paper className={classes.root}>
                         <div className={classes.tableWrapper}>
 
-                            <Table className={classes.table} aria-label="custom pagination table">
+                             <Table className={classes.table} aria-label="custom pagination table">
                             {/* Table Head of the datas  */}
                             <TableHead>
                               <TableRow>
@@ -396,8 +320,6 @@ useEffect( _ => {
                                         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         : rows
                                       )
-                                      //Filter the row by what will be typed in the search filter for department then map the result
-                                      .filter(row => row.department.toLowerCase().search(searchDept.toLowerCase()) !== -1)
                                       .map(row => (
                                         <TableRow>
                                           <TableCell component="th" scope="row">
@@ -411,20 +333,7 @@ useEffect( _ => {
                                           <TableCell align="left">{row.quantityofficers}</TableCell>
                                           <TableCell align="left">{row.description}</TableCell>
                                           <TableCell align="left">
-
-                                          <Tooltip title="Update" placement="top">
-                                             <IconButton href={"/ad/organizationlist/updaterecord/" + row.id} aria-label="edit" color="primary">
-                                              <EditIcon />
-                                            </IconButton>
-                                          </Tooltip>   
-
-                            
-                                          <Tooltip title="Delete" placement="top">
-                                             <IconButton aria-label="delete" color="secondary" onClick={ _ => deleteOrganization(row.id)}>
-                                              <DeleteIcon />
-                                            </IconButton>
-                                          </Tooltip>   
-                                                
+                                                Table cell
                                           </TableCell>
                                         
                                         </TableRow>
@@ -462,24 +371,19 @@ useEffect( _ => {
                                 </TableFooter>
                               </Table>
 
+                            
                         </div>
                     </Paper>
 
+
                 </DashboardAdmin>
             </div>
-        )
+        );
     
 };
 
-OrgListAdmin.propTypes = { 
-    history: PropTypes.object.isRequired,
-    orgDesc: PropTypes.object.isRequired,
+OrgAccountList.propTypes = {
+    classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-    orgDesc: state.orgDesc,
-});
-
-const mapDisPatchToProps = { getOrgDesc, deleteOrgDesc };
-
-export default connect(mapStateToProps, mapDisPatchToProps)(withStyles(styles)(OrgListAdmin));
+export default withStyles(styles)(OrgAccountList);

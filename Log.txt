@@ -83,3 +83,8 @@ May 25
 	-validation/registration.js
 	@Finished the rework of Register route
 	- routes/api/users.js
+
+May 27, 
+
+	1:17 PM
+	@Creating the client side for registration of accnt for organizations

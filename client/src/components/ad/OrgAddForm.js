@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import moment from 'moment';
 import { withRouter } from "react-router";
 import { addOrgDesc } from '../../actions/orgDescActions';
 import axios from 'axios';
@@ -21,8 +20,6 @@ import Grid from '@material-ui/core/Grid';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
-import HomeIcon from '@material-ui/icons/Home';
-import FindReplaceIcon from '@material-ui/icons/FindReplace';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import ViewListIcon from '@material-ui/icons/ViewList';
 

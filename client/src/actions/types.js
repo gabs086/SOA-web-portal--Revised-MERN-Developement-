@@ -21,3 +21,8 @@ export const ADD_ORGDESC = 'ADD_ORGDESC';
 export const UPDATE_ORGDESC = 'UPDATE_ORGDESC';
 export const DELETE_ORGDESC = 'DELETE_ORGDESC';
 export const RECORD_LOADING = 'RECORD_LOADING';
+
+// OrgAccnts Reducers
+export const GET_ORG_ACCNTS = 'GET_ORG_ACCNTS';
+export const REGISTER_ORG_ACCNT = 'REGISTER_ORG_ACCNT';
+export const ACCNTS_LOADING = 'ACCNTS_LOADING';

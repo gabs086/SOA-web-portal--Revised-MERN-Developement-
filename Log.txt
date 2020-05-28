@@ -79,6 +79,7 @@ May 25
 	- org.model.js
 	- org.js
 
+
 	@Creating a validation for registration route
 	-validation/registration.js
 	@Finished the rework of Register route
@@ -90,5 +91,37 @@ May 27,
 	@Creating the client side for registration of accnt for organizations
 		-OrgAccountList.js
 
+	6:12 PM
 	@Finished the data table and Form components for user inputs of Organization Account Registration
 		- OrgAccountListAddForm.js
+
+	7:20 PM
+	@Creating Reducers for orgAccount Registration
+	- reducers/index.js
+	- reducers/orgReducer.js
+	- actions/types.js
+
+	7:56 PM
+	@Created actions with reducer 
+	- actions/orgActions
+
+	9:01 PM
+	@Implementing the Registration action;
+	- reducers/orgReducer.js
+	- actions/orgActions.js
+
+May 28
+
+	2:14 AM
+	@Fetch the corresponding campus for what the user will select in the selection for organization name
+	-OrgAccountListAddForm.js
+
+	4:10 PM
+	Implementing the actions for org
+
+	7:08 PM
+	LESSON LEARNED - Use only two api if necessary so data will not be complicated in what api to go
+	Weired javascript behavior.
+
+	Finished the process of organization registration of accounts 
+	-OrgAccountListAddForm.js

@@ -185,8 +185,6 @@ function OrgAddForm(props){
 		}
 	},[props.orgDesc.added]);
 
-	console.log(props);
-
 	return (
 		 <DashboardAdmin>
 

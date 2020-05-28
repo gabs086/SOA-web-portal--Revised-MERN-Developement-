@@ -1,6 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
+import { connect } from "react-redux";
+import { getAccntRecords } from '../../actions/orgActions';
+import moment from 'moment';
 
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -32,6 +34,7 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
+import OrgAccountListSuccessfulMsg from './OrgAccountListSuccessfulMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -105,12 +108,12 @@ function TablePaginationActions(props) {
   );
 }
 
-TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-};
+// TablePaginationActions.propTypes = {
+//   count: PropTypes.number.isRequired,
+//   onChangePage: PropTypes.func.isRequired,
+//   page: PropTypes.number.isRequired,
+//   rowsPerPage: PropTypes.number.isRequired,
+// };
 
 // Style for the main Component 
 const styles = theme => ({
@@ -155,8 +158,6 @@ function OrgAccountList(props){
       const [page, setPage] = useState(0);
       const [rowsPerPage, setRowsPerPage] = useState(5);
 
-      const [reports,] = useState([]);
-
       //Campus Fetching State
       const [campuses, getCampuses] = useState([]);
       const [loadingCampuses, setLoadingCampuses] = useState(true);
@@ -166,6 +167,9 @@ function OrgAccountList(props){
 
         // Data Table Loading
         const [loading, setLoading] = useState(true);
+
+        // Successfult message state 
+        const [open, setOpen] = useState(false);
 
         ////////////Event Handlers/////////////
 
@@ -182,6 +186,14 @@ function OrgAccountList(props){
           const handleChangeCampuses = e => {
             setSearchCampus(e.target.value);
           };
+
+           const handleClose = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setOpen(false);
+              };
 
         /////////////Components Effect///////////////
 
@@ -202,10 +214,31 @@ function OrgAccountList(props){
 
         },[]);
 
+        // useEffect for getting the registered accountlist
+        useEffect( _ => {
+
+            const id = setInterval( _ => {
+                props.getAccntRecords();
+                setLoading(false);
+            }, 2000);
+
+            return _ => {
+                clearInterval(id)
+            }
+
+        },[]);
+
+        // useEffect if an account is succesully registered 
+        useEffect(_ => {
+            if(props.org.registered){
+                setOpen(true);
+            }
+        },[props.org.registered]);
+
 
           //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
-  const rows = reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+  const rows = props.org.accounts.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
     .filter(row => row.campus === searchCampus)
 
   //Empty row that says the rows for pagination
@@ -213,6 +246,8 @@ function OrgAccountList(props){
         return (
             <div>
                 <DashboardAdmin>
+
+                <OrgAccountListSuccessfulMsg open={open} onClose={handleClose} />
 
                 <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
                     <Link color="inherit" href="/ad/organizationlist" className={classes.link}>
@@ -238,7 +273,7 @@ function OrgAccountList(props){
                         variant="outlined" 
                         color="secondary"
                         >
-                        Regiter Account
+                        Register Account
                     </Button>
 
                 {/* Search Component */}
@@ -283,15 +318,10 @@ function OrgAccountList(props){
                             {/* Table Head of the datas  */}
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Campus</StyledTableCell>
-                                <StyledTableCell align="left">Department</StyledTableCell>
-                                <StyledTableCell align="left">Organization Name</StyledTableCell>
-                                <StyledTableCell align="left">Org President Name</StyledTableCell>
-                                <StyledTableCell align="left">Org Adviser Name</StyledTableCell>
-                                <StyledTableCell align="left">Members Count</StyledTableCell>
-                                <StyledTableCell align="left">Officers Count</StyledTableCell>
-                                <StyledTableCell align="left">Organization Description</StyledTableCell>
-                                <StyledTableCell align="left">Actions</StyledTableCell>
+                                <StyledTableCell>Organization Name</StyledTableCell>
+                                <StyledTableCell align="left">Campus</StyledTableCell>
+                                <StyledTableCell align="left">Username Registered</StyledTableCell>
+                                <StyledTableCell align="left">Date Registered</StyledTableCell>
                               </TableRow>
                             </TableHead>
 
@@ -323,19 +353,11 @@ function OrgAccountList(props){
                                       .map(row => (
                                         <TableRow>
                                           <TableCell component="th" scope="row">
-                                            {row.campus}
+                                            {row.orgname}
                                           </TableCell>
-                                          <TableCell align="left">{row.department}</TableCell>
-                                          <TableCell align="left">{row.orgname}</TableCell>
-                                          <TableCell align="left">{row.orgpresname}</TableCell>
-                                          <TableCell align="left">{row.orgadvisername}</TableCell>
-                                          <TableCell align="left">{row.quantitymembers}</TableCell>
-                                          <TableCell align="left">{row.quantityofficers}</TableCell>
-                                          <TableCell align="left">{row.description}</TableCell>
-                                          <TableCell align="left">
-                                                Table cell
-                                          </TableCell>
-                                        
+                                          <TableCell align="left">{row.campus}</TableCell>
+                                          <TableCell align="left">{row.username}</TableCell>
+                                          <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
                                         </TableRow>
                                       ))
                                     }
@@ -382,8 +404,11 @@ function OrgAccountList(props){
     
 };
 
-OrgAccountList.propTypes = {
-    classes: PropTypes.object.isRequired
-};
 
-export default withStyles(styles)(OrgAccountList);
+const mapStateToProps = state => ({
+    org: state.org
+});
+
+const mapDispatchToProps = { getAccntRecords };
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrgAccountList));

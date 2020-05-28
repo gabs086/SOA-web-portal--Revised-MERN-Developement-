@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { addAccntRecords } from '../../actions/orgActions';
+import { getOrgDesc } from '../../actions/orgDescActions';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +27,14 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 
 // Object Styles for the components 
 const styles = theme => ({
@@ -88,17 +98,23 @@ function OrgAccountListAddForm(props){
         // Value States
         //Other way to get values of state and put it in an object
         const [values, setValues] = useState({
+         // Data values
+         orgname: '',
+         username:'',
+         password:'',
 
-        password: '',
         // Password Input Textfield component 
-        showPassword: false
+        showPassword: false,
+        // State to check if the registered organizationlist is fetch
+        orgLoading: true,
+       
         });
-
-        ///////////Event Handlers//////////////
+        // Error State 
+        const [errors, getErrors] = useState({});
 
         const handleChange = prop => e => {
             setValues({...values, [prop]: e.target.value})
-        } ;
+        };
 
         const handleClickShowPassword = () => {
             setValues({ ...values, showPassword: !values.showPassword });
@@ -108,7 +124,48 @@ function OrgAccountListAddForm(props){
             event.preventDefault();
           };
 
+        const handleSubmit = e => {
+            e.preventDefault();
+
+            const datas = { 
+                orgname: values.orgname.orgname,
+                campus: values.orgname.campus,
+                username: values.username,
+                password: values.password,
+                type: 'org',
+            };
+
+             props.addAccntRecords(datas);          
+            
+        };
+
         ///////////////useEffects//////////////////
+
+        useEffect( _ => {
+
+                props.getOrgDesc();
+                setValues({...values, orgLoading: false})
+
+        },[]);
+
+        // useEffect if the input forms are done correctly 
+        useEffect(_ => {
+            if(props.org.registered){
+                    props.history.push('/ad/organizationlist/accountlist/')
+            }
+        },[props.org.registered]);
+
+        //useEffect for getting the errors
+        useEffect( _ => {
+            if(props.errors){
+                getErrors(props.errors)
+            }
+        },[props.errors]);
+
+
+        const orgArr = props.orgDesc.sort((a,b) => a.created_at > b.created_at ? -1 : 1);
+
+        const orgArrFilter = orgArr.filter(org => org.orgname === values.orgname.orgname);
 
         return (
             <div>
@@ -142,7 +199,7 @@ function OrgAccountListAddForm(props){
 
 
                 </Breadcrumbs>
-
+import moment from 'moment';
                     <div className={classes.root}>
                         
                         <main className={classes.layout}>
@@ -159,7 +216,7 @@ function OrgAccountListAddForm(props){
 
                              <Container maxWidth="md">
 
-                                <form noValidate>
+                                <form noValidate onSubmit={handleSubmit}>
 
                                 <Grid container spacing={3}>
 
@@ -167,55 +224,82 @@ function OrgAccountListAddForm(props){
                                             Input the details needed.
                                         </Typography>
 
+                                   {/* Fragment to control the mapping of all registered  orgnames */}
+                                        <Fragment>
+
                                         <Grid item xs={12}>
                                             <FormControl fullWidth className={classes.formControl}>
 
-                                                <InputLabel htmlFor="campus-simple">Organization</InputLabel>
+                                                <InputLabel htmlFor="orgname-simple">Organization</InputLabel>
 
                                                 <Select
-                                                   
-
+                                                    value={values.orgname}
+                                                    onChange={handleChange('orgname')}
                                                     inputProps={{
-                                                        name: 'campus',
-                                                        id:'campus-simple'
+                                                        name: 'orgname',
+                                                        id:'orgname-simple'
                                                     }}
                                                 >
-                                                {/*
-                                                    loadingCampuses ? 
+                                                {
+                                                    values.orgLoading ? 
                                                          <MenuItem></MenuItem>
                                                          :
-                                                     campuses.map((campus, id) => {
-                                                        return <MenuItem key={id} value={campus.campusname}>{campus.campusname} </MenuItem>
-                                                     })
-                                                */ }
-
-                                                <MenuItem>Items Coming Soon</MenuItem>
+                                                         // To access all the object data and use it in other components
+                                                         // setthe response object as the value of the select component 
+                                                         // and get the object data
+                                                     orgArr.map(org => {
+                                                        return <MenuItem  value={org}>{org.orgname}</MenuItem>
+                                                         })
+                                                }
                                                 </Select>
 
                                             </FormControl>
+                                             <span style={{ color: "red" }}>
+                                                {errors.orgname}
+                                             </span>
+
                                         </Grid>
 
                                         <Grid item xs={12}>
-                                            <TextField
-                                                id="campus"
-                                                name="campus"
-                                                defaultValue="Department of the Selected Organization"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                  }}
-                                                fullWidth
-                                            />
+                                         {
+                                            values.orgname === ''
+                                            ? 
+                                            <Fragment></Fragment>
+                                            : 
+
+                                            orgArrFilter.map(org => (
+
+                                                 <Fragment>
+                                                       <TextField
+                                                        id="campus"
+                                                        name="campus"
+                                                        value={org.campus}
+                                                          InputProps={{
+                                                            readOnly: true,
+                                                          }}
+                                                        fullWidth
+                                                    />
+                                                    </Fragment>
+                                                ))
+                                         }
                                         </Grid>
 
 
+                                        </Fragment>
+
                                         <Grid item xs={12}>
                                             <TextField
+                                                value={values.username}
+                                                onChange={handleChange('username')}
                                                 id="username"
                                                 name="username"
                                                 label="Username"
-                                                autoComplete="username"
                                                 fullWidth
                                             />
+
+                                            <span style={{ color: "red" }}>
+                                                {errors.username}
+                                             </span>
                                         </Grid>
 
                                         <Grid item xs={12}>
@@ -243,6 +327,10 @@ function OrgAccountListAddForm(props){
                                             }}
 
                                         />
+
+                                            <span style={{ color: "red" }}>
+                                                {errors.password}
+                                             </span>
 
                                         </Grid>
 
@@ -274,8 +362,12 @@ function OrgAccountListAddForm(props){
     
 };
 
-OrgAccountListAddForm.propTypes = {
-    classes: PropTypes.object.isRequired
-};
+const mapStateToProps = state => ({
+  orgDesc: state.orgDesc.records,
+  org: state.org,
+  errors: state.errors
+});
 
-export default withStyles(styles)(OrgAccountListAddForm);
+const mapDispatchToProps = { addAccntRecords,  getOrgDesc };
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrgAccountListAddForm));

@@ -1,4 +1,4 @@
-// /Dependencies 
+	// /Dependencies 
 const express = require('express');
 const session = require('express-session');
 const cors = require("cors");
@@ -13,6 +13,7 @@ const campuses = require('./routes/api/campuses');
 const departments = require('./routes/api/departments');
 const orgdesc = require('./routes/api/orgdesc');
 const org = require('./routes/api/org');
+const idreplacement = require('./routes/api/idreplacement')
 
 //Router
 const app = express();
@@ -56,5 +57,6 @@ app.use("/api/campuses", campuses);
 app.use("/api/departments", departments);
 app.use("/api/orgdesc", orgdesc);
 app.use("/api/org", org);
+app.use("/api/idreplacement", idreplacement);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

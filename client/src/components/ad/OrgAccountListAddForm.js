@@ -28,14 +28,6 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
 
-function isEmpty(obj) {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
-
 // Object Styles for the components 
 const styles = theme => ({
     root: {

@@ -13,7 +13,7 @@ const campuses = require('./routes/api/campuses');
 const departments = require('./routes/api/departments');
 const orgdesc = require('./routes/api/orgdesc');
 const org = require('./routes/api/org');
-const idreplacement = require('./routes/api/idreplacement')
+const idreplacements = require('./routes/api/idreplacements');
 
 //Router
 const app = express();
@@ -57,6 +57,6 @@ app.use("/api/campuses", campuses);
 app.use("/api/departments", departments);
 app.use("/api/orgdesc", orgdesc);
 app.use("/api/org", org);
-app.use("/api/idreplacement", idreplacement);
+app.use("/api/idreplacements", idreplacements);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

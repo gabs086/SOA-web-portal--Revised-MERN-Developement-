@@ -133,3 +133,14 @@ May 29
 	@Created a model schema and creating route api's for idreplacement transaction
 	-models/idreplacement.model
 	-routes/api/idreplacement.js
+
+	Created get and post api for idreplacements
+
+May 30 
+	3:58 PM
+	@Creating the update router for idreplacement
+	- routes/api/idreplacement.js
+
+	8:11 PM
+	+Having a strange behavior for setting a model schema as integer
+	-idreplacements.model.js

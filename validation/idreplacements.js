@@ -1,7 +1,7 @@
 const Validator = require('validator');
 const isEmpty = require('is-empty');
 
-const validateIdReplacement = data => {
+const validateIdReplacements = data => {
 
 	let errors = {};
 
@@ -47,4 +47,4 @@ const validateIdReplacement = data => {
 
 };
 
-module.exports = validateIdReplacement;
+module.exports = validateIdReplacements;

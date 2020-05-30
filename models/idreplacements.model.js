@@ -42,7 +42,7 @@ module.exports = db.sequelize.define(
         	type: Sequelize.STRING
         },
         count: {
-        	type: Sequelize.INTEGER
+        	type: Sequelize.STRING
         },
         otherinfo: {
         	type: Sequelize.STRING

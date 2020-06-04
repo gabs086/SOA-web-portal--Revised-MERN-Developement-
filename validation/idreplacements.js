@@ -25,7 +25,7 @@ const validateIdReplacements = data => {
 		errors.name = "Name of the student is required.";
 
 	if(Validator.isEmpty(year))
-		errors.years = "What year of college the student is.";
+		errors.year = "What year of college the student is.";
 
 	if(Validator.isEmpty(src))
 		errors.src = "SR-Code of the student is required.";

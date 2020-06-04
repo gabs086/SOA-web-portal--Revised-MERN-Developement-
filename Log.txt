@@ -144,3 +144,27 @@ May 30
 	8:11 PM
 	+Having a strange behavior for setting a model schema as integer
 	-idreplacements.model.js
+
+Jun 1
+	8:00 PM
+	@Change creating the client side for ID replacement
+	- actions/types.js
+	- reducers/idreplacementReducer.js
+	- actions/idrepslacementActions.js
+
+Jun 2
+	7:39 PM
+
+	@Created a component for add form of ID Replacement
+	- ad/IDReplacementAddForm.js
+
+Jun 4
+	1:41 PM
+	@Continutaion of component for add form of ID Replacement
+	- ad/IDReplacementAddForm.js
+
+	4:52 PM
+	@Implemented the GETTIng all the details for the idreplacement
+
+	7:53 PM
+	@Finished POST and GET api for idreplacement

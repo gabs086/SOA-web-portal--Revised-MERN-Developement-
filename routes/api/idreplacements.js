@@ -74,7 +74,7 @@ router.post('/addidrecords', (req,res) => {
 	});
 
 	newIdReplacement.save()
-	.then( _ => res.json('Record Added'))
+	.then(response => res.json(response))
 	.catch(err => res.status(500).json(err));
 	
 });

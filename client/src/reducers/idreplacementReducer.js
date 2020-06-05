@@ -1,7 +1,7 @@
 import {
 	GET_ID_REPLACEMENTS,
 	ADD_ID_REPLACEMENT,
-	ID_FETCHED_BY_ID,
+	// ID_FETCHED_BY_ID,
 	UPDATE_ID_REPLACEMENT,
 	ID_REPLACEMENT_LOADING
 } from '../actions/types';
@@ -28,6 +28,14 @@ export default function (state = initialState, action){
 				added: true,
 				records: [action.payload, ...state.records]
 			};
+		// Fetched the state by its 
+		// This will be a snippet for Redux search by id s
+		// case ID_FETCHED_BY_ID:
+		// 		return {
+		// 			...state,
+		// 			records: action.payload
+		// 		};
+
 		case UPDATE_ID_REPLACEMENT:
 			return {
 				...state,

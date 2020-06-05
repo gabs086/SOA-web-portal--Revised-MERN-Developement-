@@ -168,3 +168,16 @@ Jun 4
 
 	7:53 PM
 	@Finished POST and GET api for idreplacement
+
+	8:18 PM
+	@Created a GET route that fetch data with its specific ID
+	@Added a link for updating a route in the App.js
+
+
+********* Implement the update route in the client side 
+
+Jun 5
+	@Implementing update route and action with redux
+
+	!:28 PM
+	@Finished the ID Replacement Process

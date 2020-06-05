@@ -38,6 +38,19 @@ router.get('/getidrecords', async (req, res) => {
 
 });
 
+//@route GET /api/idreplacements/getidrecords/:id
+//@desc Get a Id Replacement record with its specific id
+//@access admin only
+router.get('/getidrecords/:id', (req, res) => {
+
+	const id = req.params.id;
+
+	IdReplacements.findByPk(id)
+	.then(response => res.json(response))
+	.catch(err => res.status(400).json(`Error: ${err}`));
+
+});
+
 //@router POST /api/idreplacements/addidrecords
 //@desc Add a record for idreplacement transaction
 //@access Admin only
@@ -85,7 +98,7 @@ router.post('/addidrecords', (req,res) => {
 router.post('/updateidrecord/:id',(req, res) => {
 	const id = req.params.id;
 
-	// const today = new Date();
+	const today = new Date();
 
 	//validation for checking the inputs in update
 	const { errors, isValid } = validateIdReplacements(req.body);
@@ -128,6 +141,7 @@ router.post('/updateidrecord/:id',(req, res) => {
 			replace.idreason = idreason;
 			replace.count = count;
 			replace.otherinfo = otherinfo;
+			replace.created_at = today;
 
 			replace.save()
 			.then(response => res.json(response))

@@ -41,6 +41,7 @@ import OrgUpdateForm from './components/ad/OrgUpdateForm';
 import OrgAccountList from './components/ad/OrgAccountList';
 import OrgAccountListAddForm from './components/ad/OrgAccountListAddForm';
 import IDReplacementAddForm from './components/ad/IDReplacementAddForm';
+import IDReplacementUpdateForm from './components/ad/IDReplacementUpdateForm';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -113,6 +114,8 @@ function App() {
           <PrivateRoute exact path="/ad/filesandreports" component={FilesAndReports} />
           <PrivateRoute exact path="/ad/idreplacement" component={IDReplacement} />
           <PrivateRoute exact path="/ad/idreplacement/addidreplacement" component={IDReplacementAddForm} />
+          <PrivateRoute exact path="/ad/idreplacement/updateidreplacement/:id" component={IDReplacementUpdateForm} />
+
 
         </Switch>
 

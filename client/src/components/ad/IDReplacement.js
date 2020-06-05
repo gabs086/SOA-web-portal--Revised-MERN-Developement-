@@ -158,6 +158,9 @@ function IDReplacement(props){
     // state for the confirmation message of adding a new records
       const [openAdded, setOpenAdded] = useState(false);  
 
+      const [openUpdated, setOpenUpdated] = useState(false);  
+
+
         /////////////Event Handlers//////////
 
           //Getting the pages, Material UI Funcs
@@ -174,6 +177,7 @@ function IDReplacement(props){
             setSearchName(e.target.value);
         };
 
+        // Event for openAdded state 
         const handleClose = (event, reason) => {
                 if (reason === 'clickaway') {
                   return;
@@ -181,6 +185,16 @@ function IDReplacement(props){
 
                 setOpenAdded(false);
           };
+
+        // Event for openUpdated state
+        const handleClose1 = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setOpenUpdated(false);
+          };
+
 
         //////////Component Effects//////
 
@@ -205,6 +219,13 @@ function IDReplacement(props){
           }
         }, [props.idreplacement.added]);
 
+        // useEffect for a successful adding of a record
+        useEffect( _ => {
+          if(props.idreplacement.replaced){
+              setOpenUpdated(true);
+          }
+        }, [props.idreplacement.replaced]);
+
           //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
   const rows = props.idreplacement.records.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
@@ -212,13 +233,13 @@ function IDReplacement(props){
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  console.log(props);
-
         return (
             <div>
                 <DashboardAdmin>
 
                 <FormConfirmationMsg open={openAdded} onClose={handleClose} variant="success" message="Record Added." />
+                <FormConfirmationMsg open={openUpdated} onClose={handleClose1} variant="success" message="Record Updated." />
+
 
             {/* Button that will redirect to registering a account*/}
                  <Button 
@@ -301,7 +322,7 @@ function IDReplacement(props){
                                           <TableCell align="left">
 
                                               <Tooltip title="Update" placement="top">
-                                                 <IconButton aria-label="edit" color="primary">
+                                                 <IconButton href={`/ad/idreplacement/updateidreplacement/${row.id}`} aria-label="edit" color="primary">
                                                   <EditIcon />
                                                 </IconButton>
                                               </Tooltip>   

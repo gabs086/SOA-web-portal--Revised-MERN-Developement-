@@ -108,6 +108,8 @@ router.post("/login", (req, res) => {
                         (err, token) => {
                             res.json({
                                 success: true,
+                                // Get the username
+                                username: user.username,
                                 //added the usertype
                                 type: user.type,
                                 // added the campus of the user 

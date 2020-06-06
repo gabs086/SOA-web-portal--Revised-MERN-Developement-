@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import SideListNavbar2 from './SideListNavbar2';
+
 //Materialize Components
 import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +15,16 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import Badge from '@material-ui/core/Badge';
 
 const styles = theme => ({
     root: {
@@ -36,7 +49,16 @@ const styles = theme => ({
             display: 'none',
         },
     },
+
+    //Drawer style components
+    list:{
+        width: 250,
+    }
 });
+
+const Transition = props => {
+    return <Slide direction="up" {...props} />
+}
 
 //Navbar For Students
 class Navbar2 extends Component {
@@ -50,13 +72,29 @@ class Navbar2 extends Component {
         this.handleSettingsOpen = this.handleSettingsOpen.bind(this);
 
         this.onLogoutClick = this.onLogoutClick.bind(this);
+        this.onModalLogoutClick = this.onModalLogoutClick.bind(this);
+        this.onHandleLogoutClickClose = this.onHandleLogoutClickClose.bind(this);
+
+        this.toggleDrawer = this.toggleDrawer.bind(this);
 
         this.state = {
             // L&F Dropdown 
             anchorEl: null,
             //Settings dropdown
-            anchorDropDownEl: null
+            anchorDropDownEl: null,
+            //logout modal
+            modalLogout: false,
+
+            // State for toggling the drawer
+            right: false
         }
+    }
+
+    //Drawer Toggle
+    toggleDrawer = (side, open) => () =>{
+        this.setState({
+            [side]: open 
+        });
     }
 
     handleActivityOpen(e) {
@@ -75,46 +113,85 @@ class Navbar2 extends Component {
         this.setState({ anchorDropDownEl: null });
     }
 
+    // Modal Logout Function 
+    onModalLogoutClick() {
+        this.setState({ modalLogout: true })
+        this.setState({ anchorDropDownEl: null });
+    }
+
+    onHandleLogoutClickClose() {
+        this.setState({ modalLogout: false })
+    }
+
+    // Logout Function
     onLogoutClick() {
-        if (window.confirm("Are you sure you want to logout?")) {
-            this.props.logoutUser();
-        }
+        this.props.logoutUser();
     }
 
     render() {
         const { classes } = this.props;
-        const { anchorEl, anchorDropDownEl } = this.state;
+        const { anchorEl, anchorDropDownEl, modalLogout } = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isSettingsOpen = Boolean(anchorDropDownEl);
 
+        // Activities Mobile Components
         const renderMenu = (
             <Menu
                 anchorEl={anchorEl}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isMenuOpen}
-                close={this.handleMenuClose}
+                onClose={this.handleMenuClose}
             >
                 <MenuItem onClick={this.handleMenuClose}>Menu Item 1 </MenuItem>
                 <MenuItem onClick={this.handleMenuClose}>Menu Item 2 </MenuItem>
             </Menu>
         );
-
+            // Setings Monile component
         const renderSettings = (
             <Menu
                 anchorEl={anchorDropDownEl}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isSettingsOpen}
-                close={this.handleSettingsOpen}
+                onClose={this.handleSettingsClose}
             >
-                <MenuItem onClick={this.handleSettingsClose}>Downloadable </MenuItem>
-                <MenuItem onClick={this.onLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
+                <MenuItem onClick={this.handleSettingsClose}>Downloadable Files </MenuItem>
+                <MenuItem onClick={this.onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
 
         return (
             <div className={classes.root}>
+                {/* Modal */}
+                <Dialog
+                    open={modalLogout}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={this.onHandleLogoutClickClose}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="alert-dialog-slide-title">
+                        {"Logging Out"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Are you you want to Logout?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.onHandleLogoutClickClose} variant="outlined" color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.onLogoutClick} variant="outlined" color="secondary">
+                            Logout
+                               </Button>
+                    </DialogActions>
+                </Dialog>
+
+
+                {/* Navbar  */}
                 <AppBar position="static">
                     <Toolbar style={{ background: "#8a1c1c" }}>
                         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
@@ -122,15 +199,20 @@ class Navbar2 extends Component {
                         </Typography>
 
                         <div className={classes.sectionDesktop}>
-                            <Button color="inherit">Home</Button>
-                            <Button color="inherit">Calendar</Button>
-                            <Button color="inherit">Events</Button>
-                            <Button
-                                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                                aria-haspopup="true"
-                                onClick={this.handleActivityOpen}
-                                color="inherit"
-                            >Activities</Button>
+                            <Button color="inherit" href="/st">Home</Button>
+                            <Button color="inherit" href="/st/lostandfoundpage">
+                                Calendar
+                            </Button>
+                            <Button color="inherit">Activities (Request, Reports)</Button>
+                            <Button color="inherit">Activity Assessment</Button>
+
+                        {/* This will be the link for measuring the notifications for the request activities*/}
+                            <Button color="inherit">
+                                <Badge badgeContent={0} color="secondary">
+                                    <NotificationsIcon />
+                                  </Badge>
+                            </Button>
+
                             <Button
                                 color="inherit"
                                 aria-owns={isSettingsOpen ? 'material-appbar' : undefined}
@@ -141,12 +223,31 @@ class Navbar2 extends Component {
                             </Button>
                         </div>
 
+                        {/* Drawer Mobile components  */}
                         <div className={classes.sectionMobile}>
                             <Button
-                                onClick={this.handleMobileMenuOpen} color="inherit">
+                                onClick={this.toggleDrawer('right',true)} color="inherit">
                                 <MenuIcon />
                             </Button>
                         </div>
+                        {/* Drawer Toggler  */}
+                        <Drawer anchor="right" open={this.state.right} 
+                        onClose={this.toggleDrawer('right',false)}
+                        >
+                        <div
+                            tabIndex={0}
+                            role="button"
+
+                            // Muted feature because of onClick behavior, always closign every click  in the drawer 
+                            onClick={this.toggleDrawer('right', false)}
+
+                            onKeyDown={this.toggleDrawer('right', false)}
+                        >
+                            <SideListNavbar2 class={classes.list} onClick={this.onModalLogoutClick} />
+                        </div>
+
+                        </Drawer>
+                        
 
                     </Toolbar>
                 </AppBar>
@@ -157,9 +258,9 @@ class Navbar2 extends Component {
     }
 }
 
-Navbar2.proptTypes = {
+Navbar2.propTypes = {
     classes: PropTypes.object.isRequired,
-    // /Logout Func from the authActions
+    //Logout Func from the authActions
     logoutUser: PropTypes.func.isRequired,
     //object prop from the authReducer
     auth: PropTypes.object.isRequired

@@ -104,5 +104,7 @@ router.post('/registerorg',(req, res) => {
 
 });
 
+//@route GET /api/lam
+
 
 module.exports = router;

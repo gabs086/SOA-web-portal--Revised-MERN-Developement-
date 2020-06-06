@@ -181,3 +181,24 @@ Jun 5
 
 	!:28 PM
 	@Finished the ID Replacement Process
+
+	5:58 PM
+	@Creating the database for request_activities
+
+	@Implementing the name of the org to access in their page
+	// Including the username in routes/api/users.js in login route and in the client side
+
+	@Fetch the Orgname by its specifc orgname
+
+Jun 6
+
+	12:46 PM
+	@Organizing the client side of the organization index
+	-client/OrgIndex.js
+
+	********* The menu for Organization
+			- Home
+			- Calendar
+			- File Formats
+			- Activity Request(Request_Activities and Reports Submittion)
+			- Activity Assessment

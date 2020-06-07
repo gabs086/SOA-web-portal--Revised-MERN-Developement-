@@ -47,7 +47,7 @@ class SideListNavbar2 extends Component {
                 </ListItem>
 
                 {/* Org Reports components  */}
-                <ListItem button component="a" href="#">
+                <ListItem button component="a" href="/org/activitysections">
                     <ListItemIcon>
                         <AssessmentIcon />
                     </ListItemIcon>

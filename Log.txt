@@ -202,3 +202,11 @@ Jun 6
 			- File Formats
 			- Activity Request(Request_Activities and Reports Submittion)
 			- Activity Assessment
+
+	6:33 PM
+	@Finished Organizing the home page for Student organization DashBoard
+	- client/org/OrgIndex.js
+
+	7:30 PM
+	@Creating the React component for Activities(Request, Reports) Component
+	- client/org/ActivityRequestReports.js

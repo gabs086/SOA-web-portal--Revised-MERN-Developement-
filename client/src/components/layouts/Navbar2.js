@@ -195,7 +195,7 @@ class Navbar2 extends Component {
                 <AppBar position="static">
                     <Toolbar style={{ background: "#8a1c1c" }}>
                         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                            SOA Web Portal
+                                SOA Web Portal
                         </Typography>
 
                         <div className={classes.sectionDesktop}>
@@ -203,7 +203,7 @@ class Navbar2 extends Component {
                             <Button color="inherit" href="#">
                                 Calendar
                             </Button>
-                            <Button color="inherit">Activities (Request, Reports)</Button>
+                            <Button color="inherit" href="/org/activitysections">Activities (Request, Reports)</Button>
                             <Button color="inherit">Activity Assessment</Button>
 
                         {/* This will be the link for measuring the notifications for the request activities*/}

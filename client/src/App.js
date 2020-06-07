@@ -17,6 +17,7 @@ import FoundTable from './components/st/FoundTable';
 
 // Student Organization Dashboard Components
 import OrgIndex from './components/org/OrgIndex';
+import ActivityRequestReports from './components/org/ActivityRequestReports';
 
 // SOA Head Dashboard Components
 import HeadIndex from './components/h/HeadIndex';
@@ -90,6 +91,7 @@ function App() {
 
           {/* Student Organization Route Pages  */}
           <PrivateRoute exact path="/org" component={OrgIndex} />
+          <PrivateRoute exact path="/org/activitysections" component={ActivityRequestReports} />
 
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />

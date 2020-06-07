@@ -16,7 +16,6 @@ import Button from '@material-ui/core/Button';
 
 import Navbar2 from "../layouts/Navbar2";
 
-
 // Material UI styles 
 const styles = theme => ({
     root: {
@@ -83,7 +82,7 @@ function OrgIndex(props) {
                     	<List component="nav">
 
                        	 {/* Link 1  */}
-                       	 <ListItemLink href="#">
+                       	 <ListItemLink href="/org">
                        	 	 <ListItemIcon>
                                 <EventIcon />
                             </ListItemIcon>
@@ -91,7 +90,7 @@ function OrgIndex(props) {
                        	 </ListItemLink>
 
 							 {/* Link 2  */}
-                       	 <ListItemLink href="#">
+                       	 <ListItemLink href="/org/activitysections">
                        	 	 <ListItemIcon>
                        	 	 	<AssignmentIcon />
                             </ListItemIcon>

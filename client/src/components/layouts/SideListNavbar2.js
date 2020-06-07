@@ -31,7 +31,7 @@ class SideListNavbar2 extends Component {
                  <List>
                     {/* Inclide a component of a for anchor tag */}
                     {/* Home Link  */}
-                <ListItem button component="a" href="/st">
+                <ListItem button component="a" href="/org">
                     <ListItemIcon>
                         <HomeIcon />
                     </ListItemIcon>

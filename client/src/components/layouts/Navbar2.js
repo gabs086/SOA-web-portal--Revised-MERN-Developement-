@@ -199,8 +199,8 @@ class Navbar2 extends Component {
                         </Typography>
 
                         <div className={classes.sectionDesktop}>
-                            <Button color="inherit" href="/st">Home</Button>
-                            <Button color="inherit" href="/st/lostandfoundpage">
+                            <Button color="inherit" href="/org">Home</Button>
+                            <Button color="inherit" href="#">
                                 Calendar
                             </Button>
                             <Button color="inherit">Activities (Request, Reports)</Button>

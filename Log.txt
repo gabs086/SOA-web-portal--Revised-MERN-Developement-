@@ -215,3 +215,10 @@ Jun 8
 	8:11 AM
 	-Creating the component Request Activity Form
 	-client/org/RequestActivityComponent.js
+
+	!:28 PM
+	-Finished Creating the component for RequestActivityComponent
+
+	3:45 PM
+	Creating the Table component for the history of files
+	- client/org/RequestActivityHistoryTableComponent.js

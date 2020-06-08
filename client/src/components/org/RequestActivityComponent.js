@@ -19,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Navbar2 from "../layouts/Navbar2";
+import RequestActivitiesHistory from './RequestActivitiesHistory'
 
 //Style component
 const useStyles = makeStyles(theme => ({
@@ -70,6 +71,12 @@ function RequestActivityComponent(props) {
 	 	setValues({...values, [prop]: e.target.value })
 	 }
 
+	 const handleSubmit = e => {
+	 	e.preventDefault();
+
+	 	console.log(values);
+	 };
+
 	 //Component Effect
 
   return (
@@ -114,7 +121,7 @@ function RequestActivityComponent(props) {
                           		  Input the details needed.
                         		</Typography>
 
-                        		<form  noValidate>
+                        		<form noValidate onSubmit={handleSubmit}>
 
                         	{/* Activity Title TextField */}
                         		 <TextField
@@ -209,6 +216,8 @@ function RequestActivityComponent(props) {
 		                 Your History
 		             </Typography>
 		              <br></br>
+
+		             <RequestActivitiesHistory />
 
 			    </Paper>
 

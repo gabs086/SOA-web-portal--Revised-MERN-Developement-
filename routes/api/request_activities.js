@@ -1,0 +1,143 @@
+/*This file will contain the models of request_activities,
+notifications and org_feeds table. 
+
+This file also have the api's for the processing of request_activities
+in the org side.
+*/
+
+const express = require('express');
+const multer = require('multer');
+const router = express.Router();
+const path = require('path');
+
+//The directory where the files will be stored
+const DIR = 'uploads/request_activities/';
+
+//Models Involve
+const RequestActivities = require('../../models/request_activities.model');
+const Notifications = require('../../models/notifications.model');
+const OrgFeeds = require('../../models/org_feeds.model');
+
+//validations
+const validateRequestActivities = require('../../validation/request_activities');
+
+//Diskstorage for sending the files into the assigned Directory
+const storage = multer.diskStorage({
+	// The destination of the file 
+	destination: (req, file, cb) => {
+		cb(null, DIR)
+	},
+	// what will be the filename of the file uploaded
+	filename: (req, file, cb) => {
+		// set the file name with its the date the file submitted and the filename 
+		const date = new Date();
+		const year = date.getFullYear();
+		const month = date.getMonth() + 1;
+		const day = date.getDate();
+		const dateFull = `${day}-${month}-${year}`;
+
+		// the filename format 
+		const filename = file.originalname.toLowerCase().split(' ').join('-');
+
+		cb(null, `${dateFull}_${filename}`);
+	}
+
+});
+// The upload and the checking if the file is not a docx type of pdf type 
+const upload = multer({
+	 storage: storage,
+	   fileFilter: (req, file, cb) => {
+	   		if(file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype === 'application/pdf') {	
+   				cb(null, true)
+	   		} 
+	   		else {
+	   		// This will throw the file as undefined because the condition is to check if the file is .docx or .pdf type file
+  	 		 cb(null, false)
+  	   		}
+	   }
+});
+
+//@route GET /api/requestactivities/getrequestactivities
+//@desc GET all the data in the request_activities table
+//@access student org, SOA Heads and Administrator
+router.get('/getrequestactivities', async (req, res) => {
+	const request_activities = await RequestActivities.findAll();
+
+	try{
+		if(request_activities) res.json(request_activities)
+	}
+	catch(err){
+		res.status(500).json(err);
+	}
+});
+
+//@route POST /api/requestactivities/submitrequest
+//@desc submit a request activity to the soa HEAD the to the director
+//The form will need files
+//@access org only
+router.post('/submitrequest', upload.single('file'), (req, res) => {
+// 	// dont forget to include this in the form
+// 	// enctype   =  "multipart/form-data
+
+const file = req.file;
+
+// Url of the web app
+const url = req.protocol + '://' + req.get('host');
+
+const { errors, isValid } = validateRequestActivities(req.body);
+
+const today = new Date();
+	
+	// This will be the error handling of the file if the mimetype is not .docx or .pdf 
+	//The file will be automatically undefined if the file is not a .docx or .pdf type
+	if(file === undefined){
+		return res.status(400).json({file: 'Note: File for the request is required, .docx and .pdf only'});
+	};
+
+	if(!isValid){
+		return res.status(400).json(errors);
+	} 
+
+	const { 
+		//Body for the requested activities
+		activity_title, description, orgname, status, campus,
+		// Body for the orgFeeds
+		username
+
+	} = req.body;
+
+	// Saving of the req.body in the RequestActivities model 
+	const newRequestActivities = new RequestActivities({
+		activity_title,
+		file: url + '/' + file.path,
+		description,
+		orgname,
+		status:'Approved0',
+		campus,
+		created_at: today
+	});
+
+	// The OrgFeeds 	
+	const newOrgFeeds = new OrgFeeds({
+		username,
+		orgname,
+		message: `You submitted ${activity_title} request activity to your SOA HEAD`,
+		created_at: today
+	});
+
+	// For saving the data submitted for new request_activities
+	newRequestActivities.save()
+	.then(response => res.json({
+		message:'Request submitted',
+		datas: {response}
+	}))
+	.catch(err => res.status(500).json(err));
+
+	// for saving the data for the orgfeeds 
+	newOrgFeeds.save()
+	.then(orgfeed => res.json(orgfeed))
+	.catch(err => res.status(500).json(err));
+
+});
+
+module.exports = router;

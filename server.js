@@ -14,6 +14,7 @@ const departments = require('./routes/api/departments');
 const orgdesc = require('./routes/api/orgdesc');
 const org = require('./routes/api/org');
 const idreplacements = require('./routes/api/idreplacements');
+const requestActivities = require('./routes/api/request_activities'); 
 
 //Router
 const app = express();
@@ -33,11 +34,26 @@ if(app.get('env') === 'production'){
 app.use(session(sess));
 
 //Middleware
+// Added a static folder for the accessing the downloads 
+app.use('/uploads/request_activities', express.static('uploads/request_activities'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cors());
 app.use(bodyParser.json());
+
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   if (req.method === "OPTIONS") {
+//     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+//     return res.status(200).json({});
+//   }
+//   next();
+// });
 
 
 //PORT configuration
@@ -58,5 +74,6 @@ app.use("/api/departments", departments);
 app.use("/api/orgdesc", orgdesc);
 app.use("/api/org", org);
 app.use("/api/idreplacements", idreplacements);
+app.use("/api/requestactivities", requestActivities);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

@@ -222,3 +222,58 @@ Jun 8
 	3:45 PM
 	Creating the Table component for the history of files
 	- client/org/RequestActivityHistoryTableComponent.js
+
+	Finished Form and table components in RequestActivityComponent
+	-client/org/RequestActivityComponent
+
+Jun 9
+	10:20 AM
+	- Creating the Model for the Request Activities
+	 / +Request Activities
+	 	- id
+	 	- activity_title
+	 	- file(The file for activity Request)
+	 	- description
+	 	- orgname(The orgname for the organization who is online)
+	 	- campus(THe campus where the org is Regitered)
+	 	- status
+	 	- created_at
+	 ++ For the History Use the model and fetch some specifc data's above
+
+	 / +Feed 
+	 	- username
+	 	- orgname
+	 	- Message (Just only for submitting activities and reports submittion)
+	 	- created_at
+
+	 /	+Notification
+	 	-username
+	 	-orgname
+	 	-notification(The message notification)
+	 	-reason(Default is null, will only have a value of the the staus is Declined1 or Declined2)
+	 	-status(read or '') defaultValue is ''
+	 	-created_at
+
+	 ++THe notification will be count WHERE THE STATUS IS EQUAL TO ''
+
+	 11:06 PM
+	 -CReated table in the database
+	 Databas table: request_activities, org_feeds, notifications
+
+	 @Creating the models for the table mentioned Above
+	 -request_activities.model.js
+	 -notifications.model.js
+	 -org_feeds.model.js 
+
+	 @Finished the models mention above
+
+Jun 10
+	10:53 PM
+	@Installed multer library package
+	-package.json
+
+	11:02 PM
+	@Finished the post method with a file attached in the body
+	-routes/api/request_activities.js
+	@Fixed the directory proccedings for the express statice folder for the directory of the files submitted
+	-server.js

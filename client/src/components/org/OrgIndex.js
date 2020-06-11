@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from "react-redux";
+import { getOrgFeeds } from '../../actions/requestActivitiesActions';
 import axios from 'axios';
+import moment from 'moment';
 
+import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -14,11 +17,13 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import Button from '@material-ui/core/Button';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Navbar2 from "../layouts/Navbar2";
 
 // Material UI styles 
-const styles = theme => ({
-    root: {
+const useStyles = makeStyles(theme => ({
+  root: {
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
@@ -34,18 +39,27 @@ const styles = theme => ({
     input: {
         display: 'none',
       },
-    
-});
+    timeFeed: {
+      float: 'right',
+      fontSize: 13
+    }
+}));
 
 function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
   }
 
 function OrgIndex(props) {
-	const classes = props;
+	const classes = useStyles();
 
+  // States
 	const [orgOnline, setOrgOnline] = useState('');
+  //Loading state for the 
+  const [loadingOrgFeeds, setOrgFeeds] = useState(true);
 
+  // Event Handlers
+
+  // Component Effects 
 	useEffect(_ => {
 		const { auth } = props;
 
@@ -57,6 +71,25 @@ function OrgIndex(props) {
 		.catch(err => err)
 
 	},[]);
+
+  // Effect for rendering the org feeds
+  useEffect(_ => {
+
+    const id = setInterval(_ => {
+        props.getOrgFeeds();
+        setOrgFeeds(false);
+    }, 2000)
+
+    return _ => {
+      clearInterval(id)
+    }
+
+  },[])
+
+  const { auth, requestActivities } = props;
+
+  const rows = requestActivities.feeds.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
+    .filter(row => row.username === auth.user.username);
 
         return (
             <div>
@@ -132,7 +165,34 @@ function OrgIndex(props) {
 
                     <List component="nav" aria-label="secondary mailbox folders">
                    	   <ListItem>
-                           <ListItemText primary={"Feeds Will be here"} />
+                       {
+                        loadingOrgFeeds 
+                        ? 
+                          <Fragment>
+                            <CircularProgress color="secondary" />
+                           <ListItemText primary={"Your Feeds is loading."} />
+
+                          </Fragment>
+                        :
+                        <Fragment>
+                         { 
+
+                          rows.length === 0
+                          ?
+                           <ListItemText primary={"The organization dont have feed yet."} />
+                          :
+                          rows.map(row => (
+                           <ListItemText>
+                           {row.message}
+                           <span className={classes.timeFeed}>
+                           {moment(row.created_at).fromNow()}
+                           </span>
+                           </ListItemText>
+
+                            ))
+                        }
+                        </Fragment>
+                       }
                         </ListItem>
                      </List>
 
@@ -150,7 +210,10 @@ function OrgIndex(props) {
 }
 
 const mapStateToProps = state => ({
-	auth:state.auth
+	auth:state.auth,
+  requestActivities: state.requestActivities
 });
 
-export default connect(mapStateToProps)(OrgIndex);
+const mapDispatchToProps = { getOrgFeeds };
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrgIndex);

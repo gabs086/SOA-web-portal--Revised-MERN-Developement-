@@ -7,6 +7,7 @@ import lafReducer from './lafReducer';
 import orgDescReducer from './orgDescReducer';
 import orgReducer from './orgReducer';
 import idreplacementReducer from './idreplacementReducer';
+import requestActivitiesReducer from './requestActivitiesReducer';
 
 export default combineReducers({
     auth: authReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     laf: lafReducer,
     orgDesc: orgDescReducer,
     org: orgReducer,
-    idreplacement: idreplacementReducer
+    idreplacement: idreplacementReducer,
+    requestActivities: requestActivitiesReducer
 });

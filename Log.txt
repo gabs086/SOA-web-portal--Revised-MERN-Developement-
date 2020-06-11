@@ -277,3 +277,18 @@ Jun 10
 	-routes/api/request_activities.js
 	@Fixed the directory proccedings for the express statice folder for the directory of the files submitted
 	-server.js
+
+Jun 11
+	2:09 PM
+	@Applying the api routes in the client side
+	-client/org/OrgIndex.js
+	-client/org/RequestActivityComponent.js
+
+	@Setup the reducer for request_activities process
+	- client/reducers/requestActivitiesReducer.js
+
+	8:05 PM
+	@Created actions for request_activities
+	-client/actions/requestActivitiesActions.js
+
+	@Finished Fetching the OrgFeeds

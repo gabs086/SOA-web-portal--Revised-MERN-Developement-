@@ -71,6 +71,20 @@ router.get('/getrequestactivities', async (req, res) => {
 	}
 });
 
+//@route GET /api/requestactivities/getorgfeeds
+//@desc GET the org feeds save in the database. Can be filtered in the client side
+//@access org only
+router.get('/getorgfeeds', async (req, res) => {
+	const orgfeeds = await OrgFeeds.findAll();
+
+	try {
+		if(orgfeeds) res.json(orgfeeds)
+	}
+	catch(err) {
+		res.status(500).json(err)
+	}
+});
+
 //@route POST /api/requestactivities/submitrequest
 //@desc submit a request activity to the soa HEAD the to the director
 //The form will need files

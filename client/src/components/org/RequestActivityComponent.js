@@ -1,4 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from "react-redux";	
+import { submitRequest } from '../../actions/requestActivitiesActions';
+import { createFormData } from "./formData";
+import axios from 'axios';
 
 // Material-ui components 
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,18 +18,15 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import IconButton from '@material-ui/core/IconButton';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Navbar2 from "../layouts/Navbar2";
-import RequestActivitiesHistory from './RequestActivitiesHistory'
+import RequestActivitiesHistory from './RequestActivitiesHistory';
+import FormConfirmationMsg from './FormConfirmationMsg';
 
 //Style component
 const useStyles = makeStyles(theme => ({
-	root: {
-		padding: theme.spacing(3, 2),
-	},
 	 link: {
     display: 'flex',
 	  },
@@ -59,30 +60,104 @@ function RequestActivityComponent(props) {
 	 const classes = useStyles();
 
 	 // States 
-	 const [values, setValues] = useState({
-	 		activity_title: '',
-	 		file: '',
-	 		request_description: '',
+	 	 // Getting the org state
+	 const [orgname, setOrgName] = useState('');
+
+	 //Errors state
+	 const [errors, getErrors] = useState({});
+
+	 //Open confirmation message state
+	 const [open, setOpen] = useState(false)
+
+	 const [obj, setObj] = useState({
+	  	file: '',
+	  	fileName:''
 	 });
+	 // const [file, setFile] = useState('');
+	 const [fileName, setFileName] = useState('');
+
 
 	 //Event Handlers
 
-	 const handleChange = prop => e => {
-	 	setValues({...values, [prop]: e.target.value })
-	 }
+	 // const handleChange = prop => e => {
+	 // 	setValues({...values, [prop]: e.target.value });
+	 // };
 
+	 // const handleChangeFile = files => {
+	 // 	// setFile(files[0]);
+	 // 	setObj({...obj, file: files[0]});
+	 // 	setFileName(files[0].name);
+	 // 	// console.log(e.target.files[0]);
+	 // };
+
+	 // Gettin all the values to send in a http request 
 	 const handleSubmit = e => {
 	 	e.preventDefault();
 
-	 	console.log(values);
+		const { auth } = props;	 	
+
+		const newRequestActivity = {
+			...obj,
+			orgname,
+			username: auth.user.username,
+	  		campus: auth.user.campus
+		}
+
+		const _formData = createFormData(newRequestActivity);
+
+		console.log(newRequestActivity);
+	 	props.submitRequest(_formData);
 	 };
 
+	 const handleClose = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setOpen(false);
+          };
+
 	 //Component Effect
+	 // Effect to know what org is online
+	 useEffect(_ => {
+		const { auth } = props;
+
+		const id = setInterval(_ => {
+
+		axios.get('/api/org/getorgaccnts')
+		.then(res => {
+			res.data.filter(org => auth.user.username === org.username)
+			.map(org => setOrgName(org.orgname))
+		})
+		.catch(err => err)
+
+		}, 2000)
+
+		return _ => {
+			clearInterval(id)
+		}
+		
+	},[]);
+
+	 // Error Effects 
+	 useEffect(_ => {
+	 	if(props.errors)
+	 		getErrors(props.errors)
+	 },[props.errors]);
+
+	 // useEffect for successful form submition
+	 useEffect(_ => {
+	 	if(props.requestActivities.submitted)
+	 		setOpen(true);
+	 },[props.requestActivities.submitted]);
+
 
   return (
-    <Fragment className={classes.root}>
-    		
+    <div>
+
    	<Navbar2 />
+
+   	<FormConfirmationMsg open={open} onClose={handleClose} variant="success" message="Activity Request Submitted" />
 
       <Container maxWidth="xl" style={{paddingTop: 20}}>
 
@@ -98,6 +173,7 @@ function RequestActivityComponent(props) {
 		          aria-current="page"
 		          className={classes.link}
 		        >
+		        <InboxIcon className={classes.icon}/>
 		        Activity Request
 		        </Link>
 
@@ -121,12 +197,12 @@ function RequestActivityComponent(props) {
                           		  Input the details needed.
                         		</Typography>
 
-                        		<form noValidate onSubmit={handleSubmit}>
+                        		<form noValidate onSubmit={handleSubmit} encType="multipart/form-data">
 
                         	{/* Activity Title TextField */}
                         		 <TextField
-                        		 	value={values.activity_title}
-                        		 	onChange={handleChange('activity_title')}
+                        		 	value={obj.activity_title}
+                        		 	onChange={e => setObj({...obj, activity_title: e.target.value})}
                                     id="activity_title"
                                     name="activity_title"
                                     label="Request Activity Title"
@@ -134,6 +210,9 @@ function RequestActivityComponent(props) {
                                     autoComplete="activity_title"
                                 />
                                 <br />
+                                <span style={{ color: "red" }}>
+				                        {errors.activity_title}
+				                 </span>
                                 <br />
 
                         	{/* File Upload TextField */}
@@ -142,8 +221,11 @@ function RequestActivityComponent(props) {
 
 							          <Grid item xs={1}>
 
-								  		<input value={values.file} onChange={handleChange('file')} className={classes.input} id="icon-button-file" type="file" />
-									      <label htmlFor="icon-button-file">
+							          {/* 
+							          */}
+										<input onChange={e => setObj({...obj, file: e.target.files[0], fileName: e.target.files[0].name})} 
+										className={classes.input} id="file" name="file" type="file" />
+									      <label htmlFor="file">
 									        <IconButton color="primary" aria-label="upload picture" component="span">
 									          <CloudUploadIcon />
 									        </IconButton>
@@ -153,9 +235,10 @@ function RequestActivityComponent(props) {
 
 							          <Grid item xs={11}>
 							            <TextField 
-							            value={values.file}
+							            value={obj.fileName}
 							            id="input-with-icon-grid"
 							            label="File Upload Here"
+							            helperText="Note: .docx and .pdf file types only"
 							            fullWidth
 							              InputProps={{
                                                readOnly: true,
@@ -165,28 +248,41 @@ function RequestActivityComponent(props) {
                                            }}
 							            />
 
-							          </Grid>
+							          
+
+								  	
+							            {/*
+							        Native Input file for
+
+							        <input type="file" name="file" value={fileName} onChange={handleChangeFile}/>
+							
+							               	*/ }
+							        
 
 							        </Grid>
+							        </Grid>
 
-							        {/*
-							        Native Input file for
-							        <input type="file" value={file} onChange={handleChange}/>
-							       	*/ }
+							      
 							    </div>
+							    <span style={{ color: "red" }}>
+				                        {errors.file}
+				                 </span>
 
 							    <br />
 
                         	{/* Activity Title TextField */}
 								<TextField
-									value={values.request_description}
-									onChange={handleChange('request_description')}
-                                    id="request_description"
-                                    name="request_description"
+									value={obj.description}
+									onChange={e => setObj({...obj, description: e.target.value})}
+                                    id="description"
+                                    name="description"
                                     label="Request Activity Description"
                                     fullWidth
                                     multiline
-                                />					    
+                                />		
+                                <span style={{ color: "red" }}>
+				                        {errors.description}
+				                 </span>			    
 
                                   <Button
 	                                type="submit"
@@ -227,8 +323,16 @@ function RequestActivityComponent(props) {
 
 	  </Container>
 
-    </Fragment>
+    </div>
   )
-}
+};
 
-export default RequestActivityComponent;
+const mapStateToProps = state => ({
+  auth:state.auth,
+  requestActivities: state.requestActivities,
+  errors: state.errors
+});
+
+const mapDispatchToProps = { submitRequest };
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestActivityComponent);

@@ -1,4 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { getActivities } from '../../actions/requestActivitiesActions';
 
 // Material-ui components 
 import { withStyles, makeStyles, useTheme } from '@material-ui/core/styles';
@@ -16,8 +20,8 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
 
+import GetAppIcon from '@material-ui/icons/GetApp';
 //Header of the Table
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -123,8 +127,6 @@ function RequestActivitiesHistory(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const [reports, ] = useState([]);
-
   //Loading State
   const [loading, setLoading] = useState(true);
 
@@ -141,14 +143,30 @@ function RequestActivitiesHistory(props) {
 
   // Component Effect
 
+  // Effect for getting the submitted request Reports 
+
+  useEffect(_ => {
+
+    const id = setInterval(_ => {
+      props.getActivities();
+      setLoading(false);
+    }, 2000);
+
+    return _ => {
+      clearInterval(id)
+    };
+
+  },[])
+
+  const { auth, requestActivities } = props;
+
    //Array of the reports in the lost item reports 
   //The array is now sorted that it only accepts data that is reported today and if the the campus of the user is equal to the campus or the report.
-  const rows = reports.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
-
+  const rows = requestActivities.records.sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+               .filter(row => row.username === auth.user.username);
 
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
 
   return (
     <Fragment>
@@ -184,7 +202,7 @@ function RequestActivitiesHistory(props) {
                     ?
                     <TableRow>
                     <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
-                        <span>No Report for today ? Refresh the page after 5 mins to see what's up</span>
+                        <span>The request you made is still empty. Try inputting the details in the form to submit.</span>
                     </TableCell>
                   </TableRow>
                     :
@@ -199,15 +217,14 @@ function RequestActivitiesHistory(props) {
                     // The row where all the datas will be displayed 
                   <TableRow>
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.activity_title}
                   </TableCell>
-                  <TableCell align="left">{row.src}</TableCell>
-                  <TableCell align="left">{row.yr}</TableCell>
-                  <TableCell align="left">{row.campus}</TableCell>
-                  <TableCell align="left">{row.department}</TableCell>
-                  <TableCell align="left">{row.course}</TableCell>
-                  <TableCell align="left">{row.details}</TableCell>
-                  <TableCell align="left">{row.contact}</TableCell>	            
+                  <TableCell align="left">
+                  <a href={row.file}>
+                     <GetAppIcon />
+                  </a>
+                  {row.fileName}
+                  </TableCell>  
                   </TableRow>
                   ))
                  }
@@ -249,6 +266,17 @@ function RequestActivitiesHistory(props) {
 
     </Fragment>
   )
-}
+};
 
-export default RequestActivitiesHistory;
+RequestActivitiesHistory.propType = {
+  history: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = state => ({
+  auth:state.auth,
+  requestActivities: state.requestActivities
+});
+
+const mapDispatchToProps = { getActivities }
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RequestActivitiesHistory));

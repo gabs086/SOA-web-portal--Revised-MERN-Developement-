@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import { getIdReplacements } from '../../actions/idreplacementActions';
 import moment from 'moment';
@@ -24,9 +24,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 

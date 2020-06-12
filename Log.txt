@@ -292,3 +292,17 @@ Jun 11
 	-client/actions/requestActivitiesActions.js
 
 	@Finished Fetching the OrgFeeds
+
+	@added username in the routes of request_activities
+	-routes/api/request_activities.js
+
+Jun 12
+	10:29 AM
+	@Applying the action for submitting the activity request
+
+	11:26 PM
+	@ Finished the request Activities part with help of a prop
+	- A snippet of code where a form values turned into a formed data is located at
+	client/org/formData.js
+	- client/org/formData.js
+	- route/api/request_activities.js

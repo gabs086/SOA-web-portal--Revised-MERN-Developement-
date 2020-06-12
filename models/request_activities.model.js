@@ -1,7 +1,6 @@
 /*
 This file will contain the model schema for the request_activities 
 table
-
 The schema will have the ff structure
 1. activity_title
 2. file
@@ -32,10 +31,16 @@ module.exports = db.sequelize.define(
 		file : {
 			type: Sequelize.STRING
 		},
+		fileName: {
+			type: Sequelize.STRING
+		},
 		description: {
 			type: Sequelize.STRING
 		},
 		orgname: {
+			type: Sequelize.STRING
+		},
+		username: {
 			type: Sequelize.STRING
 		},
 		status: {

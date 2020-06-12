@@ -63,13 +63,20 @@ function OrgIndex(props) {
 	useEffect(_ => {
 		const { auth } = props;
 
-		axios.get('/api/org/getorgaccnts')
-		.then(res => {
-			res.data.filter(org => auth.user.username === org.username)
-			.map(org => setOrgOnline(org.orgname))
-		})
-		.catch(err => err)
+    const id = setInterval(_ => {
+          axios.get('/api/org/getorgaccnts')
+        .then(res => {
+          res.data.filter(org => auth.user.username === org.username)
+          .map(org => setOrgOnline(org.orgname))
+        })
+        .catch(err => err)
 
+    },2000)
+
+    return _ => {
+      clearInterval(id)
+    }
+		
 	},[]);
 
   // Effect for rendering the org feeds

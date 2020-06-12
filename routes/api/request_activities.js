@@ -94,6 +94,8 @@ router.post('/submitrequest', upload.single('file'), (req, res) => {
 // 	// enctype   =  "multipart/form-data
 
 const file = req.file;
+console.log(file);
+console.log(req.body);
 
 // Url of the web app
 const url = req.protocol + '://' + req.get('host');
@@ -114,7 +116,7 @@ const today = new Date();
 
 	const { 
 		//Body for the requested activities
-		activity_title, description, orgname, status, campus,
+		activity_title, description, orgname, status, campus, fileName,
 		// Body for the orgFeeds
 		username
 
@@ -124,8 +126,10 @@ const today = new Date();
 	const newRequestActivities = new RequestActivities({
 		activity_title,
 		file: url + '/' + file.path,
+		fileName: fileName,
 		description,
 		orgname,
+		username,
 		status:'Approved0',
 		campus,
 		created_at: today

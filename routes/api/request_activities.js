@@ -159,7 +159,7 @@ const today = new Date();
 
 });
 
-//@route GET /api/requestactivities/countheadrequest
+//@route GET /api/requestactivities/countheadrequest/:campus
 //@desc Count the total request mad by student organizations that will be filter by campus
 //@access SOA Head only
 router.get('/countheadrequest/:campus', async (req, res) => {
@@ -179,7 +179,23 @@ router.get('/countheadrequest/:campus', async (req, res) => {
 		}
 });
 
+//@route POST /api/requestactivities/updatecountheadrequest/:campus
+//@desc Update the notif column with read0 for the notif count to decrease
+//@access SOA Head only
+router.post('/updatecountheadrequest/:campus', (req, res) => {
 
+	const { notif } = req.body;
+
+	//Find the Request Activities who's campus is equal to the params of the route
+	RequestActivities.update(
+		{notif: notif},
+	{ where: { campus: req.params.campus } }
+	)
+	.then(campuses => {
+		res.json('Update Notifications');
+		})
+	.catch(err => res.status(500).json(`Error: ${err}`))
+});
 
 
 module.exports = router;

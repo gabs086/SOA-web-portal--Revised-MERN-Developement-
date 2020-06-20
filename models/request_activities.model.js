@@ -49,6 +49,9 @@ module.exports = db.sequelize.define(
 		campus: {
 			type: Sequelize.STRING
 		},
+		notif: {
+			type: Sequelize.STRING
+		},
 		created_at: {
 			type: Sequelize.DATE
 		}

@@ -1,7 +1,13 @@
 import {
+	// Org Part 
 	GET_ORG_FEEDS,
 	GET_REQUEST_ACTIVITIES,
 	SUBMIT_REQUEST_ACTIVITIES,
+
+	// SOA HEAD Part
+
+	// SOA ADMIN PART 
+
 	REQUEST_ACTIVITIES_LOADING
 } from '../actions/types';
 
@@ -10,10 +16,13 @@ const initialState = {
 	records: [],
 	feeds:[],
 	loading: false,
+	countNotif: ''
 };
 
 export default function(state = initialState, action){
 	switch(action.type){
+		// Org Part 
+
 		//Reducer for getting the feeds in the database
 		case GET_ORG_FEEDS: 
 		return	{
@@ -35,6 +44,7 @@ export default function(state = initialState, action){
 				submitted: true,
 				records: [action.payload, ...state.records]
 			};
+
 		case REQUEST_ACTIVITIES_LOADING: 
 			return {
 				...state,

@@ -1,9 +1,13 @@
-// This function lets the object as a new FormData the files 
+/*
+This function lets the object as a new FormData the files 
 
-// Explanation by the Pro-programmer who give me this code snippet
+Explanation by the Pro-programmer who give me this code snippet
 
-//According to him, it gets all the object states and convert it a single json. with the help of a condition where if the object has a instance of a File
-// it will create a new FormData with its property as a file
+According to him, it gets all the object states and convert it a single json. with the help of a condition where if the object has a instance of a File
+it will create a new FormData with its property as a file
+
+Credit to: Anthony Pillos
+*/
 
 // Function help by a pro
 export function createFormData(object, form, namespace) {

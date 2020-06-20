@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -108,8 +108,11 @@ function DashboardHead(props) {
     const theme = useTheme();
 
     //States
+    
     const [open, setOpen] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
+
+    // Event Handlers 
 
     // onclick menu toggle
     const handleDrawerOpen = _ => {
@@ -131,6 +134,8 @@ function DashboardHead(props) {
     const onLogOutClick = e => {
         props.logoutUser();
     }
+
+    // Component Effects 
 
     //Name of user
     const { user } = props.auth;

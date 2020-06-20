@@ -171,36 +171,44 @@ function OrgIndex(props) {
 
 
                     <List component="nav" aria-label="secondary mailbox folders">
-                   	   <ListItem>
+                   	  
                        {
                         loadingOrgFeeds 
                         ? 
                           <Fragment>
-                            <CircularProgress color="secondary" />
-                           <ListItemText primary={"Your Feeds is loading."} />
-
+                             <ListItem>
+                              <CircularProgress color="secondary" />
+                             <ListItemText primary={"Your Feeds is loading."} />
+                             </ListItem>
                           </Fragment>
                         :
                         <Fragment>
-                         { 
+                             { 
 
-                          rows.length === 0
-                          ?
-                           <ListItemText primary={"The organization dont have feed yet."} />
-                          :
-                          rows.map(row => (
-                           <ListItemText>
-                           {row.message}
-                           <span className={classes.timeFeed}>
-                           {moment(row.created_at).fromNow()}
-                           </span>
-                           </ListItemText>
+                              rows.length === 0
+                              ?
+                            <ListItem>
 
-                            ))
-                        }
+                               <ListItemText primary={"The organization dont have feed yet."} />
+                            </ListItem>
+
+                              :
+                              rows.map(row => (
+                              <Fragment>  
+                                  <ListItem>
+                                       <ListItemText>
+                                       {row.message}
+                                       <span className={classes.timeFeed}>
+                                       {moment(row.created_at).fromNow()}
+                                       </span>
+                                       </ListItemText>
+                                   </ListItem>
+                               </Fragment>
+                                ))
+                            }
                         </Fragment>
+
                        }
-                        </ListItem>
                      </List>
 
                 </Container>    

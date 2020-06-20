@@ -73,9 +73,6 @@ function RequestActivityComponent(props) {
 	  	file: '',
 	  	fileName:''
 	 });
-	 // const [file, setFile] = useState('');
-	 const [fileName, setFileName] = useState('');
-
 
 	 //Event Handlers
 

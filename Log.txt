@@ -306,3 +306,30 @@ Jun 12
 	client/org/formData.js
 	- client/org/formData.js
 	- route/api/request_activities.js
+
+Jun 20
+	12:56 PM
+	@Creating the client side for getting the reports that will filter what campus the activity submitted is
+	*** Adding a table column of request_activities table with "notif", This will be the basis of how many notification the
+	 head have.
+	*** The notifications will have "read0" for SOA hEAD and "read1" for admin
+
+	@Added notif in the model schema of the request_activities.model
+	@Added notif object value in the newRequestActivities variable of request_activities api
+	- model/request_activities.model.js
+	- route/api/request_activities.js
+
+	@Edited Some front-end structure of the Organization feeds in OrgIndex.
+	- client/org/OrgIndex.js
+
+	@Creating a route for counting the notifications for SOA Head
+	- route/api/request_activities.js
+
+	@Implementing the count in the the DashboardHead Component
+	- client/layouts/DashboardHead.js
+
+	3:30 PM
+	@Change the GET api for counting the notification to POST Method
+	- route/api/request_activities.js
+
+	@Creating the Reducer and the actions for getting the count of notfi with request_activities in SOA HEad Dashboard

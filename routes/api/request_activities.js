@@ -159,15 +159,15 @@ const today = new Date();
 
 });
 
-//@route POST /api/requestactivities/countheadrequest
+//@route GET /api/requestactivities/countheadrequest
 //@desc Count the total request mad by student organizations that will be filter by campus
 //@access SOA Head only
-router.post('/countheadrequest', async (req, res) => {
-		const { campus } = req.body;
+router.get('/countheadrequest/:campus', async (req, res) => {
+
 		const result = await RequestActivities.findAndCountAll({
 			where: {
 				notif: '',
-				campus: campus
+				campus: req.params.campus
 			}
 		});
 
@@ -175,9 +175,11 @@ router.post('/countheadrequest', async (req, res) => {
 			if(result) res.json(result.count)
 		}	
 		catch(err) {
-			res.status(500).json(err)
+			res.status(400).json("Cant Count data")
 		}
 });
+
+
 
 
 module.exports = router;

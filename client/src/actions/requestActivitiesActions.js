@@ -1,12 +1,21 @@
 import axios from 'axios';
 
 import {
+	//Organization SIde
 	GET_ORG_FEEDS,
 	GET_REQUEST_ACTIVITIES,
 	SUBMIT_REQUEST_ACTIVITIES,
 	REQUEST_ACTIVITIES_LOADING,
+
+	// SOA Head SIde 
+	COUNT_REQUEST_ACTIVITIES_NOTIF,
+
+	// SOA Admin Side 
+
 	GET_ERRORS,
 } from './types';
+
+/* Organization Side */
 
 // Getting the data in the org_feeds table 
 export const getOrgFeeds = _ => dispatch => {
@@ -32,7 +41,6 @@ export const getActivities = _ => dispatch => {
 
 //Action for request sumittions
 export const submitRequest = data => dispatch => {
-
 	axios.post('/api/requestactivities/submitrequest', data)
 	.then(res => dispatch({
 		type: SUBMIT_REQUEST_ACTIVITIES,
@@ -43,7 +51,23 @@ export const submitRequest = data => dispatch => {
 		type: GET_ERRORS,
 		payload: err.response.data
 	}));
+};
+
+
+/* SOA Head Side */
+export const countNotifHead = request => dispatch => {
+	axios.get(`/api/requestactivities/countheadrequest/${request}`)
+	.then(res => dispatch({
+		type: COUNT_REQUEST_ACTIVITIES_NOTIF,
+		payload: res.data
+	}))
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+	}));
 }
+
+/* SOA Admin Side */
 
 export const setRecordLoading = _ => {
 	return { type: REQUEST_ACTIVITIES_LOADING }

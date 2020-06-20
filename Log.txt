@@ -333,3 +333,12 @@ Jun 20
 	- route/api/request_activities.js
 
 	@Creating the Reducer and the actions for getting the count of notfi with request_activities in SOA HEad Dashboard
+	- actions/type.js
+	- reducers/requestActivitiesReducer.js
+	- actions/requestActivitiesActions.js
+
+	@Applying the action with reducer of counting notification in DashboardHead Component
+	-client/layouts/DashboardHead.js
+
+	@Rework the http request for counthead api endpoint. Added a param for the Reading  of campus
+	- route/api/request_activities.js

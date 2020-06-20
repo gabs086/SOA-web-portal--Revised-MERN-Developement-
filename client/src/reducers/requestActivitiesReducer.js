@@ -4,8 +4,8 @@ import {
 	GET_REQUEST_ACTIVITIES,
 	SUBMIT_REQUEST_ACTIVITIES,
 
-	// SOA HEAD Part
-
+	// SOA HEAD PARt
+	COUNT_REQUEST_ACTIVITIES_NOTIF,
 	// SOA ADMIN PART 
 
 	REQUEST_ACTIVITIES_LOADING
@@ -16,7 +16,7 @@ const initialState = {
 	records: [],
 	feeds:[],
 	loading: false,
-	countNotif: ''
+	countNotif: 0
 };
 
 export default function(state = initialState, action){
@@ -43,6 +43,14 @@ export default function(state = initialState, action){
 				...state,
 				submitted: true,
 				records: [action.payload, ...state.records]
+			};
+
+		// SOA Head PArt 
+		case COUNT_REQUEST_ACTIVITIES_NOTIF: 
+			return {
+				...state,
+				// Set the countNotif State with the response of count object in the action 
+				countNotif: action.payload
 			};
 
 		case REQUEST_ACTIVITIES_LOADING: 

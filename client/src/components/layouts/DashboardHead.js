@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
+//Redux components
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
+import { countNotifHead } from '../../actions/requestActivitiesActions';
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,10 +34,6 @@ import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import FindReplaceIcon from '@material-ui/icons/FindReplace';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AssessmentIcon from '@material-ui/icons/Assessment';
-
-//Redux components
-import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
 
 //Link Components
 import ListItemLink from './ListItemLink';
@@ -112,6 +114,8 @@ function DashboardHead(props) {
     const [open, setOpen] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
 
+    // Counting the notif filtered by campus in request_activities table
+    // const [count, setCount] = useState(4);
     // Event Handlers 
 
     // onclick menu toggle
@@ -135,10 +139,31 @@ function DashboardHead(props) {
         props.logoutUser();
     }
 
+
     // Component Effects 
+
+    useEffect(_ => {
+
+        const { auth } = props;
+
+        const id = setInterval(_ => {
+         props.countNotifHead(auth.user.campus);
+
+        },2000);
+
+        return _ => {
+            clearInterval(id);
+        };
+
+    },[]);
 
     //Name of user
     const { user } = props.auth;
+    // Props of the count notification 
+    const { requestActivities } = props;
+
+    // The count for the Notifications 
+    const count = requestActivities.countNotif;
 
     return (
         <div className={classes.root}>
@@ -264,7 +289,7 @@ function DashboardHead(props) {
                     to="/h/requestedactivities"
                     primary="Requested Activities"
                     icon={<ListAltIcon />}
-                    count={4}
+                    count={count}
                     />
 
                     <ListItemLink
@@ -297,9 +322,10 @@ function DashboardHead(props) {
 
 //Redux State connection 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    requestActivities: state.requestActivities
 });
 //Dipatch proptypes(React Hooks) 
-const mapDispatchToProps = { logoutUser };
+const mapDispatchToProps = { logoutUser, countNotifHead };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardHead); 

@@ -188,7 +188,7 @@ router.post('/updatecountheadrequest/:campus', (req, res) => {
 
 	//Find the Request Activities who's campus is equal to the params of the route
 	RequestActivities.update(
-		{notif: notif},
+	{ notif: notif },
 	{ where: { campus: req.params.campus } }
 	)
 	.then(campuses => {

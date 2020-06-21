@@ -343,5 +343,9 @@ Jun 20
 	@Rework the http request for counthead api endpoint. Added a param for the Reading  of campus
 	- route/api/request_activities.js
 
-	5:49 PM
+	9:50 PM
+	Finished the updating of the notification
+
+Jun 21
+	1:18 PM
 	

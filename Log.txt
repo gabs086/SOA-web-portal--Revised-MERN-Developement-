@@ -348,4 +348,4 @@ Jun 20
 
 Jun 21
 	1:18 PM
-	
+	@Building the client side of the request_activities in SOA Head Page

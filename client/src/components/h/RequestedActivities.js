@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from "react-redux";
+import { getActivitiesHead } from '../../actions/requestActivitiesActions';
+
 import { withStyles, makeStyles, useTheme, } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
@@ -20,6 +22,8 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -153,8 +157,24 @@ function RequestedActivities(props){
           };
 
     // Component Effect
+    useEffect(_ => {
 
-    const rows = reports.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
+      const id = setInterval(_ => {
+          props.getActivitiesHead();
+          setLoading(false);
+      },2000);
+      
+      return _ => {
+        clearInterval(id);
+      }
+
+    },[])
+
+    // Props
+    const { auth } = props;
+
+    const rows = props.requestActivities.request.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
+                    .filter(row => row.campus === auth.user.campus && row.status === 'Approved0');
 
     //Empty row that says the rows for pagination
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -174,15 +194,11 @@ function RequestedActivities(props){
                             {/* Table Head of the datas  */}
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Name of student</StyledTableCell>
-                                <StyledTableCell align="left">College Year</StyledTableCell>
-                                <StyledTableCell align="left">SR-Code</StyledTableCell>
-                                <StyledTableCell align="left">Campus</StyledTableCell>
-                                <StyledTableCell align="left">Department</StyledTableCell>
-                                <StyledTableCell align="left">ID_R Reason</StyledTableCell>
-                                <StyledTableCell align="left">ID_R Count</StyledTableCell>
-                                <StyledTableCell align="left">Remarks</StyledTableCell>
-                                <StyledTableCell align="left">Date Recorded</StyledTableCell>
+                                <StyledTableCell>Organization Name</StyledTableCell>
+                                <StyledTableCell align="left">Organization Campus</StyledTableCell>
+                                <StyledTableCell align="left">Activity Title</StyledTableCell>
+                                <StyledTableCell align="left">Description</StyledTableCell>
+                                <StyledTableCell align="left">File</StyledTableCell>
                                 <StyledTableCell align="left">Action</StyledTableCell>
 
                               </TableRow>
@@ -200,7 +216,16 @@ function RequestedActivities(props){
                                       </TableCell>
                                     </TableRow>
                                     :   
-                                    //Data to be displayed when the data is fetched
+                                    <Fragment>
+                                    {
+                                        rows.length === 0
+                                        ?
+                                    <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                                       <br></br>
+                                       No Request activity for today.
+                                     </TableCell>
+                                        :
+                                        //Data to be displayed when the data is fetched
                                       (rowsPerPage > 0
                                         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         : rows
@@ -208,29 +233,23 @@ function RequestedActivities(props){
                                       .map(row => (
                                         <TableRow>
                                           <TableCell component="th" scope="row">
-                                            {row.name}
+                                            {row.orgname}
                                           </TableCell>
-                                          <TableCell align="left">{row.year}</TableCell>
-                                          <TableCell align="left">{row.src}</TableCell>
                                           <TableCell align="left">{row.campus}</TableCell>
-                                          <TableCell align="left">{row.department}</TableCell>
-                                          <TableCell align="left">{row.idreason}</TableCell>
-                                          <TableCell align="left">{row.count > 1 ? `${row.count} marks` : `${row.count} mark` }</TableCell>
-                                          <TableCell align="left">{row.otherinfo}</TableCell>
-                                          <TableCell align="left"></TableCell>
+                                          <TableCell align="left">{row.activity_title}</TableCell>
+                                          <TableCell align="left">{row.description}</TableCell>
                                           <TableCell align="left">
-                                                {/*
-                                              <Tooltip title="Update" placement="top">
-                                                 <IconButton href={`/ad/idreplacement/updateidreplacement/${row.id}`} aria-label="edit" color="primary">
-                                                  <EditIcon />
-                                                </IconButton>
-                                              </Tooltip>   
-                                          */}
-
+                                            <a href={row.file} target="_blank">
+                                              <GetAppIcon />
+                                            </a>
+                                            {row.fileName}
                                           </TableCell>
+                                          <TableCell align="left">To be implemented later</TableCell>
                                         </TableRow>
                                       ))
+                                    }
                                     
+                                    </Fragment>
                                   }
 
                                   {emptyRows > 0 && (
@@ -269,6 +288,13 @@ function RequestedActivities(props){
                 </DashBoardHead>
             </div>
         )
-}
+};
 
-export default RequestedActivities;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    requestActivities: state.requestActivities
+});
+
+const mapDispatchToProps = { getActivitiesHead };
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestedActivities);

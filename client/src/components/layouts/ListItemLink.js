@@ -9,7 +9,7 @@ import Badge from '@material-ui/core/Badge';
 // Component for having a sidebar with links on it 
 function ListItemLink(props) {
     // props to be included in the component 
-    const { icon, primary, to , count} = props;
+    const { icon, primary, to , count, handleClick} = props;
 
     // Function for rendering the component everytime the listlink is clicked  
     const renderLink = useMemo(
@@ -18,7 +18,39 @@ function ListItemLink(props) {
     );
 
     return (
-       <li>
+        <Fragment>
+    {     
+        handleClick        
+        ?
+        <li>
+           <ListItem button onClick={handleClick} component={renderLink}>
+               
+                {
+                // If icon props is included 
+                icon ? 
+                <Fragment>
+                  
+                    {
+                        // If count props is included 
+                        count 
+                        ?
+                        <ListItemIcon>
+                            <Badge badgeContent={count} color="primary">
+                            {icon}
+                            </Badge>
+                        </ListItemIcon> 
+                        
+                        :
+                        <ListItemIcon>{icon}</ListItemIcon> 
+                    }
+                    </Fragment>
+                : null}
+                <ListItemText primary={primary} />
+           </ListItem>
+       </li>
+        :
+        // if none 
+        <li>
            <ListItem button component={renderLink}>
                
                 {
@@ -44,6 +76,9 @@ function ListItemLink(props) {
                 <ListItemText primary={primary} />
            </ListItem>
        </li>
+    }
+    </Fragment>
+       
     )
 }
 

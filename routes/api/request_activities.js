@@ -192,7 +192,7 @@ router.post('/updatecountheadrequest/:campus', (req, res) => {
 	{ where: { campus: req.params.campus } }
 	)
 	.then(campuses => {
-		res.json('Update Notifications');
+		res.json(campuses);
 		})
 	.catch(err => res.status(500).json(`Error: ${err}`))
 });

@@ -349,3 +349,22 @@ Jun 20
 Jun 21
 	1:18 PM
 	@Building the client side of the request_activities in SOA Head Page
+
+	6:38 PM
+	@Connect the authentication state for the Filtering of data in RequestedActivities Component
+	-client/h/RequestedActivities.js
+
+	@Added "request", "approvedByHead", "declinedByHead" as a state that serves as an array of the requested activities
+	and what action the head give
+	- client/reducers/requestActivitiesReducer.js
+
+Jun 27
+	9:39 PM
+	@Fetching the data from the request_activities table
+		-client/h/RequestActivities.js
+		-client/actions/types.js
+		-client/reducers/requestActivitiesReducer.js
+
+Jun 28
+	11:07 PM
+	@Getting the data table for SOA Head at table for request activities structure

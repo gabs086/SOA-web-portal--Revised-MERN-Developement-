@@ -3,7 +3,7 @@ import clsx from 'clsx';
 //Redux components
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import { countNotifHead } from '../../actions/requestActivitiesActions';
+import { countNotifHead, updateCountNotif } from '../../actions/requestActivitiesActions';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
@@ -139,6 +139,12 @@ function DashboardHead(props) {
         props.logoutUser();
     }
 
+    const handleUpdateNotif = notif => {
+        const { auth } = props;
+        const read = { notif }
+        props.updateCountNotif(read, auth.user.campus);
+    }
+
 
     // Component Effects 
 
@@ -149,13 +155,14 @@ function DashboardHead(props) {
         const id = setInterval(_ => {
          props.countNotifHead(auth.user.campus);
 
-        },2000);
+        },200);
 
         return _ => {
             clearInterval(id);
         };
 
     },[]);
+
 
     //Name of user
     const { user } = props.auth;
@@ -277,7 +284,7 @@ function DashboardHead(props) {
                 <Divider />
 
                 {/* Item List 2 */}
-                <List>
+                <List>  
 
                     <ListItemLink 
                     to="/h/organizationlist"
@@ -286,6 +293,7 @@ function DashboardHead(props) {
                     />
 
                     <ListItemLink 
+                    handleClick={_ => handleUpdateNotif('read')}
                     to="/h/requestedactivities"
                     primary="Requested Activities"
                     icon={<ListAltIcon />}
@@ -326,6 +334,6 @@ const mapStateToProps = state => ({
     requestActivities: state.requestActivities
 });
 //Dipatch proptypes(React Hooks) 
-const mapDispatchToProps = { logoutUser, countNotifHead };
+const mapDispatchToProps = { logoutUser, countNotifHead, updateCountNotif };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardHead); 

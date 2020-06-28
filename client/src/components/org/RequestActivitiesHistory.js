@@ -220,7 +220,7 @@ function RequestActivitiesHistory(props) {
                     {row.activity_title}
                   </TableCell>
                   <TableCell align="left">
-                  <a href={row.file}>
+                  <a href={row.file} target="_blank">
                      <GetAppIcon />
                   </a>
                   {row.fileName}

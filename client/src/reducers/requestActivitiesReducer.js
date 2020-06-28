@@ -6,17 +6,26 @@ import {
 
 	// SOA HEAD PARt
 	COUNT_REQUEST_ACTIVITIES_NOTIF,
+	GET_REQUEST_ACTIVITIES_HEAD,
+	UPDATE_COUNT_NOTIF,
 	// SOA ADMIN PART 
 
 	REQUEST_ACTIVITIES_LOADING
 } from '../actions/types';
 
 const initialState = {
+	//Org Part
 	submitted: false,
 	records: [],
 	feeds:[],
+
+	// SOA Head Part 
+	request: [],
+	approvedByHead: false,
+	declinedByHead: false,
+	countNotif: 0,
+
 	loading: false,
-	countNotif: 0
 };
 
 export default function(state = initialState, action){
@@ -50,6 +59,17 @@ export default function(state = initialState, action){
 			return {
 				...state,
 				// Set the countNotif State with the response of count object in the action 
+				countNotif: action.payload
+			};
+		case GET_REQUEST_ACTIVITIES_HEAD:
+			return {
+				...state,
+				request: action.payload,
+				loading: false
+			};
+		case UPDATE_COUNT_NOTIF:
+			return {
+				...state,
 				countNotif: action.payload
 			};
 

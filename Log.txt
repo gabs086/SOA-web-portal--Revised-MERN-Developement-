@@ -249,8 +249,8 @@ Jun 9
 	 /	+Notification
 	 	-username
 	 	-orgname
-	 	-notification(The message notification)
-	 	-reason(Default is null, will only have a value of the the staus is Declined1 or Declined2)
+	 	-notification(The message of what action the SOA Head or the Admin done )
+	 	-reason( default is null, will only have value if the status of the request activity is Declined1 or Declined2)
 	 	-status(read or '') defaultValue is ''
 	 	-created_at
 
@@ -368,3 +368,21 @@ Jun 27
 Jun 28
 	11:07 PM
 	@Getting the data table for SOA Head at table for request activities structure
+
+	@Using the update router of the notifications
+	-client/actions/types.js
+	-client/reducers/requestActivitiesReducer.js
+	-client/layout/ListItemLink.js
+	-client/layout/DashboardHead.js
+
+	@Creating a two post api for the action of soa Head if
+	the request_activity is approved or declined
+	-route/api/request_activities
+	  @Created the api if the action is approved
+		-route/api/request_activities
+	  @Creating the api if the activity is declined
+		-route/api/request_activities
+
+Jun 29 
+	4:24 PM
+	@Finished the API for declining a request activity

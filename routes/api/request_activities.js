@@ -197,5 +197,87 @@ router.post('/updatecountheadrequest/:campus', (req, res) => {
 	.catch(err => res.status(500).json(`Error: ${err}`))
 });
 
+//@route POST /api/requestactivities/approverequestactivityhead/:id
+//@desc update the request activity in Approved1 if the head accept the request_activity send
+//@access SOA Head Only
+router.post('/approverequestactivityhead/:id', (req,res) => {
+	const id = req.params.id
+
+	// Getting the body for the notifications 
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+
+	// for updating the Status of the request activity to Approved1
+	const status = req.body.status;
+
+	// Find the RequestActivities by id
+	RequestActivities.findByPk(id)
+	.then(response => {
+
+		response.status = status;
+
+		response.save()
+		.then(_ => res.json('Request Approved by SOA Head'))
+		.catch(err => res.status(500).json(`Error: ${err}`))
+	})
+	.catch(err => res.status(500).json(err));
+
+	// Saving message for notification
+	const newNotification = new Notifications({
+		username,
+		orgname,
+		notification: `Your request activity title ${notification} has been approved by the SOA Head`
+	});
+
+	newNotification.save()
+	.then(_ => {
+		res.json('Notification Sent')
+	})
+	.catch(err => res.status(500).json(err));
+
+});
+
+//@route POST /api/requestactivities/declinerequestactivityhead/:id
+//@desc update the request_activity in Declined1 with the reason why it is declined
+//@access SOA Head Only
+router.post('/declinedrequestactivityhead/:id', (req,res) => {
+
+	const id = req.params.id;
+
+	// Getting the body for the notifications 
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+	// Requirement to have a reason if the request is declined 
+	const reason = req.body.reason;
+
+	// for updating the Status of the request activity to Approved1
+	const status = req.body.status;
+
+	RequestActivities.findByPk(id)
+	.then(response => {
+		response.status = status;
+
+		response.save()
+		.then(_ => res.json('Request Declined by SOA Head'))
+		.catch(err => res.status(500).json(`Error: ${err}`))
+
+	})
+	.catch(err => res.status(500).json(`Error: ${err}`));
+
+	const newNotification = new Notifications({
+		username,
+		orgname,
+		notification:`Your request activity title ${notification} has been declined by the SOA Head`,
+		reason
+	});
+
+	newNotification.save()
+	.then( _ => res.json('Notification Sent'))
+	.catch(err => res.status(500).json(err));
+
+});
+
 
 module.exports = router;

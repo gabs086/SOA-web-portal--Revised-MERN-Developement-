@@ -33,14 +33,15 @@ module.exports = db.sequelize.define(
 			},
 			reason: {
 				type: Sequelize.STRING,
-				defaultValue: null
+				defaultValue: ''
 			},
 			status: {
 				type: Sequelize.STRING,
 				defaultValue: ''
 			},
 			created_at: {
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.NOW
 			}
 
 		}, {

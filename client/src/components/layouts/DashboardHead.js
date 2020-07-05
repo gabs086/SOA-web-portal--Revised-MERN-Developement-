@@ -155,7 +155,7 @@ function DashboardHead(props) {
         const id = setInterval(_ => {
          props.countNotifHead(auth.user.campus);
 
-        },200);
+        },800);
 
         return _ => {
             clearInterval(id);
@@ -188,7 +188,7 @@ function DashboardHead(props) {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Are you you want to Logout?
+                        Are you sure you want to Logout?
                         </DialogContentText>
                 </DialogContent>
                 <DialogActions>

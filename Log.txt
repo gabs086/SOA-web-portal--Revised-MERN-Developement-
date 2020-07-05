@@ -386,3 +386,34 @@ Jun 28
 Jun 29 
 	4:24 PM
 	@Finished the API for declining a request activity
+	-client/h/RequestACtivities.js
+
+Jun 30
+	4:45 PM
+	@Creating a modal for confirmation of approved and declined 
+	  Action
+	 -client/h/RequestActivities.js
+
+	@Creatin reducer type for request Activity
+	 - client/actions/types.js
+	 - client/actions/requestActivitiesReducer.js
+
+	@Implementing the Actions for of approved and declined by head in the client side
+	 - client/h/RequestActivities.js
+
+Jul 4
+	5:56 PM
+	@Implemented actions and success message for approved and decliend confirmation message
+	-client/h/Requestedctivities.js
+
+	8:00 PM
+	@CReating to new api for notifications
+	-route/api/request_activities.js
+
+	@Change the api request for approve and decliend http request
+	- client/actions/requestActivitiesActions.js
+
+Jul 5
+	12:43 PM
+	
+

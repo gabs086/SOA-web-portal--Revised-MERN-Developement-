@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from "react-redux";
-import { getActivitiesHead } from '../../actions/requestActivitiesActions';
+import { getActivitiesHead, setApprovedHead, setDeclinedHead } from '../../actions/requestActivitiesActions';
 
 import { withStyles, makeStyles, useTheme, } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -23,7 +23,24 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField'
+
 import GetAppIcon from '@material-ui/icons/GetApp';
+import Button from '@material-ui/core/Button';
+
+import Slide from '@material-ui/core/Slide';
+
+//Confirmation Message
+import FormConfirmationMsg from './FormConfirmationMsg';
+
+const Transition = props => {
+    return <Slide direction="up" {...props} />
+}
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -144,6 +161,26 @@ function RequestedActivities(props){
       const [reports,] = useState([]);
       const [loading, setLoading] = useState(true);
 
+      const [id, setId] = useState();
+      const [username, setUsername] = useState('');
+      const [orgname, setOrgName] = useState('');
+      // This state will have the value of the title of the request activity
+      const [notification, setNotification] = useState('');
+
+      // if the clicked event handler is Decline 
+      const [reason, setReason] = useState('');
+
+      // Data for the status of the request_activity 
+      const [approved,] = useState('Approved1');
+      const [declined,] = useState('Declined1');
+
+      // Modal open for Approved 
+      const [approvedModal, openApprovedModal] = useState(false);
+      const [declinedModal, openDeclinedModal] = useState(false);
+
+      const [openApproved, setOpenApproved] = useState(false);
+      const [openDeclined, setOpenDeclined] = useState(false);
+
     //Event Handlers
 
      //Getting the pages, Material UI Funcs
@@ -156,19 +193,114 @@ function RequestedActivities(props){
             setPage(0);
           };
 
+      const handleApprovedModalClose = _ =>  {
+          openApprovedModal(false);
+      }
+
+      const handleDeclinedModalClose = _ => {
+          openDeclinedModal(false);
+      }
+
+        const handleCloseApproved = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setOpenApproved(false);
+          };
+
+      const handleCloseDeclined = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setOpenDeclined(false);
+      };
+
+
+
+      const handleApproved = (id, username, orgname, notif) => {
+          setId(id);
+          setUsername(username);
+          setOrgName(orgname);
+          setNotification(notif);
+
+          openApprovedModal(true);
+      };
+
+      const handleDeclined = (id, username, orgname, notif) => {
+          setId(id);
+          setUsername(username);
+          setOrgName(orgname);
+          setNotification(notif);
+
+          openDeclinedModal(true);
+      }
+
+      const handleReason = e => {
+        setReason(e.target.value);
+      }
+
+      const approvedFinal = _ => {
+        const approvedBody = {
+          status: approved
+        };
+
+        const notifBody = {
+          username,
+          orgname,
+          notification,
+        }
+        props.setApprovedHead(id,approvedBody, notifBody);
+        openApprovedModal(false);
+        // console.log(id, approvedBody, notifBody);
+
+      }
+
+      const declinedFinal = _ => {
+        const declinedBody = {
+          status: declined
+        }
+
+        const notifBody = {
+          username,
+          orgname,
+          notification,
+          reason,
+        }
+
+        props.setDeclinedHead(id, declinedBody, notifBody);
+        openDeclinedModal(false);
+        // console.log(id, declinedBody, notifBody);
+      }
+
     // Component Effect
     useEffect(_ => {
 
       const id = setInterval(_ => {
           props.getActivitiesHead();
           setLoading(false);
-      },2000);
+      },800);
       
       return _ => {
         clearInterval(id);
       }
 
     },[])
+
+    // Effect is the request activity is now approved by the soa head
+    useEffect(_ => {
+        if (props.requestActivities.approvedByHead) {
+             setOpenApproved(true)
+        }
+    },[props.requestActivities.approvedByHead]);
+
+    // Effect if the request activity is declined
+    useEffect(_ => {
+        if (props.requestActivities.declinedByHead) {
+            setOpenDeclined(true)
+        }
+    },[props.requestActivities.declinedByHead]);
 
     // Props
     const { auth } = props;
@@ -182,6 +314,86 @@ function RequestedActivities(props){
         return (
             <div>
                 <DashBoardHead>
+                   {/* Component for Approved Confirmation message  */}
+                <FormConfirmationMsg open={openApproved} onClose={handleCloseApproved} variant="success" message="Request Activity Approved" />
+                  
+                   {/* Component for Declined Confirmation Message  */}
+                <FormConfirmationMsg open={openDeclined} onClose={handleCloseDeclined} variant="info" message="Request Activity Declined" />
+
+
+                   {/* Modal for approve and declined action  */}
+
+                   {/* For Approved Modal */}
+
+                   <Dialog
+                   open={approvedModal}
+                   TransitionComponent={Transition}
+                   keepMounted
+                   onClose={handleApprovedModalClose}
+                   aria-labelledby="alert-dialog-slide-title"
+                   aria-describedby="alert-dialog-slide-description"
+                   >
+                       <DialogTitle id="alert-dialog-slide-title">
+                           {"Approved Request Activity"}
+                        </DialogTitle>
+
+                        <DialogContent>
+
+                          <DialogContentText id="alert-dialog-slide-description">
+                              Are you sure to approve this requested activity?
+                              </DialogContentText>
+                          </DialogContent>  
+
+                          <DialogActions>
+                            <Button onClick={approvedFinal} variant="outlined" color="primary">
+                              Yes
+                            </Button>
+                            <Button onClick={handleApprovedModalClose} variant="outlined" color="secondary">
+                              No
+                            </Button>
+                          </DialogActions>
+                   </Dialog>
+
+                   {/* For Approved Modal */}
+
+                    <Dialog
+                       open={declinedModal}
+                       TransitionComponent={Transition}
+                       keepMounted
+                       onClose={handleDeclinedModalClose}
+                       aria-labelledby="alert-dialog-slide-title"
+                       aria-describedby="alert-dialog-slide-description"
+                       >
+                           <DialogTitle id="alert-dialog-slide-title">
+                               {"Decline Request Activity"}
+                            </DialogTitle>
+
+                            <DialogContent>
+
+                              <DialogContentText id="alert-dialog-slide-description">
+                                  Tell the reason why it is declined before sending bakc to org.
+                                  </DialogContentText>
+
+                                  <TextField
+                                    onChange={handleReason}
+                                    autoFocus
+                                    margin="dense"
+                                    id="reason"
+                                    label="Reason"
+                                    type="text"
+                                    fullWidth
+                                  />
+                              </DialogContent>  
+
+                              <DialogActions>
+                                <Button onClick={declinedFinal} variant="outlined" color="primary">
+                                  send
+                                </Button>
+                                <Button onClick={handleDeclinedModalClose} variant="outlined" color="secondary">
+                                  cancel
+                                </Button>
+                              </DialogActions>
+                       </Dialog>
 
                     <Typography variant="h6">
                         Request Activity List
@@ -244,7 +456,21 @@ function RequestedActivities(props){
                                             </a>
                                             {row.fileName}
                                           </TableCell>
-                                          <TableCell align="left">To be implemented later</TableCell>
+                                          <TableCell align="left">
+                                              <Button variant="contained" 
+                                              color="primary" 
+                                              onClick={_ => handleApproved(row.id, row.username, row.orgname, row.activity_title)}>
+                                                Accept
+                                              </Button>
+                                              <br />
+                                              |
+                                              <Button 
+                                              onClick={_ => handleDeclined(row.id, row.username, row.orgname, row.activity_title)}
+                                              variant="contained" 
+                                              color="secondary">
+                                                Decline
+                                              </Button>
+                                          </TableCell>
                                         </TableRow>
                                       ))
                                     }
@@ -295,6 +521,6 @@ const mapStateToProps = state => ({
     requestActivities: state.requestActivities
 });
 
-const mapDispatchToProps = { getActivitiesHead };
+const mapDispatchToProps = { getActivitiesHead, setApprovedHead, setDeclinedHead };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RequestedActivities);

@@ -8,6 +8,8 @@ import {
 	COUNT_REQUEST_ACTIVITIES_NOTIF,
 	GET_REQUEST_ACTIVITIES_HEAD,
 	UPDATE_COUNT_NOTIF,
+	SET_APPROVED_REQUEST_ACTIVITIES_HEAD,
+	SET_DECLINED_REQUEST_ACTIVITIES_HEAD,
 	// SOA ADMIN PART 
 
 	REQUEST_ACTIVITIES_LOADING
@@ -72,6 +74,16 @@ export default function(state = initialState, action){
 				...state,
 				countNotif: action.payload
 			};
+		case SET_APPROVED_REQUEST_ACTIVITIES_HEAD:
+			return {
+				...state,
+				approvedByHead: true
+			};
+		case SET_DECLINED_REQUEST_ACTIVITIES_HEAD:
+			return {
+				...state,
+				declinedByHead: true
+			}
 
 		case REQUEST_ACTIVITIES_LOADING: 
 			return {

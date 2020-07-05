@@ -94,8 +94,6 @@ router.post('/submitrequest', upload.single('file'), (req, res) => {
 // 	// enctype   =  "multipart/form-data
 
 const file = req.file;
-console.log(file);
-console.log(req.body);
 
 // Url of the web app
 const url = req.protocol + '://' + req.get('host');
@@ -203,11 +201,7 @@ router.post('/updatecountheadrequest/:campus', (req, res) => {
 router.post('/approverequestactivityhead/:id', (req,res) => {
 	const id = req.params.id
 
-	// Getting the body for the notifications 
-	const username = req.body.username;
-	const orgname = req.body.orgname;
-	const notification = req.body.notification;
-
+	
 	// for updating the Status of the request activity to Approved1
 	const status = req.body.status;
 
@@ -222,6 +216,19 @@ router.post('/approverequestactivityhead/:id', (req,res) => {
 		.catch(err => res.status(500).json(`Error: ${err}`))
 	})
 	.catch(err => res.status(500).json(err));
+
+
+});
+
+//@route POST /api/requestactivities/approverequestactivityhead/notif
+//@desc save a notification for the organization if the  request activity is approved
+//@access SOA Head
+
+router.post('/requestactivityapproved/notif', (req,res) => {
+		// Getting the body for the notifications 
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
 
 	// Saving message for notification
 	const newNotification = new Notifications({
@@ -245,10 +252,6 @@ router.post('/declinedrequestactivityhead/:id', (req,res) => {
 
 	const id = req.params.id;
 
-	// Getting the body for the notifications 
-	const username = req.body.username;
-	const orgname = req.body.orgname;
-	const notification = req.body.notification;
 	// Requirement to have a reason if the request is declined 
 	const reason = req.body.reason;
 
@@ -264,9 +267,22 @@ router.post('/declinedrequestactivityhead/:id', (req,res) => {
 		.catch(err => res.status(500).json(`Error: ${err}`))
 
 	})
-	.catch(err => res.status(500).json(`Error: ${err}`));
+	.catch(err => res.status(500).json(err));
 
-	const newNotification = new Notifications({
+});
+
+//@route /api/requestactivities/declinerequestactivityhead/notif
+//@desc save a notification with reason if the request activity is declined
+//@access SOA HEad
+router.post('/requestactivitydeclined/notif', (req, res) => {
+
+		// Getting the body for the notifications 
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+	const reason = req.body.reason;
+
+const newNotification = new Notifications({
 		username,
 		orgname,
 		notification:`Your request activity title ${notification} has been declined by the SOA Head`,
@@ -275,8 +291,7 @@ router.post('/declinedrequestactivityhead/:id', (req,res) => {
 
 	newNotification.save()
 	.then( _ => res.json('Notification Sent'))
-	.catch(err => res.status(500).json(err));
-
+	.catch(err => res.status(500).json(`Error: ${err}`));
 });
 
 

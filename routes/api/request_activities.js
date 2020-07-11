@@ -178,6 +178,23 @@ router.get('/countorgnotif/:username', async (req, res) => {
 
 });
 
+//@route POST /api/requestactivities/updatenotifcountorg/:username
+//@desc Update the status column in notification table for org
+//@access org only
+router.post('/updatenotifcountorg/:username', (req, res) => {
+	const { status } = req.body;
+	const { username } = req.params;
+
+	Notifications.update(
+	{ status: status },
+	{ where: { username: username} }
+	)
+	.then(result => {
+		res.json(result);
+	})
+	.catch(err => res.status(500).json(`Error: ${err}`))
+});
+
 //@route GET /api/requestactivities/countheadrequest/:campus
 //@desc Count the total request mad by student organizations that will be filter by campus
 //@access SOA Head only

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import axios from 'axios';
 import SideListNavbar2 from './SideListNavbar2';
 
 //Materialize Components
@@ -93,6 +94,8 @@ const Transition = props => {
 //Navbar For Students
 function Navbar2 (props) {
 
+    // State ++++++++++++++
+
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorDropDownEl, setAnchorDropDownEl] = useState(null);
     const [modalLogout, setModalLogout] = useState(null);
@@ -103,9 +106,14 @@ function Navbar2 (props) {
         right: false,
     });
 
+    // Notification count
+    const [count, setCount] = useState(0);
+
+    // Event Handlers +++++++++++++
+
     //Drawer Toggle
    const toggleDrawer = (side, open) => event => {
-    
+
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -150,6 +158,21 @@ function Navbar2 (props) {
     const onLogoutClick = _ => {
         props.logoutUser();
     }
+
+
+    // Component Effects ++++++++++++++
+
+    // Getting the notification count 
+    useEffect(_ => {
+        const { auth } = props;
+
+        
+        axios.get(`/api/requestactivities/countorgnotif/${auth.user.username}`)
+        .then(res => setCount(res.data))
+        .catch(err => err);
+
+    },[]);
+
 
         const classes  = useStyles();
         const isMenuOpen = Boolean(anchorEl);
@@ -229,7 +252,7 @@ function Navbar2 (props) {
 
                         {/* This will be the link for measuring the notifications for the request activities*/}
                             <Button color="inherit">
-                                <Badge badgeContent={0} color="secondary">
+                                <Badge badgeContent={count} color="secondary">
                                     <NotificationsIcon />
                                   </Badge>
                             </Button>

@@ -420,3 +420,9 @@ Jul 11
 	
 	@ Changing the Navbar2 to functional component
 	- client/layout/Navbar2.js
+
+	@Including the api endpoint for getting the notification count for organizations
+	-client/layout/Navbar2.js
+
+	@Creating api endpoint for updating the notif to read
+	- route/api/request_activities.js

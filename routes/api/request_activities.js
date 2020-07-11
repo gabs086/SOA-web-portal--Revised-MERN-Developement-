@@ -157,6 +157,27 @@ const today = new Date();
 
 });
 
+//@route GET /api/requestactivities/countorgnotif/:username
+//@desc Count the total notif for the organizations
+//@access org only
+router.get('/countorgnotif/:username', async (req, res) => {
+	const result = await Notifications.findAndCountAll({
+		where: {
+			status: '',
+			username: req.params.username
+		}
+	});
+
+	try	 {
+		if(result) res.json(result.count);
+	}
+	catch (err) {
+		res.status(500).json("Cant Count Data");
+	}
+
+
+});
+
 //@route GET /api/requestactivities/countheadrequest/:campus
 //@desc Count the total request mad by student organizations that will be filter by campus
 //@access SOA Head only

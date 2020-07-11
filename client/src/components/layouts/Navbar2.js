@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import SideListNavbar2 from './SideListNavbar2';
 
 //Materialize Components
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles , makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,6 +24,36 @@ import Slide from '@material-ui/core/Slide';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
+
+const useStyles = makeStyles(theme => ({
+     root: {
+        width: "100%",
+    },
+    title: {
+        display: 'none',
+        [theme.breakpoints.up("sm")]: {
+            display: "block"
+        },
+        flexGrow: 1
+    },
+    sectionDesktop: {
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'flex',
+        },
+    },
+    sectionMobile: {
+        display: 'flex',
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
+    },
+
+    //Drawer style components
+    list:{
+        width: 250,
+    }
+}));
 
 const styles = theme => ({
     root: {
@@ -59,77 +89,69 @@ const Transition = props => {
     return <Slide direction="up" {...props} />
 }
 
+
 //Navbar For Students
-class Navbar2 extends Component {
-    constructor(props) {
-        super(props)
+function Navbar2 (props) {
 
-        this.handleMenuClose = this.handleMenuClose.bind(this);
-        this.handleActivityOpen = this.handleActivityOpen.bind(this);
-
-        this.handleSettingsClose = this.handleSettingsClose.bind(this);
-        this.handleSettingsOpen = this.handleSettingsOpen.bind(this);
-
-        this.onLogoutClick = this.onLogoutClick.bind(this);
-        this.onModalLogoutClick = this.onModalLogoutClick.bind(this);
-        this.onHandleLogoutClickClose = this.onHandleLogoutClickClose.bind(this);
-
-        this.toggleDrawer = this.toggleDrawer.bind(this);
-
-        this.state = {
-            // L&F Dropdown 
-            anchorEl: null,
-            //Settings dropdown
-            anchorDropDownEl: null,
-            //logout modal
-            modalLogout: false,
-
-            // State for toggling the drawer
-            right: false
-        }
-    }
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorDropDownEl, setAnchorDropDownEl] = useState(null);
+    const [modalLogout, setModalLogout] = useState(null);
+    const [side, setSide] = useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
 
     //Drawer Toggle
-    toggleDrawer = (side, open) => () =>{
-        this.setState({
-            [side]: open 
-        });
+   const toggleDrawer = (side, open) => event => {
+    
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
     }
 
-    handleActivityOpen(e) {
-        this.setState({ anchorEl: e.currentTarget });
+    setSide({ ...side, [side]: open });
     }
 
-    handleMenuClose() {
-        this.setState({ anchorEl: null });
+    const handleActivityOpen = e => {
+        // this.setState({ anchorEl: e.currentTarget });
+        setAnchorEl(e.currentTarget);
     }
 
-    handleSettingsOpen(e) {
-        this.setState({ anchorDropDownEl: e.currentTarget });
+   const handleMenuClose = _ => {
+        // this.setState({ anchorEl: null });
+        setAnchorEl(null);
     }
 
-    handleSettingsClose() {
-        this.setState({ anchorDropDownEl: null });
+   const handleSettingsOpen = e =>  {
+        // this.setState({ anchorDropDownEl: e.currentTarget });
+        setAnchorDropDownEl(e.currentTarget);
+    }
+
+    const handleSettingsClose = _ => {
+        // this.setState({ anchorDropDownEl: null });
+        setAnchorDropDownEl(null);
     }
 
     // Modal Logout Function 
-    onModalLogoutClick() {
-        this.setState({ modalLogout: true })
-        this.setState({ anchorDropDownEl: null });
+    const onModalLogoutClick = _ => {
+        // this.setState({ modalLogout: true })
+        // this.setState({ anchorDropDownEl: null });
+            setModalLogout(true);
+            setAnchorDropDownEl(null)
     }
 
-    onHandleLogoutClickClose() {
-        this.setState({ modalLogout: false })
+    const onHandleLogoutClickClose = _ => {
+        // this.setState({ modalLogout: false })
+        setModalLogout(false);
     }
 
     // Logout Function
-    onLogoutClick() {
-        this.props.logoutUser();
+    const onLogoutClick = _ => {
+        props.logoutUser();
     }
 
-    render() {
-        const { classes } = this.props;
-        const { anchorEl, anchorDropDownEl, modalLogout } = this.state;
+        const classes  = useStyles();
         const isMenuOpen = Boolean(anchorEl);
         const isSettingsOpen = Boolean(anchorDropDownEl);
 
@@ -140,10 +162,10 @@ class Navbar2 extends Component {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isMenuOpen}
-                onClose={this.handleMenuClose}
+                onClose={handleMenuClose}
             >
-                <MenuItem onClick={this.handleMenuClose}>Menu Item 1 </MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>Menu Item 2 </MenuItem>
+                <MenuItem onClick={handleMenuClose}>Menu Item 1 </MenuItem>
+                <MenuItem onClick={handleMenuClose}>Menu Item 2 </MenuItem>
             </Menu>
         );
             // Setings Monile component
@@ -153,10 +175,10 @@ class Navbar2 extends Component {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isSettingsOpen}
-                onClose={this.handleSettingsClose}
+                onClose={handleSettingsClose}
             >
-                <MenuItem onClick={this.handleSettingsClose}>Downloadable Files </MenuItem>
-                <MenuItem onClick={this.onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
+                <MenuItem onClick={handleSettingsClose}>Downloadable Files </MenuItem>
+                <MenuItem onClick={onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
 
@@ -167,7 +189,7 @@ class Navbar2 extends Component {
                     open={modalLogout}
                     TransitionComponent={Transition}
                     keepMounted
-                    onClose={this.onHandleLogoutClickClose}
+                    onClose={onHandleLogoutClickClose}
                     aria-labelledby="alert-dialog-slide-title"
                     aria-describedby="alert-dialog-slide-description"
                 >
@@ -180,10 +202,10 @@ class Navbar2 extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onHandleLogoutClickClose} variant="outlined" color="primary">
+                        <Button onClick={onHandleLogoutClickClose} variant="outlined" color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.onLogoutClick} variant="outlined" color="secondary">
+                        <Button onClick={onLogoutClick} variant="outlined" color="secondary">
                             Logout
                                </Button>
                     </DialogActions>
@@ -216,7 +238,7 @@ class Navbar2 extends Component {
                                 color="inherit"
                                 aria-owns={isSettingsOpen ? 'material-appbar' : undefined}
                                 aria-haspopup="true"
-                                onClick={this.handleSettingsOpen}
+                                onClick={handleSettingsOpen}
                             >
                                 <SettingsIcon />
                             </Button>
@@ -225,24 +247,24 @@ class Navbar2 extends Component {
                         {/* Drawer Mobile components  */}
                         <div className={classes.sectionMobile}>
                             <Button
-                                onClick={this.toggleDrawer('right',true)} color="inherit">
+                                onClick={toggleDrawer('right',true)} color="inherit">
                                 <MenuIcon />
                             </Button>
                         </div>
                         {/* Drawer Toggler  */}
-                        <Drawer anchor="right" open={this.state.right} 
-                        onClose={this.toggleDrawer('right',false)}
+                        <Drawer anchor="right" open={side.right} 
+                        onClose={toggleDrawer('right',false)}
                         >
                         <div
                             tabIndex={0}
                             role="button"
 
                             // Muted feature because of onClick behavior, always closign every click  in the drawer 
-                            onClick={this.toggleDrawer('right', false)}
+                            onClick={toggleDrawer('right', false)}
 
-                            onKeyDown={this.toggleDrawer('right', false)}
+                            onKeyDown={toggleDrawer('right', false)}
                         >
-                            <SideListNavbar2 class={classes.list} onClick={this.onModalLogoutClick} />
+                            <SideListNavbar2 class={classes.list} onClick={onModalLogoutClick} />
                         </div>
 
                         </Drawer>
@@ -254,7 +276,7 @@ class Navbar2 extends Component {
                 {renderSettings}
             </div>
         )
-    }
+    
 }
 
 Navbar2.propTypes = {

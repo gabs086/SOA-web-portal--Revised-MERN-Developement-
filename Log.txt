@@ -415,6 +415,8 @@ Jul 4
 
 Jul 11
 	3:28 PM
-		
+	@Creating api that will count the notification for organizations
+	- route/api/request_activities.js
 	
-
+	@ Changing the Navbar2 to functional component
+	- client/layout/Navbar2.js

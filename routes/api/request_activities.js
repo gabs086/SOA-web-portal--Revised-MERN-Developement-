@@ -194,6 +194,20 @@ router.post('/updatenotifcountorg/:username', (req, res) => {
 	.catch(err => res.status(500).json(`Error: ${err}`))
 });
 
+//@route GET /api/requestactivities/getorgnotifications
+//@desc Get the notification datas in the database;
+//@access org
+router.get('/getorgnotifications', async (req,res) => {
+	const result = await Notifications.findAll();
+
+	try {
+		if(result) res.json(result);
+	}
+	catch (err){
+		res.status(500).json(err);
+	}
+});
+
 //@route GET /api/requestactivities/countheadrequest/:campus
 //@desc Count the total request mad by student organizations that will be filter by campus
 //@access SOA Head only

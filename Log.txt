@@ -435,4 +435,6 @@ Jul 12
 	1:48 Pm
 	@Creating a component for notifications list in Org Dashboard
 	- client/org/OrgNotifications.js
-	
+
+	@Creating a api endpoint for getting all the notifications data
+	- route/api/request_activities.js

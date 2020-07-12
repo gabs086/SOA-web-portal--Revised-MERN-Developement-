@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -35,6 +35,17 @@ function OrgNotifications(props) {
 
 	const classes = useStyles();
 
+	//States ++++++++++++
+	const [notifs, getNotifs] = useState([]);
+
+	//Event Handlers +++++++++
+
+	//Component Effect +++++++++++
+
+	// useEffect(_ => {
+	// 	axios.get()
+	// },[])
+
   return (
     <Fragment>
     		
@@ -45,7 +56,7 @@ function OrgNotifications(props) {
     		<Paper className={classes.root} elevation={10}>
     			
     			<Typography variant="h5" component="h3">
-    		 		Notifications	
+    		 		Organizations Notifications
     		 	</Typography>
 
     		</Paper>

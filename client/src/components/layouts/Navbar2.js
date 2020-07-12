@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import axios from 'axios';
+import { withRouter } from "react-router";
 import SideListNavbar2 from './SideListNavbar2';
 
 //Materialize Components
@@ -109,6 +110,8 @@ function Navbar2 (props) {
     // Notification count
     const [count, setCount] = useState(0);
 
+    const [notifUpdated, setNotifUpdated] = useState(false);
+
     // Event Handlers +++++++++++++
 
     //Drawer Toggle
@@ -159,6 +162,17 @@ function Navbar2 (props) {
         props.logoutUser();
     }
 
+    const handleUpdateNotif = status => {
+        const { auth } = props;
+        const read = { status };
+
+        axios.post(` /api/requestactivities/updatenotifcountorg/${auth.user.username}`, read)
+        .then(res => {
+            setNotifUpdated(true);
+        })
+        .catch(err => console.log(err));
+    }
+
 
     // Component Effects ++++++++++++++
 
@@ -166,12 +180,11 @@ function Navbar2 (props) {
     useEffect(_ => {
         const { auth } = props;
 
-        
         axios.get(`/api/requestactivities/countorgnotif/${auth.user.username}`)
         .then(res => setCount(res.data))
         .catch(err => err);
 
-    },[]);
+    },[notifUpdated]);
 
 
         const classes  = useStyles();
@@ -204,6 +217,8 @@ function Navbar2 (props) {
                 <MenuItem onClick={onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
+
+        console.log(props);
 
         return (
             <div className={classes.root}>
@@ -251,7 +266,7 @@ function Navbar2 (props) {
                             <Button color="inherit">Activity Assessment</Button>
 
                         {/* This will be the link for measuring the notifications for the request activities*/}
-                            <Button color="inherit">
+                            <Button color="inherit" onClick={_ => handleUpdateNotif('read')}>
                                 <Badge badgeContent={count} color="secondary">
                                     <NotificationsIcon />
                                   </Badge>
@@ -307,11 +322,14 @@ Navbar2.propTypes = {
     //Logout Func from the authActions
     logoutUser: PropTypes.func.isRequired,
     //object prop from the authReducer
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, { logoutUser })(withStyles(styles)(Navbar2));
+const mapDispatchToProps = { logoutUser };
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Navbar2)));

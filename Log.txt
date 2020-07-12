@@ -426,3 +426,8 @@ Jul 11
 
 	@Creating api endpoint for updating the notif to read
 	- route/api/request_activities.js
+
+Jul 12
+	12:47 PM
+	@Applying the update notification api in the client side
+	- client/layout/Navbar2.js

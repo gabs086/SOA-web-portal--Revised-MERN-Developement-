@@ -63,7 +63,7 @@ function OrgIndex(props) {
 	useEffect(_ => {
 		const { auth } = props;
 
-    const id = setInterval(_ => {
+    // const id = setInterval(_ => {
           axios.get('/api/org/getorgaccnts')
         .then(res => {
           res.data.filter(org => auth.user.username === org.username)
@@ -71,25 +71,25 @@ function OrgIndex(props) {
         })
         .catch(err => err)
 
-    },2000)
+    // },2000)
 
-    return _ => {
-      clearInterval(id)
-    }
+    // return _ => {
+    //   clearInterval(id)
+    // }
 		
 	},[]);
 
   // Effect for rendering the org feeds
   useEffect(_ => {
 
-    const id = setInterval(_ => {
+    // const id = setInterval(_ => {
         props.getOrgFeeds();
         setOrgFeeds(false);
-    }, 2000)
+    // }, 2000)
 
-    return _ => {
-      clearInterval(id)
-    }
+    // return _ => {
+    //   clearInterval(id)
+    // }
 
   },[])
 

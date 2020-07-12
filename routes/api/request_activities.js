@@ -183,11 +183,10 @@ router.get('/countorgnotif/:username', async (req, res) => {
 //@access org only
 router.post('/updatenotifcountorg/:username', (req, res) => {
 	const { status } = req.body;
-	const { username } = req.params;
 
 	Notifications.update(
 	{ status: status },
-	{ where: { username: username} }
+	{ where: { username: req.params.username} }
 	)
 	.then(result => {
 		res.json(result);

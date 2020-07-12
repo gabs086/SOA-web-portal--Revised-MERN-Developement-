@@ -1,9 +1,16 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { connect } from "react-redux";
+import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemText from '@material-ui/core/ListItemText';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Navbar2 from "../layouts/Navbar2";
 
@@ -14,6 +21,14 @@ const useStyles = makeStyles(theme => ({
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
     },
+   root2:{
+   	 width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+},
+ inline: {
+    display: 'inline',
+  },
     list: {
         width: '100%',
         maxWidth: 360,
@@ -28,6 +43,10 @@ const useStyles = makeStyles(theme => ({
     timeFeed: {
       float: 'right',
       fontSize: 13
+    },
+    preloader: {
+    	textAlign: 'center',
+    	marginTop: 40,
     }
 }));
 
@@ -38,13 +57,27 @@ function OrgNotifications(props) {
 	//States ++++++++++++
 	const [notifs, getNotifs] = useState([]);
 
+	const [notifLoading, setNotifLoading] = useState(true);
+
 	//Event Handlers +++++++++
 
 	//Component Effect +++++++++++
 
-	// useEffect(_ => {
-	// 	axios.get()
-	// },[])
+	useEffect(_ => {
+		axios.get('/api/requestactivities/getorgnotifications')
+		.then(res => {
+			getNotifs(res.data);
+			setNotifLoading(false);
+		})
+		.catch(err => console.log(err));
+
+	},[]);
+
+	const { auth } = props;
+
+	const rows = notifs.sort((a,b) => (a.created_at > b.created_at ? -1 : 1))
+		.filter(row => row.username === auth.user.username);
+
 
   return (
     <Fragment>
@@ -58,6 +91,89 @@ function OrgNotifications(props) {
     			<Typography variant="h5" component="h3">
     		 		Organizations Notifications
     		 	</Typography>
+				
+				<List className={classes.root}>
+
+
+    		 	{
+    		 		notifLoading 
+    		 		?
+    		 		<Fragment>
+    		 		<div className={classes.preloader}>
+    		 		 <CircularProgress color="secondary" size={60}/>
+                    	<br/>
+                    <span>Loading ...</span>
+    		 		</div>
+    		 		</Fragment>
+    		 		:
+    		 		<Fragment>
+    		 		{
+    		 			rows.length === 0
+    		 			?
+    		 			<Fragment>
+					          <ListItem alignItems="flex-start">
+					          		
+					          	<span style={{textAlign: 'center'}}>
+					          		No notifications available...
+					          	</span>
+					         	
+					          </ListItem>
+					      
+					          <Divider variant="inset" component="li" />
+    		 			</Fragment>
+
+    		 			:
+    		 			<Fragment>
+    		 			{
+    		 				rows.map(row => (
+    		 					<Fragment>
+					          <ListItem alignItems="flex-start">
+					          
+					            <ListItemText
+					              primary={row.notification}
+					              secondary={
+					                <Fragment>
+					                {
+					                	row.reason 
+					                	?
+					                	<Fragment>
+					                	<Typography
+						                component="span"
+						                variant="body2"
+						                className={classes.inline}
+						                color="textPrimary"
+						              >
+						                <span style={{color: 'red'}}>
+						                Reason
+						                </span>: {row.reason}
+						              </Typography>
+					                  {` - ${row.created_at}`}
+
+						              </Fragment>
+						              :
+						              <Fragment>
+					                  {row.created_at}
+						              </Fragment>
+					                }
+					                
+					                </Fragment>
+					              }
+					            />
+					          </ListItem>
+					      
+					          <Divider variant="inset" component="li" />
+
+					          </Fragment>
+    		 			))
+    		 			}
+    		 			
+    		 		</Fragment>
+    		 		}
+    		 		</Fragment>
+    		 	}
+			</List>
+    		 	
+
 
     		</Paper>
 
@@ -67,4 +183,10 @@ function OrgNotifications(props) {
   )
 }
 
-export default OrgNotifications;
+const mapStateToProps = state => ({
+	auth: state.auth
+});
+
+
+
+export default connect(mapStateToProps)(OrgNotifications);

@@ -431,3 +431,8 @@ Jul 12
 	12:47 PM
 	@Applying the update notification api in the client side
 	- client/layout/Navbar2.js
+
+	1:48 Pm
+	@Creating a component for notifications list in Org Dashboard
+	- client/org/OrgNotifications.js
+	

@@ -82,14 +82,14 @@ function OrgIndex(props) {
   // Effect for rendering the org feeds
   useEffect(_ => {
 
-    // const id = setInterval(_ => {
+    const id = setInterval(_ => {
         props.getOrgFeeds();
         setOrgFeeds(false);
-    // }, 2000)
+    }, 2000)
 
-    // return _ => {
-    //   clearInterval(id)
-    // }
+    return _ => {
+      clearInterval(id)
+    }
 
   },[])
 

@@ -169,6 +169,7 @@ function Navbar2 (props) {
         axios.post(` /api/requestactivities/updatenotifcountorg/${auth.user.username}`, read)
         .then(res => {
             setNotifUpdated(true);
+            props.history.push('/org/notifications');
         })
         .catch(err => console.log(err));
     }
@@ -216,9 +217,7 @@ function Navbar2 (props) {
                 <MenuItem onClick={handleSettingsClose}>Downloadable Files </MenuItem>
                 <MenuItem onClick={onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
-        )
-
-        console.log(props);
+        );
 
         return (
             <div className={classes.root}>

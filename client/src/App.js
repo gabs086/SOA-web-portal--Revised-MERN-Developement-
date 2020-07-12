@@ -19,6 +19,7 @@ import FoundTable from './components/st/FoundTable';
 import OrgIndex from './components/org/OrgIndex';
 import ActivityRequestReports from './components/org/ActivityRequestReports';
 import RequestActivityComponent from './components/org/RequestActivityComponent';
+import OrgNotifications from './components/org/OrgNotifications';
 
 // SOA Head Dashboard Components
 import HeadIndex from './components/h/HeadIndex';
@@ -94,6 +95,7 @@ function App() {
           <PrivateRoute exact path="/org" component={OrgIndex} />
           <PrivateRoute exact path="/org/activitysections" component={ActivityRequestReports} />
           <PrivateRoute exact path="/org/activitysections/requestactivities" component={RequestActivityComponent} />
+          <PrivateRoute exact path="/org/notifications" component={OrgNotifications} />
 
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />

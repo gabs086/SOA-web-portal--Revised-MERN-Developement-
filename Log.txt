@@ -441,3 +441,6 @@ Jul 12
 
 	@Implemented mapping of data in the client side of Org dashboard
 	- /client/org/OrgNotifications.js
+
+	@Created api endpoint for count request_activities for SOA Admin
+	-route/api/request_activities.js

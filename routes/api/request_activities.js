@@ -345,5 +345,24 @@ const newNotification = new Notifications({
 	.catch(err => res.status(500).json(`Error: ${err}`));
 });
 
+//@route /api/requestactivities/countrequestactivitiesadmin
+//@desc Count the Request activities that has a 'Approved1'
+// status and 'read' notif 
+//@desc SOA Admin
+router.get('/countrequestactivitiesadmin', async (req, res) => {
+	const result = await RequestActivities.findAndCountAll({
+		where: {
+			status: 'Approved1',
+			notif: 'read'
+		}
+	});
+
+	try {
+		if(result) res.json(result); 
+	}
+	catch (err) {
+		res.status(500).json(`Error: ${err}`)
+	}
+});
 
 module.exports = router;

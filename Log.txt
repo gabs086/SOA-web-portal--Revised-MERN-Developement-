@@ -444,3 +444,7 @@ Jul 12
 
 	@Created api endpoint for count request_activities for SOA Admin
 	-route/api/request_activities.js
+
+Jul 18
+	@Appliyng counting of notification in SideListNavbar2.js
+

@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from "prop-types";
+import axios from 'axios';
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,16 +20,45 @@ import EventIcon from '@material-ui/icons/Event';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
-const styles = theme => ({
+
+const useStyles = makeStyles(theme => ({
     nested: {
         paddingLeft: theme.spacing(2),
       },
-})
+}))
 
-class SideListNavbar2 extends Component {
+function SideListNavbar2 (props) {
 
-    render() {
-        const { classes } = this.props;
+    const classes = useStyles();
+
+    //state
+    const [count, setCount] = useState(0);
+    const [notifUpdated, setNotifUpdated] = useState(false);
+
+    //Event handlers/
+         const handleUpdateNotif = status => {
+                const { auth } = props;
+                const read = { status };
+
+                axios.post(` /api/requestactivities/updatenotifcountorg/${auth.user.username}`, read)
+                .then(res => {
+                    setNotifUpdated(true);
+                    props.history.push('/org/notifications');
+                })
+                .catch(err => console.log(err));
+            }
+
+    //component effect
+
+     useEffect(_ => {
+        const { auth } = props;
+
+        axios.get(`/api/requestactivities/countorgnotif/${auth.user.username}`)
+        .then(res => setCount(res.data))
+        .catch(err => err);
+
+    },[notifUpdated]);
+
         return (
             <div className={classes.nested}>
                  <List>
@@ -62,9 +95,9 @@ class SideListNavbar2 extends Component {
                         </ListItem>
 
 
-                <ListItem button component="a" href="#">
+                <ListItem button component="a" href="#" onClick={_ => handleUpdateNotif('read')}>
                 		 <ListItemIcon>
-                            <Badge badgeContent={0} color="secondary">
+                            <Badge badgeContent={count} color="secondary">
 						        <NotificationsIcon />
 						      </Badge>
                         </ListItemIcon>
@@ -86,7 +119,7 @@ class SideListNavbar2 extends Component {
                         <ListItemText primary="Downloadable Files" />
                     </ListItem>
 
-                    <ListItem style={{ color: "red" }} button onClick={this.props.onClick}>
+                    <ListItem style={{ color: "red" }} button onClick={props.onClick}>
                         <ListItemIcon>
                             <PowerSettingsNewIcon color="error"/>
                         </ListItemIcon>
@@ -98,6 +131,14 @@ class SideListNavbar2 extends Component {
             </div>
         )
     }
+
+SideListNavbar2.propTypes = {
+    auth: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(SideListNavbar2);
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default withRouter(connect(mapStateToProps)(SideListNavbar2)) ;

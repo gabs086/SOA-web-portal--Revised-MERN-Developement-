@@ -447,4 +447,17 @@ Jul 12
 
 Jul 18
 	@Appliyng counting of notification in SideListNavbar2.js
+	-client/layout/SideListNavbar2.js
 
+Jul 19
+	@Implement the counting of notification in the client side of Admin
+	- client/layout/DashboardAdmin.js
+
+	@Created Api Endpoint for updating statuses of notifications
+	- routes/api/request_activities.js
+
+	@Created table for mapping data for request_activity at admin part
+	- client/ad/RequestedActivitiesAdmin.js
+
+	@Creating a route for getting the data in request activities for admin part
+	- routes/api/request_activities.js;

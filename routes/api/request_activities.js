@@ -365,4 +365,40 @@ router.get('/countrequestactivitiesadmin', async (req, res) => {
 	}
 });
 
+//@route POST /api/requestactivities/updatecountrequestactivitiesadmin
+//@desc Update the column notif by depending in the condition that will be given in the where clause
+//@access SOA Admin
+router.post('/updatecountrequestactivitiesadmin', (req, res) => {
+
+	const notif = req.body.notif;
+
+	RequestActivities.update(
+	{ notif: notif},
+	{ where : {	
+		status: 'Approved1',
+		notif: 'read'
+	}}
+	)
+	.then(result => res.json(result))
+	.catch(err => res.status(500).json(`Error: ${err}`))
+});
+
+//@route GET /api/requestactivities/getrequestactivitiesadmin
+//@desc get all data in the request_activities that has a status of 'Approved1'
+///@access SOA Admin
+router.get('/getrequestactivitiesadmin', async (req, res) => {
+	const result = await RequestActivities.findAll({
+		where: {
+			status: 'Approved1'
+		}
+	});
+
+	try {
+		if(result) res.json(result);
+	}
+	catch (err) {
+		res.status(500).json(`Error: ${err}`);
+	}
+});
+
 module.exports = router;

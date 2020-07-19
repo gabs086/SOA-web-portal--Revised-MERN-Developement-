@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
+import axios from 'axios';
 //Redux components
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
@@ -112,6 +113,12 @@ function DashboardAdmin(props) {
     const [open, setOpen] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
 
+    // Count of the Notification 
+    const [count, setCount] = useState(0);
+
+    // Updating status state 
+    const [notifUpdated, setNotifUpdated] = useState(false);
+
     // onclick menu toggle
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -132,6 +139,17 @@ function DashboardAdmin(props) {
     const onLogOutClick = e => {
         props.logoutUser();
     }
+
+    
+
+    //Component effect
+    useEffect(_ => {
+
+        axios.get('/api/requestactivities/countrequestactivitiesadmin')
+        .then(res => setCount(res.data.count))
+        .catch(err => console.log(err));
+
+    },[notifUpdated])
 
     return (
         <div className={classes.root}>
@@ -250,7 +268,7 @@ function DashboardAdmin(props) {
                         to="/ad/requestedactivities"
                         primary="Requested Activities"
                         icon={<ListAltIcon />}
-                        count={4}
+                        count={count}
                     />
 {/* 
                     This component will be just one for :

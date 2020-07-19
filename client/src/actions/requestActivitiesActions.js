@@ -14,6 +14,8 @@ import {
 	SET_APPROVED_REQUEST_ACTIVITIES_HEAD,
 	SET_DECLINED_REQUEST_ACTIVITIES_HEAD,
 	// SOA Admin Side 
+	SET_APPROVED_REQUEST_ACTIVITIES_ADMIN,
+	SET_DECLINED_REQUEST_ACTIVITIES_ADMIN,
 
 	GET_ERRORS,
 } from './types';
@@ -125,6 +127,39 @@ export const setDeclinedHead = (id, data, data2) => dispatch => {
 }
 
 /* SOA Admin Side */
+
+export const setApprovedAdmin = (id, data, data2) => dispatch => {
+	axios.post(`/api/requestactivities/approverequestactivityadmin/${id}`, data)
+	.then(res => dispatch({
+		type: SET_APPROVED_REQUEST_ACTIVITIES_ADMIN,
+		payload: res.data
+	}))	
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+
+	}));	
+
+	axios.post('/api/requestactivities/requestactivityapprovedadmin/notif', data2)
+	.then(res => res)
+	.catch(err => err)
+};
+
+export const setDeclinedAdmin = (id, data, data2) => dispatch => {
+	axios.post(`/api/requestactivities/declinerequestactivityadmin/${id}`, data)
+	.then(res => dispatch({
+		type: SET_DECLINED_REQUEST_ACTIVITIES_ADMIN,
+		payload: res.data
+	}))	
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+	}));	
+
+	axios.post('/api/requestactivities/requestactivitydeclinedadmin/notif', data2)
+	.then(res => res)
+	.catch(err => err)
+};
 
 export const setRecordLoading = _ => {
 	return { type: REQUEST_ACTIVITIES_LOADING }

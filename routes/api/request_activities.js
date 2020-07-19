@@ -387,7 +387,7 @@ router.post('/updatecountrequestactivitiesadmin', (req, res) => {
 //@desc get all data in the request_activities that has a status of 'Approved1'
 ///@access SOA Admin
 router.get('/getrequestactivitiesadmin', async (req, res) => {
-	const result = await RequestActivities.findAll({
+	const result = await RequestActivities.findAndCountAll({
 		where: {
 			status: 'Approved1'
 		}
@@ -399,6 +399,98 @@ router.get('/getrequestactivitiesadmin', async (req, res) => {
 	catch (err) {
 		res.status(500).json(`Error: ${err}`);
 	}
+});
+
+//@route POST /api/requesactivities/approverequestactivityadmin/:id
+//@desc update the request_activity in ApprovedFinal
+//@access SOA Admin
+router.post('/approverequestactivityadmin/:id', (req, res) => {
+	const id = req.params.id;
+
+	const status = req.body.status;
+
+	// Find the RequestActivities by id
+	RequestActivities.findByPk(id)
+	.then(response => {
+		response.status = status;
+
+		response.save()
+		.then(_ => res.json('Request Approved by SOA Admin'))
+		.catch(err => res.status(500).json(`Error: ${err}`));
+	})
+	.catch(err => res.status(500).json(err));
+});
+
+//@route POST /api/requestactivities/requestactivityapprovedadmin/notif
+//@desc save a notification for the organization that their request_activity is approved by admin
+//@access SOA Admin
+router.post('/requestactivityapprovedadmin/notif', (req, res) => {
+	// Request Body
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+
+	//Saving message for notification
+	const newNotification = new Notifications({
+		username,
+		orgname,
+		notification: `Your request activity title ${notification} has been approved by the SOA Admin. You may now proceed in the office for final evaluation`
+
+	});
+
+	newNotification.save()
+	.then(_ => {
+		res.json('Notification Sent')
+	})
+	.catch(err => res.status(500).json(err));
+
+});
+
+
+//@route POST /api/requesactivities/declinerequestactivityadmin/:id
+//@desc update the request_activity in DeclinedFinal
+//@access SOA Admin
+router.post('/declinerequestactivityadmin/:id', (req, res) => {
+	const id = req.params.id;
+
+	const status = req.body.status;
+
+	// Find the RequestActivities by id
+	RequestActivities.findByPk(id)
+	.then(response => {
+		response.status = status;
+
+		response.save()
+		.then(_ => res.json('Request Declined by SOA Admin'))
+		.catch(err => res.status(500).json(`Error: ${err}`));
+	})
+	.catch(err => res.status(500).json(err));
+});
+
+//@route POST /api/requestactivities/requestactivitydeclinedadmin/notif
+//@desc save a notification for the organization that their request_activity is approved by admin
+//@access SOA Admin
+router.post('/requestactivitydeclinedadmin/notif', (req, res) => {
+	// Request Body
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+	const reason = req.body.reason;
+
+	//Saving message for notification
+	const newNotification = new Notifications({
+		username,
+		orgname,
+		notification: `Your request activity title ${notification} has been declined by the SOA Admin`,
+		reason
+	});
+
+	newNotification.save()
+	.then(_ => {
+		res.json('Notification Sent')
+	})
+	.catch(err => res.status(500).json(err));
+
 });
 
 module.exports = router;

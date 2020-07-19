@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from "prop-types";
 import clsx from 'clsx';
 import axios from 'axios';
 //Redux components
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import { withRouter } from "react-router";
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -140,7 +142,15 @@ function DashboardAdmin(props) {
         props.logoutUser();
     }
 
-    
+    const handleUpdateNotif = notif => {
+        const read = { notif };
+
+        axios.post('/api/requestactivities/updatecountrequestactivitiesadmin', read)
+        .then(res => {
+            setNotifUpdated(true);
+        })
+        .catch(err => console.log(err));
+    }
 
     //Component effect
     useEffect(_ => {
@@ -149,7 +159,7 @@ function DashboardAdmin(props) {
         .then(res => setCount(res.data.count))
         .catch(err => console.log(err));
 
-    },[notifUpdated])
+    },[count])
 
     return (
         <div className={classes.root}>
@@ -265,6 +275,7 @@ function DashboardAdmin(props) {
                 <List>
 
                     <ListItemLink 
+                        handleClick={_ => handleUpdateNotif('read1')}
                         to="/ad/requestedactivities"
                         primary="Requested Activities"
                         icon={<ListAltIcon />}
@@ -315,6 +326,11 @@ function DashboardAdmin(props) {
     );
 }
 
+DashboardAdmin.propTypes = {
+    auth: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+};
+
 //Redux State connection 
 const mapStateToProps = state => ({
     auth: state.auth
@@ -322,6 +338,6 @@ const mapStateToProps = state => ({
 //Dipatch proptypes(React Hooks) 
 const mapDispatchToProps = { logoutUser };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardAdmin);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DashboardAdmin));
 
 

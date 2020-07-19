@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import axios from 'axios';
+import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -147,12 +148,12 @@ function OrgNotifications(props) {
 						                Reason
 						                </span>: {row.reason}
 						              </Typography>
-					                  {` - ${row.created_at}`}
+					                  {` - ${moment(row.created_at).fromNow()}`}
 
 						              </Fragment>
 						              :
 						              <Fragment>
-					                  {row.created_at}
+					                  {moment(row.created_at).fromNow()}
 						              </Fragment>
 					                }
 					                

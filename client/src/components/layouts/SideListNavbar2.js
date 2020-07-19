@@ -4,7 +4,7 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';

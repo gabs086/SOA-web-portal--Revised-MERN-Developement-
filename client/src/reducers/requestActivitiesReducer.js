@@ -11,6 +11,8 @@ import {
 	SET_APPROVED_REQUEST_ACTIVITIES_HEAD,
 	SET_DECLINED_REQUEST_ACTIVITIES_HEAD,
 	// SOA ADMIN PART 
+	SET_APPROVED_REQUEST_ACTIVITIES_ADMIN,
+	SET_DECLINED_REQUEST_ACTIVITIES_ADMIN,
 
 	REQUEST_ACTIVITIES_LOADING
 } from '../actions/types';
@@ -26,6 +28,9 @@ const initialState = {
 	approvedByHead: false,
 	declinedByHead: false,
 	countNotif: 0,
+
+	approvedByAdmin: false,
+	declinedByAdmin: false,
 
 	loading: false,
 };
@@ -83,6 +88,18 @@ export default function(state = initialState, action){
 			return {
 				...state,
 				declinedByHead: true
+			};
+
+		case SET_APPROVED_REQUEST_ACTIVITIES_ADMIN:
+			return {
+				...state,
+				approvedByAdmin: true
+			};
+
+		case SET_DECLINED_REQUEST_ACTIVITIES_ADMIN:
+			return {
+				...state,
+				declinedByAdmin: true
 			}
 
 		case REQUEST_ACTIVITIES_LOADING: 

@@ -461,3 +461,15 @@ Jul 19
 
 	@Creating a route for getting the data in request activities for admin part
 	- routes/api/request_activities.js;
+
+	@Creating api endpoint for admin approved and declined actions
+	- routes/api/request_activities.js
+
+	@ADding state management for reducers and actions
+	- client/reducers/requestActivitiesReducer.js
+	- client/actions/types.js
+
+	@Finished Approved for SOA ADmin
+	@Created endpoint for SOA Admin decline action
+	- routes/api/request_activities.js
+	

@@ -200,7 +200,7 @@ class Navbar extends Component {
                                 Lost&Found
                             </Button>
                             <Button color="inherit">BatStateU Org Reports</Button>
-                            <Button color="inherit">Events</Button>
+                            <Button color="inherit" href="/st/lostandfoundpage/events">Events</Button>
                             <Button
                                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                                 aria-haspopup="true"

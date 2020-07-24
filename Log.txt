@@ -473,3 +473,13 @@ Jul 19
 	@Created endpoint for SOA Admin decline action
 	- routes/api/request_activities.js
 	
+Jul 24
+ 	@Installing full calendar package
+ 	-client/package.json
+
+ 	@Created a component called StudentCalendar.js
+ 	- client/st/StudentCalendar.js
+
+ 	@Created route for StudentCalendarComponent
+ 	- client/App.js
+ 	- client/layout/Navbar.js

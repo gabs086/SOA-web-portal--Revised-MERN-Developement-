@@ -483,3 +483,9 @@ Jul 24
  	@Created route for StudentCalendarComponent
  	- client/App.js
  	- client/layout/Navbar.js
+
+ 	@Creating FrontEnd Component for the page of events data
+ 	- client/ad/AnnounceEvents.js
+
+ 	@Creating component for the Form of announcing events
+ 	- client/ad/AddEventForm.js

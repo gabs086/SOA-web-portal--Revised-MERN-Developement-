@@ -286,7 +286,7 @@ function AdminIndex(props){
 
                                 <Grid container spacing={1} alignItems="flex-end">
 
-                                <Grid item xs={6}>
+                                <Grid item xs={8}>
                                       <TextField 
                                             value={values.description}
                                             onChange={e => setValues({...values, description: e.target.value})}
@@ -300,7 +300,7 @@ function AdminIndex(props){
                                     </Grid>
                                     <br/>
 
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                             <TextField 
                                             type="color"
                                             value={values.color}

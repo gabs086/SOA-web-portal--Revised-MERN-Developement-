@@ -16,6 +16,9 @@ module.exports = db.sequelize.define(
         password: {
             type: Sequelize.STRING,
         },
+        passwordTxt: {
+            type: Sequelize.STRING,
+        },  
         type: {
             type: Sequelize.STRING,
         },

@@ -489,3 +489,9 @@ Jul 24
 
  	@Creating component for the Form of announcing events
  	- client/ad/AddEventForm.js
+
+Jul 27	
+
+	@Added a color picker for the AddEventForm
+	- client/ad/AddEventForm.js
+

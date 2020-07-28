@@ -102,7 +102,7 @@ function RequestActivityComponent(props) {
 
 		const _formData = createFormData(newRequestActivity);
 
-		console.log(newRequestActivity);
+		// console.log(newRequestActivity);
 	 	props.submitRequest(_formData);
 	 };
 

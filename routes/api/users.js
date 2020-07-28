@@ -13,6 +13,20 @@ const validateRegisterInput = require('../../validation/registration');
 // Model
 const Users = require('../../models/user.model');
 
+//@route GET /api/users/
+//@desc Get all user records
+//@access Public
+router.get("/", async (req, res) => {
+    const result = await Users.findAll();
+
+    try {
+        if(result) res.json(result);
+    }
+    catch(err) {
+        res.status(500).json(err);
+    }
+ });
+
 //@route POST api/users/register
 //@desc Register a user through api
 //@access Through Routes only

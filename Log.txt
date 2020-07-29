@@ -495,3 +495,20 @@ Jul 27
 	@Added a color picker for the AddEventForm
 	- client/ad/AddEventForm.js
 
+Jul 29
+
+	@Creating a schema for the announcements
+	announcements:
+	 - id
+	 - title
+	 - date
+	 - dateDate
+	 - dateTime
+	 - bgColor
+	 - venue
+	 - description
+	 - poster
+	 - setBy
+
+	@Created Model for announcements
+	- models/announcements.model.js

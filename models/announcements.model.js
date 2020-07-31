@@ -32,7 +32,7 @@ module.exports = db.sequelize.define(
 		},
 		date: {
 			type: Sequelize.DATE,
-		}
+		},
 		dateDate: {
 			type: Sequelize.STRING
 		},
@@ -60,5 +60,4 @@ module.exports = db.sequelize.define(
 		},
 	}, {
 		timestamps: false	
-	}
-	)
+	})

@@ -512,3 +512,12 @@ Jul 29
 
 	@Created Model for announcements
 	- models/announcements.model.js
+
+Jul 31
+
+	@Created announcement file for all the http request of announcement process and included in the server.js
+	- routes/api/announcements.js
+	- server.js
+
+	@Created GET api endpoint in announcements.js
+	- routes/api/announcements.js

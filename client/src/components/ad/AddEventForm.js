@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { addAnnouncement, addAnnouncementFalse } from '../../actions/announcementActions';
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -102,16 +104,18 @@ function AdminIndex(props){
         /* States*/
 
         const [values, setValues] = useState({
-            file: "",
+            poster: "",
             fileName:"",
             title: '',
             venue: '',
             description: '',
             color:'',
 
-        })
+        });
          const [selectedDate, setSelectedDate] = useState(new Date());
          const [selectedTime, setSelectedTime] = useState(new Date());
+
+         const [errors, getErrors] = useState({});
         
         /* Event Handlers*/
         const handleDate = date => {
@@ -139,8 +143,25 @@ function AdminIndex(props){
             const _formData = createFormData(newAnnouncement);
 
             console.log(newAnnouncement);
-            console.log(_formData);
+            // console.log(_formData);
+            props.addAnnouncement(_formData);
+
         }
+
+        // Component Effect for a successful Adding of Announcement
+        useEffect(_ => {
+           if(props.announcement.added)
+              props.history.push('/ad/announceevent');
+
+        },[props.announcement.added]);
+
+        // Component Effect for the errors
+        useEffect(_ => {
+          if(props.errors)
+              getErrors(props.errors)
+        },[props.errors])
+
+        console.log(props);
      
         return (
             <div>
@@ -189,6 +210,9 @@ function AdminIndex(props){
                                                 autoComplete
                                             />
                                         </Grid>
+                                        <span style={{ color: "red" }}>
+                                               {errors.title}
+                                         </span>
                                         <br />
                                          <Grid item xs={12}>
                                             <FormControl fullWidth className={classes.formControl}>
@@ -209,6 +233,9 @@ function AdminIndex(props){
                                                 </MuiPickersUtilsProvider>
                                           </FormControl>
                                         </Grid>
+                                         <span style={{ color: "red" }}>
+                                               {errors.date}
+                                         </span>
                                         
                                         <br />
 
@@ -242,6 +269,9 @@ function AdminIndex(props){
                                                 autoComplete
                                             />
                                         </Grid>
+                                         <span style={{ color: "red" }}>
+                                               {errors.venue}
+                                         </span>
                                         <br />
 
                                 <Grid container spacing={1} alignItems="flex-end">
@@ -255,9 +285,9 @@ function AdminIndex(props){
 
                                       */}
                                         <input
-                                        onChange={e => setValues({...values, file: e.target.files[0], fileName: e.target.files[0].name})} 
-                                        className={classes.input} id="file" name="file" type="file" />
-                                          <label htmlFor="file">
+                                        onChange={e => setValues({...values, poster: e.target.files[0], fileName: e.target.files[0].name})} 
+                                        className={classes.input} id="poster" name="poster" type="file" />
+                                          <label htmlFor="poster">
                                             <IconButton color="primary" aria-label="upload picture" component="span">
                                               <CloudUploadIcon />
                                             </IconButton>
@@ -281,6 +311,9 @@ function AdminIndex(props){
                                         />
                                     </Grid>
                                 </Grid>
+                                 <span style={{ color: "red" }}>
+                                               {errors.poster}
+                                         </span>
 
                                 <br />
 
@@ -298,6 +331,9 @@ function AdminIndex(props){
                                                 multiline
                                             />
                                     </Grid>
+                                     <span style={{ color: "red" }}>
+                                               {errors.description}
+                                         </span>
                                     <br/>
 
                                     <Grid item xs={4}>
@@ -336,4 +372,11 @@ function AdminIndex(props){
     
 }
 
-export default AdminIndex;
+const mapStateToProps = state => ({
+  announcement: state.announcement,
+  errors: state.errors
+});
+
+const mapDispatchToProps = { addAnnouncement, addAnnouncementFalse }; 
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminIndex);

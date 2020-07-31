@@ -51,6 +51,9 @@ module.exports = db.sequelize.define(
 		poster: {
 			type: Sequelize.STRING
 		},
+		fileName: {
+			type: Sequelize.STRING
+		},
 		setBy: {
 			type: Sequelize.STRING
 		},

@@ -115,6 +115,7 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	const description = req.body.description;
 	const bgColor = req.body.bgColor;
 	const setBy = req.body.setBy;
+	const fileName = req.body.fileName;
 
 	// const newAnnouncements = {
 	// 	title,
@@ -133,6 +134,7 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 		venue,
 		description,
 		poster: url + '/' + poster.path,
+		fileName,
 		setBy,
 		created_at: today
 	});

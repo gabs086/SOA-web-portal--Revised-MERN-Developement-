@@ -521,3 +521,10 @@ Jul 31
 
 	@Created GET api endpoint in announcements.js
 	- routes/api/announcements.js
+
+	@Creating Announcements Process Reducers
+	- client/actions/types.js
+	- client/actions/announcementReducer.js
+
+	@Created announcement Actions
+	- client/actions/announcementActions.js

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { addAnnouncementFalse } from '../../actions/announcementActions';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -25,6 +27,7 @@ import Button from '@material-ui/core/Button';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
+import FormConfirmationMsg from './FormConfirmationMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -143,6 +146,8 @@ function AnnounceEvents(props){
       const [reports,] = useState([]);
       const [loading, setLoading] = useState(true);
 
+      const [added, setAdded] = useState(false);
+
     /* Event Handlers */
         //Getting the pages, Material UI Funcs
           const handleChangePage = (event, newPage) => {
@@ -154,15 +159,37 @@ function AnnounceEvents(props){
             setPage(0);
           };
 
+            // Event for openAdded state 
+        const handleClose = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setAdded(false);
+          };
+
     /* Component Effect */
+    useEffect(_ => {
+      if(props.announcement.added)
+          setAdded(true);
+
+
+      setTimeout(function(){ props.addAnnouncementFalse() }, 6000);
+
+    },[props.announcement.added]);
+
+
     const rows = reports.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
 
     //Empty row that says the rows for pagination
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+    console.log(props);
         return (
             <div>
                 <DashboardAdmin>
+
+                <FormConfirmationMsg open={added} onClose={handleClose} variant="success" message="Announcement Added."  />
 
       {/* Button that will redirect to registering a account*/}
                  <Button 
@@ -265,4 +292,10 @@ function AnnounceEvents(props){
     
 }
 
-export default AnnounceEvents;
+const mapStateToProps = state => ({
+  announcement: state.announcement,
+});
+
+const mapDispatchToProps = { addAnnouncementFalse }; 
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnnounceEvents);

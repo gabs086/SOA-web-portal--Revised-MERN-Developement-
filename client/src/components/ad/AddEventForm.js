@@ -109,7 +109,7 @@ function AdminIndex(props){
             title: '',
             venue: '',
             description: '',
-            color:'',
+            bgColor:'',
 
         });
          const [selectedDate, setSelectedDate] = useState(new Date());
@@ -130,14 +130,17 @@ function AdminIndex(props){
             e.preventDefault();
 
             // const fullDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
-            const fullDate = moment(selectedDate).format('YYYY-MM-DD');
-            const fullTime = moment(selectedTime).format('HH:mm:ss');       
+            const dateDate = moment(selectedDate).format('YYYY-MM-DD');
+            const dateTime = moment(selectedTime).format('HH:mm:ss');       
 
-            const date = `${fullDate} ${fullTime}`;
+            const date = `${dateDate} ${dateTime}`;
 
             const newAnnouncement = { 
                 ...values,
-                date
+                date,
+                dateDate,
+                dateTime,
+                setBy: 'SOA Admin'
             }
 
             const _formData = createFormData(newAnnouncement);
@@ -161,7 +164,6 @@ function AdminIndex(props){
               getErrors(props.errors)
         },[props.errors])
 
-        console.log(props);
      
         return (
             <div>
@@ -339,8 +341,8 @@ function AdminIndex(props){
                                     <Grid item xs={4}>
                                             <TextField 
                                             type="color"
-                                            value={values.color}
-                                            onChange={e => setValues({...values, color: e.target.value})}
+                                            value={values.bgColor}
+                                            onChange={e => setValues({...values, bgColor: e.target.value})}
                                                 id="color"
                                                 name="color"
                                                 label="Choose color for the display background of the event"
@@ -374,9 +376,9 @@ function AdminIndex(props){
 
 const mapStateToProps = state => ({
   announcement: state.announcement,
-  errors: state.errors
+  errors: state.errors,
 });
 
-const mapDispatchToProps = { addAnnouncement, addAnnouncementFalse }; 
+const mapDispatchToProps = { addAnnouncement }; 
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminIndex);

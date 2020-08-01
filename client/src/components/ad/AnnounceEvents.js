@@ -184,7 +184,6 @@ function AnnounceEvents(props){
     //Empty row that says the rows for pagination
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-    console.log(props);
         return (
             <div>
                 <DashboardAdmin>

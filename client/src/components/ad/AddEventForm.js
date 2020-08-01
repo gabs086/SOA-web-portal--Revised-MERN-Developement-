@@ -109,7 +109,7 @@ function AdminIndex(props){
             title: '',
             venue: '',
             description: '',
-            bgColor:'',
+            bgColor:'#000000',
 
         });
          const [selectedDate, setSelectedDate] = useState(new Date());
@@ -145,7 +145,7 @@ function AdminIndex(props){
 
             const _formData = createFormData(newAnnouncement);
 
-            console.log(newAnnouncement);
+            // console.log(newAnnouncement);
             // console.log(_formData);
             props.addAnnouncement(_formData);
 

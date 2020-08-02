@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import axios from 'axios';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { addAnnouncementFalse } from '../../actions/announcementActions';
@@ -143,8 +144,9 @@ function AnnounceEvents(props){
       const [page, setPage] = useState(0);
       const [rowsPerPage, setRowsPerPage] = useState(5);
 
-      const [reports,] = useState([]);
+      const [events, getEvents] = useState([]);
       const [loading, setLoading] = useState(true);
+      const [ifError, setIfError] = useState(false);
 
       const [added, setAdded] = useState(false);
 
@@ -171,6 +173,16 @@ function AnnounceEvents(props){
 
         useEffect(_ => {
 
+        axios.get('/api/announcements/')
+        .then(res => {
+          getEvents(res.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          if(err) 
+            setIfError(true)
+        })
+
         },[]);
 
     /* Component Effect */
@@ -184,8 +196,9 @@ function AnnounceEvents(props){
     },[props.announcement.added]);
 
 
-    const rows = reports.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
+    const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
 
+    console.log(rows);
     //Empty row that says the rows for pagination
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
@@ -236,7 +249,17 @@ function AnnounceEvents(props){
                                         <span>Loading ...</span>
                                       </TableCell>
                                     </TableRow>
-                                    :   
+                                    :  
+                                    <Fragment>
+                                     {
+                                      ifError
+                                      ?
+                                      <TableRow>
+                                      <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
+                                        <span>Something went wrong. Please try again.</span>
+                                      </TableCell>
+                                    </TableRow>
+                                    :
                                     //Data to be displayed when the data is fetched
                                       (rowsPerPage > 0
                                         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -245,15 +268,18 @@ function AnnounceEvents(props){
                                       .map(row => (
                                         <TableRow>
                                           <TableCell component="th" scope="row">
-                                            {row.name}
+                                            {row.title}
                                           </TableCell>
-                                          <TableCell align="left">{row.year}</TableCell>
-                                          <TableCell align="left">{row.src}</TableCell>
-                                          <TableCell align="left">{row.campus}</TableCell>
-                                          <TableCell align="left">{row.department}</TableCell>
-                                          <TableCell align="left">{row.idreason}</TableCell>
+                                          <TableCell align="left">{moment(row.dateDate).format('MMMM D YYYY')}</TableCell>
+                                          <TableCell align="left">{moment(row.date).format('LT')}</TableCell>
+                                          <TableCell align="left">{row.venue}</TableCell>
+                                          <TableCell align="left">{row.description}</TableCell>
+                                          <TableCell align="left">To be implemented</TableCell>
                                         </TableRow>
                                       ))
+                                    
+                                    }
+                                    </Fragment>
                                     
                                   }
 

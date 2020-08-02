@@ -24,6 +24,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker, KeyboardTimePicker,} from '@material-ui/pickers';
 import IconButton from '@material-ui/core/IconButton';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
@@ -145,7 +146,7 @@ function AdminIndex(props){
 
             const _formData = createFormData(newAnnouncement);
 
-            // console.log(newAnnouncement);
+            console.log(newAnnouncement);
             // console.log(_formData);
             props.addAnnouncement(_formData);
 
@@ -254,6 +255,7 @@ function AdminIndex(props){
                                                       KeyboardButtonProps={{
                                                         'aria-label': 'change time',
                                                       }}
+                                                      keyboardIcon={<AccessTimeIcon />}
                                                     />
                                                 </MuiPickersUtilsProvider>
                                             </FormControl>

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import Navbar from "../layouts/Navbar";
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,6 +36,16 @@ const useStyles = makeStyles(theme => ({
 function StudentCalendar(props) {
 	const classes = useStyles();
 
+    const [events, setEvents] = useState([]);
+
+    useEffect(_ => {
+        axios.get('/api/announcements/')
+        .then(res => setEvents(res.data))
+        .catch(err => console.log(err));
+    },[]);
+
+    console.log(events);
+
 	return (
 		<div>
                 <Navbar />
@@ -46,6 +58,7 @@ function StudentCalendar(props) {
 					        plugins={[ dayGridPlugin , interactionPlugin ]}
 					        initialView="dayGridMonth"
 					        weekends={true}
+                            events={events}
 					      />
 
                 	</Paper>

@@ -106,8 +106,7 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 
 	const title = req.body.title;
 	
-	const dateSet = req.body.date;
-	const date = new Date(dateSet);
+	const date = req.body.date;
 
 	const dateDate = req.body.dateDate;
 	const dateTime = req.body.dateTime;

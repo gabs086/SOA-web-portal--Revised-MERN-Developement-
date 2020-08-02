@@ -31,7 +31,7 @@ module.exports = db.sequelize.define(
 			type: Sequelize.STRING
 		},
 		date: {
-			type: Sequelize.DATE,
+			type: Sequelize.STRING,
 		},
 		dateDate: {
 			type: Sequelize.STRING

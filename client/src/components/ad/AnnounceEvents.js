@@ -166,7 +166,12 @@ function AnnounceEvents(props){
                 }
 
                 setAdded(false);
+                props.addAnnouncementFalse();
           };
+
+        useEffect(_ => {
+
+        },[]);
 
     /* Component Effect */
     useEffect(_ => {

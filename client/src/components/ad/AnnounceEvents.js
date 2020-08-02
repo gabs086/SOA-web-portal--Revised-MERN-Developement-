@@ -196,9 +196,10 @@ function AnnounceEvents(props){
     },[props.announcement.added]);
 
 
-    const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
+    const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
+          .filter(row => row.setBy === 'SOA Admin');
 
-    console.log(rows);
+    // console.log(rows);
     //Empty row that says the rows for pagination
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 

@@ -39,7 +39,7 @@ module.exports = db.sequelize.define(
 		dateTime: {
 			type: Sequelize.STRING
 		},
-		bgColor: {
+		backgroundColor: {
 			type: Sequelize.STRING
 		},
 		venue: {

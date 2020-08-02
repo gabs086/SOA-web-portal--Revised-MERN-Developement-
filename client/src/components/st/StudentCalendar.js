@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 
 import Navbar from "../layouts/Navbar";
@@ -33,6 +33,27 @@ const useStyles = makeStyles(theme => ({
     
 }));
 
+//This will be the style of the in the calendar
+// function renderEventContent(eventInfo) {
+
+//     const [events, setEvents] = useState([]);
+
+//       useEffect(_ => {
+//         axios.get('/api/announcements/')
+//         .then(res => setEvents(res.data))
+//         .catch(err => console.log(err));
+//     },[]);
+
+//     return (
+//          <Fragment>
+//               <span style={{color: 'white', backgroundColor:'blue'}}>
+//               <b>{eventInfo.timeText}</b>
+//               <span>{eventInfo.event.title}</span>
+//               </span>
+//             </Fragment>
+//         )
+// }
+
 function StudentCalendar(props) {
 	const classes = useStyles();
 
@@ -45,6 +66,24 @@ function StudentCalendar(props) {
     },[]);
 
     // console.log(events);
+
+    const renderEventContent = eventInfo => (
+            <Fragment>     
+        {console.log(eventInfo)}
+
+            {
+              events.map(row => (
+              <span style={{color: 'white', backgroundColor:`${eventInfo.backgroundColor}`}}>
+               
+               <b>{eventInfo.timeText}</b> &nbsp;
+                <span>{eventInfo.event.title}</span>
+
+               </span>
+
+                    ))
+            }
+            </Fragment>
+        )
 
 	return (
 		<div>
@@ -59,6 +98,7 @@ function StudentCalendar(props) {
 					        initialView="dayGridMonth"
 					        weekends={true}
                             events={events}
+                            eventContent={renderEventContent}
 					      />
 
                 	</Paper>

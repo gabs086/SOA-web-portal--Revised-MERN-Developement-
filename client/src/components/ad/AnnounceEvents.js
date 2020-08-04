@@ -22,6 +22,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import Button from '@material-ui/core/Button';
@@ -275,7 +276,21 @@ function AnnounceEvents(props){
                                           <TableCell align="left">{moment(row.date).format('LT')}</TableCell>
                                           <TableCell align="left">{row.venue}</TableCell>
                                           <TableCell align="left">{row.description}</TableCell>
-                                          <TableCell align="left">To be implemented</TableCell>
+                                          <TableCell align="left">
+
+                                                <Tooltip title="Update" placement="top">
+                                                 <IconButton href={`${row.id}`} aria-label="edit" color="primary">
+                                                  <EditIcon />
+                                                </IconButton>
+                                              </Tooltip>   
+
+                                              <Tooltip title="Delete" placement="top">
+                                                 <IconButton aria-label="edit" color="secondary">
+                                                  <DeleteIcon />
+                                                </IconButton>
+                                              </Tooltip>   
+
+                                          </TableCell>
                                         </TableRow>
                                       ))
                                     

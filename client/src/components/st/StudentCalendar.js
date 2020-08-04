@@ -71,17 +71,14 @@ function StudentCalendar(props) {
             <Fragment>     
         {console.log(eventInfo)}
 
-            {
-              events.map(row => (
+     
               <span style={{color: 'white', backgroundColor:`${eventInfo.backgroundColor}`}}>
                
                <b>{eventInfo.timeText}</b> &nbsp;
                 <span>{eventInfo.event.title}</span>
 
                </span>
-
-                    ))
-            }
+               
             </Fragment>
         )
 

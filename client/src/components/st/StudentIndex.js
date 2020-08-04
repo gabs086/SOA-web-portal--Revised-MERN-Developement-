@@ -81,7 +81,7 @@ class StudentIndex extends Component {
                             </ListItem>
                     
 
-                        <ListItemLink href="#simple-list">
+                        <ListItemLink href="/st/lostandfoundpage/events">
                         <ListItemIcon>
                                 <EventIcon />
                             </ListItemIcon>

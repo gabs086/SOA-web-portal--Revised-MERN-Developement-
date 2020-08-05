@@ -44,9 +44,9 @@ const storage = multer.diskStorage({
 		const dateFull = `${day}-${month}-${year}`;
 
 		// the filename format 
-		const filename = file.originalname.toLowerCase().split(' ').join('-');
+		const filename = file.originalname;
 
-		cb(null, `${dateFull}_${filename}`);
+		cb(null, `${filename}`);
 	}
 
 });
@@ -79,6 +79,19 @@ router.get('/', async (req, res) => {
         catch(err){
                 res.status(500).json(err);
         }
+});
+
+//@route GET /api/announcements/:id
+//@desc Get the data by specific id parameter
+//@access admin only
+router.get('/:id', (req, res) => {
+
+	const id = req.params.id;
+
+	Announcements.findByPk(id)
+	.then(response => res.json(response))
+	.catch(err => res.status(400).json(`Error: ${err}`));
+
 });
 
 //@route POST /api/announcements/addEvents
@@ -144,6 +157,96 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 
 	// console.log(newAnnouncements);
 
+});
+
+//@route DELETE /api/announcements/deleteannouncement/:id
+//@desc Delete a data for announcement
+//@admin only
+router.delete('/deleteannouncement/:id', (req, res) => {
+
+	const id = req.params.id;
+
+	Announcements.destroy({
+		where: {
+			id: id
+		}
+	})
+	.then(_ => res.json('Announcements Deleted'))
+	.catch(err => res.status(500).json(`Error: ${err}`));
+
+});
+
+//@route POST /api/announcements/updateannouncement/:id
+//@desc update a announcement
+//@access admin only
+router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
+	const poster = req.file;
+
+	const id = req.params.id;
+
+	//Url of the app
+	const url = req.protocol + '://' + req.get('host');
+
+	const today = new Date();
+
+	//Validators
+	const { errors, isValid } = validateAnnouncements(req.body);
+
+	if(!isValid) {
+		return res.status(400).json(errors);
+	}
+
+	if(poster === undefined) {
+		return res.status(400).json({poster: 'Pictures only'})
+	}
+
+	const title = req.body.title;
+	
+	const date = req.body.date;
+
+	const dateDate = req.body.dateDate;
+	const dateTime = req.body.dateTime;
+	const venue = req.body.venue;
+	const description = req.body.description;
+	const backgroundColor = req.body.bgColor;
+	const setBy = req.body.setBy;
+	const fileName = req.body.fileName;
+
+	const posterReq = url + '/' + poster.path;
+
+	Announcements.findByPk(id)
+	.then(response => {
+		if(response.title === title 
+			&& response.date === date 
+			&& response.dateDate === dateDate 
+			&& response.dateTime === dateTime 
+			&& response.backgroundColor === backgroundColor 
+			&& response.venue === venue 
+			&& response.description === description 
+			&& response.poster === posterReq 
+			&& response.fileName === fileName 
+			&& response.setBy === setBy){
+
+			errors.all = "No data have been change";
+
+			return res.status(400).json(errors);
+		}
+			response.title = title;
+			response.date = date;
+			response.dateDate = dateDate;
+			response.dateTime = dateTime;
+			response.venue = venue;
+			response.description = description;
+			response.backgroundColor = backgroundColor;
+			response.setBy = setBy;
+			response.fileName = fileName;
+			response.poster = posterReq;
+
+			response.save()
+			.then(_ => res.json('Update Successfully'))
+			.catch(err => res.status(500).json(`Error ${err}`))
+	})
+	.catch(err => res.status(500).json(`Error Main: ${err}`));
 });
 
 module.exports = router;

@@ -335,10 +335,11 @@ function AdminIndex(props){
                                                 multiline
                                             />
                                     </Grid>
-                                     <span style={{ color: "red" }}>
+                                   
+                                    <br/>
+                                      <span style={{ color: "red" }}>
                                                {errors.description}
                                          </span>
-                                    <br/>
 
                                     <Grid item xs={4}>
                                             <TextField 

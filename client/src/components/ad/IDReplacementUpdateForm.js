@@ -25,7 +25,6 @@ import Grid from '@material-ui/core/Grid';
 import DashboardAdmin from '../layouts/DashboardAdmin';
 import FormConfirmationMsg from './FormConfirmationMsg';
 
-
 // Object Styles for the components 
 const styles = theme => ({
     root: {

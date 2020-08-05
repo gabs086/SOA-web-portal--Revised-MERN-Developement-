@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { addAnnouncementFalse } from '../../actions/announcementActions';
+import { addAnnouncementFalse, updateAnnouncementFalse } from '../../actions/announcementActions';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -150,6 +150,7 @@ function AnnounceEvents(props){
       const [ifError, setIfError] = useState(false);
 
       const [added, setAdded] = useState(false);
+      const [updated, setUpdate] = useState(false);
 
     /* Event Handlers */
         //Getting the pages, Material UI Funcs
@@ -172,6 +173,17 @@ function AnnounceEvents(props){
                 props.addAnnouncementFalse();
           };
 
+                // Event for openAdded state 
+        const handleCloseUpdate = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setUpdate(false);
+                props.updateAnnouncementFalse();
+          };
+
+
         useEffect(_ => {
 
         axios.get('/api/announcements/')
@@ -191,10 +203,18 @@ function AnnounceEvents(props){
       if(props.announcement.added)
           setAdded(true);
 
-
       setTimeout(function(){ props.addAnnouncementFalse() }, 6000);
 
+
     },[props.announcement.added]);
+
+    useEffect(_ => {
+       if(props.announcement.updated)
+          setUpdate(true)
+
+      setTimeout(function(){ props.updateAnnouncementFalse() }, 6000);
+
+    },[props.announcement.updated])
 
 
     const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
@@ -209,6 +229,7 @@ function AnnounceEvents(props){
                 <DashboardAdmin>
 
                 <FormConfirmationMsg open={added} onClose={handleClose} variant="success" message="Announcement Added."  />
+                <FormConfirmationMsg open={updated} onClose={handleCloseUpdate} variant="success" message="Announcement Update Successfully."  />
 
       {/* Button that will redirect to registering a account*/}
                  <Button 
@@ -279,7 +300,7 @@ function AnnounceEvents(props){
                                           <TableCell align="left">
 
                                                 <Tooltip title="Update" placement="top">
-                                                 <IconButton href={`${row.id}`} aria-label="edit" color="primary">
+                                                 <IconButton href={`/ad/announceevent/updateevent/${row.id}`} aria-label="edit" color="primary">
                                                   <EditIcon />
                                                 </IconButton>
                                               </Tooltip>   
@@ -342,6 +363,6 @@ const mapStateToProps = state => ({
   announcement: state.announcement,
 });
 
-const mapDispatchToProps = { addAnnouncementFalse }; 
+const mapDispatchToProps = { addAnnouncementFalse, updateAnnouncementFalse }; 
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnnounceEvents);

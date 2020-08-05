@@ -179,7 +179,12 @@ router.delete('/deleteannouncement/:id', (req, res) => {
 //@route POST /api/announcements/updateannouncement/:id
 //@desc update a announcement
 //@access admin only
+// const postUpload = upload.fields([{ name: 'poster', maxCount: 1}])
 router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
+	
+	console.log(req.body);
+
+	//For  Updating a file that is in the db already
 	const poster = req.file;
 
 	const id = req.params.id;
@@ -197,7 +202,7 @@ router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
 	}
 
 	if(poster === undefined) {
-		return res.status(400).json({poster: 'Pictures only'})
+		return res.status(400).json({poster: 'Reupload your banner. Note: Pictures only'})
 	}
 
 	const title = req.body.title;
@@ -211,7 +216,6 @@ router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
 	const backgroundColor = req.body.bgColor;
 	const setBy = req.body.setBy;
 	const fileName = req.body.fileName;
-
 	const posterReq = url + '/' + poster.path;
 
 	Announcements.findByPk(id)

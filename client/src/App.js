@@ -37,6 +37,7 @@ import AddFound from './components/h/AddFound';
 import AdminIndex from './components/ad/AdminIndex';
 import AnnounceEvents from './components/ad/AnnounceEvents';
 import AddEventForm from './components/ad/AddEventForm';
+import UpdateEventForm from './components/ad/UpdateEventForm';
 import OrgListAdmin from './components/ad/OrgListAdmin';
 import RequestedActivitesAdmin from './components/ad/RequestedActivitiesAdmin';
 import FilesAndReports from './components/ad/FilesAndReports';
@@ -115,6 +116,7 @@ function App() {
           <PrivateRoute exact path="/ad" component={AdminIndex} />
           <PrivateRoute exact path="/ad/announceevent" component={AnnounceEvents} />
           <PrivateRoute exact path="/ad/announceevent/addevent" component={AddEventForm} />
+          <PrivateRoute exact path="/ad/announceevent/updateevent/:id" component={UpdateEventForm} />
           <PrivateRoute exact path="/ad/organizationlist" component={OrgListAdmin} />
           <PrivateRoute exact path="/ad/organizationlist/addrecord" component={OrgAddForm} />
           <PrivateRoute exact path="/ad/organizationlist/updaterecord/:id" component={OrgUpdateForm} />

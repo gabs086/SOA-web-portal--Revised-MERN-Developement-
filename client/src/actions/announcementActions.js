@@ -28,3 +28,20 @@ export const addAnnouncementFalse = _ => {
 		type: ADD_ANNOUNCEMENT_ADMIN_FALSE
 	}
 }
+
+export const updateAnnouncement = (id,data) => dispatch => {
+	axios.post(`/api/announcements/updateannouncement/${id}`, data)
+	.then(res => dispatch({
+		type:UPDATE_ANNOUNCEMENT_ADMIN
+	}))
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+	}));
+}
+
+export const updateAnnouncementFalse = _ => {
+	return {
+		type: UPDATE_ANNOUNCEMENT_ADMIN_FALSE
+	}
+}

@@ -122,7 +122,7 @@ function OrgIndex(props) {
                     	<List component="nav">
 
                        	 {/* Link 1  */}
-                       	 <ListItemLink href="/org">
+                       	 <ListItemLink href="/org/calendar">
                        	 	 <ListItemIcon>
                                 <EventIcon />
                             </ListItemIcon>

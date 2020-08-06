@@ -72,7 +72,7 @@ function SideListNavbar2 (props) {
                 </ListItem>
 
                 {/* Calendar of Events components  */}
-                <ListItem button component="a" href="#">
+                <ListItem button component="a" href="/org/calendar">
                     <ListItemIcon>
                         <EventIcon />
                     </ListItemIcon>

@@ -258,7 +258,7 @@ function Navbar2 (props) {
 
                         <div className={classes.sectionDesktop}>
                             <Button color="inherit" href="/org">Home</Button>
-                            <Button color="inherit" href="#">
+                            <Button color="inherit" href="/org/calendar">
                                 Calendar
                             </Button>
                             <Button color="inherit" href="/org/activitysections">Activities (Request, Reports)</Button>

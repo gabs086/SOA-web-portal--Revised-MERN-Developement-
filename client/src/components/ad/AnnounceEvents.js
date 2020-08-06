@@ -270,8 +270,7 @@ function AnnounceEvents(props){
 
     },[props.announcement.deleted])
 
-    const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
-          .filter(row => row.setBy === 'SOA Admin');
+    const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
 
     // console.log(rows);
     //Empty row that says the rows for pagination
@@ -341,6 +340,7 @@ function AnnounceEvents(props){
                                 <StyledTableCell align="left">Time of Event</StyledTableCell>
                                 <StyledTableCell align="left">Venue of the Event</StyledTableCell>
                                 <StyledTableCell align="left">Description</StyledTableCell>
+                                <StyledTableCell align="left">Announce by</StyledTableCell>
                                 <StyledTableCell align="left">Action</StyledTableCell>
 
                               </TableRow>
@@ -382,6 +382,7 @@ function AnnounceEvents(props){
                                           <TableCell align="left">{moment(row.date).format('LT')}</TableCell>
                                           <TableCell align="left">{row.venue}</TableCell>
                                           <TableCell align="left">{row.description}</TableCell>
+                                          <TableCell align="left">{row.setBy}</TableCell>
                                           <TableCell align="left">
 
                                                 <Tooltip title="Update" placement="top">

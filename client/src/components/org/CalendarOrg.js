@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 
-import Navbar from "../layouts/Navbar";
+import Navbar2 from "../layouts/Navbar2";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
 //         )
 // }
 
-function StudentCalendar(props) {
+function CalendarOrg(props) {
 	const classes = useStyles();
 
     const [events, setEvents] = useState([]);
@@ -84,7 +84,7 @@ function StudentCalendar(props) {
 
 	return (
 		<div>
-                <Navbar />
+                <Navbar2 />
 
                 <Container style={{paddingTop: 20}}>
 
@@ -106,4 +106,4 @@ function StudentCalendar(props) {
 		)
 }
 
-export default StudentCalendar;
+export default CalendarOrg;

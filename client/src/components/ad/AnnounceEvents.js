@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { addAnnouncementFalse, updateAnnouncementFalse } from '../../actions/announcementActions';
+import { addAnnouncementFalse, updateAnnouncementFalse, deleteAnnouncement, deleteAnnouncementFalse } from '../../actions/announcementActions';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -27,9 +27,21 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import Button from '@material-ui/core/Button';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import Slide from '@material-ui/core/Slide';
+
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
 import FormConfirmationMsg from './FormConfirmationMsg';
+
+const Transition = props => {
+    return <Slide direction="up" {...props} />
+}
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -145,12 +157,19 @@ function AnnounceEvents(props){
       const [page, setPage] = useState(0);
       const [rowsPerPage, setRowsPerPage] = useState(5);
 
+      const [id, setId] = useState();
+
       const [events, getEvents] = useState([]);
       const [loading, setLoading] = useState(true);
       const [ifError, setIfError] = useState(false);
 
-      const [added, setAdded] = useState(false);
+      //Confirmation States
+      const [added, setAdded] = useState(false);  
       const [updated, setUpdate] = useState(false);
+      const [deleted, setDeleted] = useState(false);
+
+      //Delete modal State
+      const [deleteModal, openDeleteModal] = useState(false);
 
     /* Event Handlers */
         //Getting the pages, Material UI Funcs
@@ -183,6 +202,33 @@ function AnnounceEvents(props){
                 props.updateAnnouncementFalse();
           };
 
+          const handleCloseDelete = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setDeleted(false);
+                props.deleteAnnouncementFalse();
+          };
+
+          //Delete button function
+        const handleDelete = id => {
+          setId(id);
+
+          openDeleteModal(true);
+        }
+
+        //Final action for the delete action
+        const deleteFinal = _ => {
+          props.deleteAnnouncement(id);
+
+          openDeleteModal(false);
+
+        }
+
+        const handleDeleteModalClose = _ => {
+          openDeleteModal(false)
+        }
 
         useEffect(_ => {
 
@@ -196,7 +242,7 @@ function AnnounceEvents(props){
             setIfError(true)
         })
 
-        },[]);
+        },[props.announcement.added, props.announcement.updated, props.announcement.deleted]);
 
     /* Component Effect */
     useEffect(_ => {
@@ -216,6 +262,13 @@ function AnnounceEvents(props){
 
     },[props.announcement.updated])
 
+    useEffect(_ => {
+       if(props.announcement.deleted)
+          setDeleted(true)
+
+      setTimeout(function(){ props.deleteAnnouncementFalse() }, 6000);
+
+    },[props.announcement.deleted])
 
     const rows = events.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
           .filter(row => row.setBy === 'SOA Admin');
@@ -228,8 +281,40 @@ function AnnounceEvents(props){
             <div>
                 <DashboardAdmin>
 
+                 {/* Modal body for the delete */}
+
+                   <Dialog
+                   open={deleteModal}
+                   TransitionComponent={Transition}
+                   keepMounted
+                   onClose={handleDeleteModalClose}
+                   aria-labelledby="alert-dialog-slide-title"
+                   aria-describedby="alert-dialog-slide-description"
+                   >
+                       <DialogTitle id="alert-dialog-slide-title">
+                           {"Approved Request Activity"}
+                        </DialogTitle>
+
+                        <DialogContent>
+
+                          <DialogContentText id="alert-dialog-slide-description">
+                              Are you sure to approve this requested activity?
+                              </DialogContentText>
+                          </DialogContent>  
+
+                          <DialogActions>
+                            <Button onClick={deleteFinal} variant="outlined" color="primary">
+                              Yes
+                            </Button>
+                            <Button onClick={handleDeleteModalClose} variant="outlined" color="secondary">
+                              No
+                            </Button>
+                          </DialogActions>
+                   </Dialog>
+
                 <FormConfirmationMsg open={added} onClose={handleClose} variant="success" message="Announcement Added."  />
                 <FormConfirmationMsg open={updated} onClose={handleCloseUpdate} variant="success" message="Announcement Update Successfully."  />
+                <FormConfirmationMsg open={deleted} onClose={handleCloseDelete} variant="success" message="Announcement Delete Successfully."  />
 
       {/* Button that will redirect to registering a account*/}
                  <Button 
@@ -306,7 +391,7 @@ function AnnounceEvents(props){
                                               </Tooltip>   
 
                                               <Tooltip title="Delete" placement="top">
-                                                 <IconButton aria-label="edit" color="secondary">
+                                                 <IconButton onClick={_ => handleDelete(row.id)} aria-label="edit" color="secondary">
                                                   <DeleteIcon />
                                                 </IconButton>
                                               </Tooltip>   
@@ -363,6 +448,6 @@ const mapStateToProps = state => ({
   announcement: state.announcement,
 });
 
-const mapDispatchToProps = { addAnnouncementFalse, updateAnnouncementFalse }; 
+const mapDispatchToProps = { addAnnouncementFalse, updateAnnouncementFalse, deleteAnnouncement, deleteAnnouncementFalse }; 
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnnounceEvents);

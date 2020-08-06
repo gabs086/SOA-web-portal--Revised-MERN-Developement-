@@ -45,3 +45,15 @@ export const updateAnnouncementFalse = _ => {
 		type: UPDATE_ANNOUNCEMENT_ADMIN_FALSE
 	}
 }
+
+export const deleteAnnouncement = id => dispatch => {
+	axios.delete(`/api/announcements/deleteannouncement/${id}`)
+	.then(res => dispatch({
+		type: DELETE_ANNOUNCEMENT_ADMIN
+	}))
+	.catch(err => console.log(err));
+}
+
+export const deleteAnnouncementFalse = _ => {
+	return  { type: DELETE_ANNOUNCEMENT_ADMIN_FALSE }
+}

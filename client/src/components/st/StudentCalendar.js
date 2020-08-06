@@ -45,26 +45,29 @@ function StudentCalendar(props) {
     },[]);
 
     const dateClick = arg => {
-        console.log(arg);
+        // console.log(arg);
+        props.history.push(`/st/lostandfoundpage/listOfEvents/${arg.dateStr}`)
     }
-
 
     // console.log(events);
 
     const renderEventContent = eventInfo => (
             <Fragment>     
-        {/*console.log(eventInfo) */}
+        {/* console.log(eventInfo)*/}
 
-     
+            <a href={`/st/lostandfoundpage/events/${eventInfo.event._def.publicId}`}>
               <span style={{color: 'white', backgroundColor:`${eventInfo.backgroundColor}`}}>
                
                <b>{eventInfo.timeText}</b> &nbsp;
                 <span>{eventInfo.event.title}</span>
 
                </span>
-               
+            </a>
+
             </Fragment>
-        )
+        );
+
+    console.log(props);
 
 	return (
 		<div>

@@ -33,27 +33,6 @@ const useStyles = makeStyles(theme => ({
     
 }));
 
-//This will be the style of the in the calendar
-// function renderEventContent(eventInfo) {
-
-//     const [events, setEvents] = useState([]);
-
-//       useEffect(_ => {
-//         axios.get('/api/announcements/')
-//         .then(res => setEvents(res.data))
-//         .catch(err => console.log(err));
-//     },[]);
-
-//     return (
-//          <Fragment>
-//               <span style={{color: 'white', backgroundColor:'blue'}}>
-//               <b>{eventInfo.timeText}</b>
-//               <span>{eventInfo.event.title}</span>
-//               </span>
-//             </Fragment>
-//         )
-// }
-
 function StudentCalendar(props) {
 	const classes = useStyles();
 
@@ -64,6 +43,11 @@ function StudentCalendar(props) {
         .then(res => setEvents(res.data))
         .catch(err => console.log(err));
     },[]);
+
+    const dateClick = arg => {
+        console.log(arg);
+    }
+
 
     // console.log(events);
 
@@ -96,6 +80,7 @@ function StudentCalendar(props) {
 					        weekends={true}
                             events={events}
                             eventContent={renderEventContent}
+                            dateClick={dateClick}
 					      />
 
                 	</Paper>

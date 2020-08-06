@@ -253,4 +253,27 @@ router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
 	.catch(err => res.status(500).json(`Error Main: ${err}`));
 });
 
+
+/* Creating a query that will get the id and the dateStr of the event in ht calendar*/
+
+//@route /api/announcements/getByDate/:dateDate
+//@desc get the data by the parameter date
+//@access Public
+router.get('/getByDate/:dateDate', async (req,res) => {
+
+	const result = await Announcements.findAndCountAll({
+		where: {
+			dateDate: req.params.dateDate
+		}
+	});
+
+	try {
+		if (result) res.json(result.rows);
+	}
+	catch (err) {
+		res.status(500).json("Cant Count Data");
+	}
+
+});
+
 module.exports = router;

@@ -22,7 +22,7 @@ const multer = require('multer');
 const path = require('path');
 
 //The directory where the files will be stored
-const DIR = 'uploads/announcements/';
+const DIR = 'client/public/announcements/';
 
 const Announcements = require('../../models/announcements.model');
 
@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
 		const dateFull = `${day}-${month}-${year}`;
 
 		// the filename format 
-		const filename = file.originalname;
+		const filename = file.originalname.toLowerCase().split(' ').join('-');
 
 		cb(null, `${filename}`);
 	}

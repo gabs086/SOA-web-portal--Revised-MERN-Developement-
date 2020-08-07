@@ -22,6 +22,7 @@ export const addAnnouncement = data => dispatch => {
 		type: GET_ERRORS,
 		payload: err.response.data
 	}));
+	// .catch(err => console.log(err.response))
 }
 export const addAnnouncementFalse = _ => {
 	return {

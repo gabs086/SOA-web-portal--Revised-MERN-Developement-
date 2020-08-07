@@ -116,6 +116,7 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	if(!isValid) {
 		return res.status(400).json(errors);
 	}
+	else {
 
 	const title = req.body.title;
 	
@@ -154,6 +155,7 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	newAnnouncements.save()
 	.then(response => res.json(response))
 	.catch(err => res.status(500).json(err));	
+	}
 
 	// console.log(newAnnouncements);
 

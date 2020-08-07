@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { addAnnouncement, addAnnouncementFalse } from '../../actions/announcementActions';
+import { addAnnouncement } from '../../actions/announcementActions';
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,9 +12,6 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import ViewListIcon from '@material-ui/icons/ViewList';
 
 import Container from '@material-ui/core/Container';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -106,7 +103,7 @@ function AdminIndex(props){
 
         const [values, setValues] = useState({
             poster: "",
-            fileName:"",
+            fileName: '',
             title: '',
             venue: '',
             description: '',
@@ -146,7 +143,7 @@ function AdminIndex(props){
 
             const _formData = createFormData(newAnnouncement);
 
-            console.log(newAnnouncement);
+            // console.log(newAnnouncement);
             // console.log(_formData);
             props.addAnnouncement(_formData);
 
@@ -196,7 +193,7 @@ function AdminIndex(props){
                                     </Typography>
                                       <br></br>
 
-                                    <form noValidate onSubmit={handleSubmit}>
+                                    <form noValidate onSubmit={handleSubmit} enctype="multipart/form-data">
 
                                     <Typography variant="h6">
                                      Input the details needed.
@@ -289,7 +286,7 @@ function AdminIndex(props){
 
                                       */}
                                         <input
-                                        onChange={e => setValues({...values, poster: e.target.files[0], fileName: e.target.files[0].name})} 
+                                        onChange={e => setValues({...values, poster: e.target.files[0], fileName: e.target.files[0].name.toLowerCase().split(' ').join('-')})} 
                                         className={classes.input} id="poster" name="poster" type="file" />
                                           <label htmlFor="poster">
                                             <IconButton color="primary" aria-label="upload picture" component="span">

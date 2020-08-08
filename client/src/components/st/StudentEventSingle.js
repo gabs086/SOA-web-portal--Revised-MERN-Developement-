@@ -82,7 +82,7 @@ function StudentEventSingle(props) {
 		.catch(err => console.log(err));
 	},[]);
 
-	console.log(event);
+	// console.log(event);
 
 	return (
 			<div>
@@ -137,6 +137,10 @@ function StudentEventSingle(props) {
 								  </CardMedia>
 
 								      <CardContent>
+								         <Typography variant="body2" color="textSecondary" component="p">
+								          Venue: {event.venue}
+								        </Typography>
+
 								        <Typography variant="body2" color="textPrimary" component="p">
 								          {event.description}
 								        </Typography>

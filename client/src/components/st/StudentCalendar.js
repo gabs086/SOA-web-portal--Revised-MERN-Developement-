@@ -67,8 +67,6 @@ function StudentCalendar(props) {
             </Fragment>
         );
 
-    console.log(props);
-
 	return (
 		<div>
                 <Navbar />

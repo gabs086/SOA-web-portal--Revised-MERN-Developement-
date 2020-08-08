@@ -3,7 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 import clsx from 'clsx';
 
-import Navbar from "../layouts/Navbar";
+import Navbar2 from "../layouts/Navbar2";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
     
 }));
 
-function StudentEventSingle(props) {
+function OrgEvents(props) {
 	const classes = useStyles();
 
     //State for the events
@@ -93,12 +93,12 @@ function StudentEventSingle(props) {
 	return (
 			<div>
 
-				 <Navbar />
+				 <Navbar2 />
 
-				  <Container style={{paddingTop: 20}}>
+				  	<Container style={{paddingTop: 20}}>
 
 					<Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
-				        <Link color="inherit" href="/st/lostandfoundpage/events" className={classes.link}>
+				        <Link color="inherit" href="/org/calendar" className={classes.link}>
 				          <DateRangeIcon className={classes.icon} />
 				          Calendar
 				        </Link>
@@ -233,4 +233,4 @@ function StudentEventSingle(props) {
 		)	
 }
 
-export default StudentEventSingle;
+export default OrgEvents;

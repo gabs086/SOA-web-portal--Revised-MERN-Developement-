@@ -30,18 +30,23 @@ function HeadIndex(props){
                 .catch(err => console.log(err));
             },[]);
 
+    const dateClick = arg => {
+        // console.log(arg);
+        props.history.push(`/h/calendar/listOfEvents/${arg.dateStr}`)
+    }
 
     const renderEventContent = eventInfo => (
             <Fragment>     
         {/*console.log(eventInfo) */}
      
+            <a href={`/h/calendar/${eventInfo.event._def.publicId}`}>
               <span style={{color: 'white', backgroundColor:`${eventInfo.backgroundColor}`}}>
                
                <b>{eventInfo.timeText}</b> &nbsp;
                 <span>{eventInfo.event.title}</span>
 
                </span>
-               
+            </a>
             </Fragment>
         )
 
@@ -57,6 +62,7 @@ function HeadIndex(props){
                             events={events}
                             eventContent={renderEventContent}
                             themeSystem='bootstrap'
+                            dateClick={dateClick}
                           />
 
                      </Paper>

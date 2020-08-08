@@ -1,9 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
+
 import moment from 'moment';
 import clsx from 'clsx';
-
-import Navbar from "../layouts/Navbar";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -29,10 +28,11 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Avatar from '@material-ui/core/Avatar';
-
 import Grid from '@material-ui/core/Grid';
 import WarningIcon from '@material-ui/icons/Warning';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
+
+import DashBoardHead from '../layouts/DashboardHead';
 
 // Material UI styles 
 const useStyles = makeStyles(theme => ({
@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     width: 20,
     height: 20,
   },
-     card: {
+   card: {
    float: 'center',
     maxWidth: 500,
   },
@@ -73,9 +73,9 @@ const useStyles = makeStyles(theme => ({
     
 }));
 
-function StudentEventSingle(props) {
-	const classes = useStyles();
+function HeadEvents(props){
 
+    const classes = useStyles();
     //State for the events
     const [events, setEvents] = useState([]);
     const [ifError, setIfError] = useState(false);
@@ -89,23 +89,25 @@ function StudentEventSingle(props) {
                 setIfError(true)
         });
     },[]);
-    // console.log(events);
-	return (
-			<div>
 
-				 <Navbar />
+        return (
+            <div>
+                <DashBoardHead>
 
-				  <Container style={{paddingTop: 20}}>
+                        <Container style={{paddingTop: 20}}>
+
+
+                     <Paper className={classes.root}>
 
 					<Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
-				        <Link color="inherit" href="/st/lostandfoundpage/events" className={classes.link}>
+				        <Link color="inherit" href="/h" className={classes.link}>
 				          <DateRangeIcon className={classes.icon} />
 				          Calendar
 				        </Link>
 
 				        <Link
 				          color="textPrimary"
-				          href={``}
+				          href={`/h/calendar/listOfEvents/${props.match.params.dateDate}`}
 				          aria-current="page"
 				          className={classes.link}
 				        >
@@ -225,12 +227,13 @@ function StudentEventSingle(props) {
                             }
 
                         </Fragment>
+                     </Paper>
                         
-
 				  	</Container>
 
-			</div>
-		)	
+                </DashBoardHead>
+            </div>
+        )
 }
 
-export default StudentEventSingle;
+export default HeadEvents;

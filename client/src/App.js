@@ -24,6 +24,8 @@ import ActivityRequestReports from './components/org/ActivityRequestReports';
 import RequestActivityComponent from './components/org/RequestActivityComponent';
 import OrgNotifications from './components/org/OrgNotifications';
 import CalendarOrg from './components/org/CalendarOrg';
+import OrgEventSingle from './components/org/OrgEventSingle';
+import OrgEvents from './components/org/OrgEvents';
 
 // SOA Head Dashboard Components
 import HeadIndex from './components/h/HeadIndex';
@@ -35,6 +37,8 @@ import ActivityAssessment from './components/h/ActivityAssessment';
 import LostOrFound from './components/h/LostOrFound';
 import Found from './components/h/Found';
 import AddFound from './components/h/AddFound';
+import HeadEventSingle from './components/h/HeadEventSingle';
+import HeadEvents from './components/h/HeadEvents';
 
 // SOA Admin Dashboard Components
 import AdminIndex from './components/ad/AdminIndex';
@@ -51,6 +55,8 @@ import OrgAccountList from './components/ad/OrgAccountList';
 import OrgAccountListAddForm from './components/ad/OrgAccountListAddForm';
 import IDReplacementAddForm from './components/ad/IDReplacementAddForm';
 import IDReplacementUpdateForm from './components/ad/IDReplacementUpdateForm';
+import AdminEventSingle from './components/ad/AdminEventSingle';
+import AdminEvents from './components/ad/AdminEvents';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -106,7 +112,8 @@ function App() {
           <PrivateRoute exact path="/org/activitysections/requestactivities" component={RequestActivityComponent} />
           <PrivateRoute exact path="/org/notifications" component={OrgNotifications} />
           <PrivateRoute exact path="/org/calendar" component={CalendarOrg} />
-
+          <PrivateRoute exact path="/org/calendar/:id" component={OrgEventSingle} />
+          <PrivateRoute exact path="/org/calendar/listOfEvents/:dateDate" component={OrgEvents} />
 
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />
@@ -118,6 +125,8 @@ function App() {
           <PrivateRoute exact path="/h/organizationlist" component={OrgList} />
           <PrivateRoute exact path="/h/requestedactivities" component={RequestedActivities} />
           <PrivateRoute exact path="/h/activityassessment" component={ActivityAssessment} />
+          <PrivateRoute exact path="/h/calendar/:id" component={HeadEventSingle} />
+          <PrivateRoute exact path="/h/calendar/listOfEvents/:dateDate" component={HeadEvents} />
 
           {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />
@@ -134,6 +143,9 @@ function App() {
           <PrivateRoute exact path="/ad/idreplacement" component={IDReplacement} />
           <PrivateRoute exact path="/ad/idreplacement/addidreplacement" component={IDReplacementAddForm} />
           <PrivateRoute exact path="/ad/idreplacement/updateidreplacement/:id" component={IDReplacementUpdateForm} />
+          <PrivateRoute exact path="/ad/calendar/:id" component={AdminEventSingle} />
+          <PrivateRoute exact path="/ad/calendar/listOfEvents/:dateDate" component={AdminEvents} />
+
 
 
         </Switch>

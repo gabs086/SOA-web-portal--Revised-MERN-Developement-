@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 
 
 //PORT configuration
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 6000;
 
 // APIs
 // Passport middleware

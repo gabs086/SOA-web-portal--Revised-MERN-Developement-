@@ -14,7 +14,6 @@
 	- Who announce the EVent (SOA Head or SOA Admin)
 
 */
-
 const express = require('express');
 const router = express.Router();
 
@@ -36,12 +35,6 @@ const storage = multer.diskStorage({
 	},
 	// what will be the filename of the file uploaded
 	filename: (req, file, cb) => {
-		// set the file name with its the date the file submitted and the filename 
-		const date = new Date();
-		const year = date.getFullYear();
-		const month = date.getMonth() + 1;
-		const day = date.getDate();
-		const dateFull = `${day}-${month}-${year}`;
 
 		// the filename format 
 		const filename = file.originalname.toLowerCase().split(' ').join('-');
@@ -107,14 +100,11 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 
 	const { errors, isValid } = validateAnnouncements(req.body);
 
-
-	if(poster === undefined) {
-		return res.status(400).json({poster: 'Pictures only'})
-	}
-
-
 	if(!isValid) {
 		return res.status(400).json(errors);
+	}
+	else if(poster === undefined) {
+		return res.status(400).json({poster: 'Pictures only'})
 	}
 	else {
 
@@ -129,14 +119,6 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	const backgroundColor = req.body.bgColor;
 	const setBy = req.body.setBy;
 	const fileName = req.body.fileName;
-
-	// const newAnnouncements = {
-	// 	title,
-	// 	date,
-	// 	venue,
-	// 	description,
-	// 	poster: url + '/' + poster.path
-	// };
 
 	const newAnnouncements = new Announcements({
 		title,
@@ -153,7 +135,10 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	});
 
 	newAnnouncements.save()
-	.then(response => res.json(response))
+	.then(response => res.json({
+		message:'Request submitted',
+		datas: {response}
+	}))
 	.catch(err => res.status(500).json(err));	
 	}
 
@@ -181,10 +166,11 @@ router.delete('/deleteannouncement/:id', (req, res) => {
 //@route POST /api/announcements/updateannouncement/:id
 //@desc update a announcement
 //@access admin only
-// const postUpload = upload.fields([{ name: 'poster', maxCount: 1}])
+// const postUpload = upload.fields([{ name: 'poster', maxCount: 1}])\
+// upload.single('poster'),
 router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
 	
-	console.log(req.body);
+	// console.log(req.body);
 
 	//For  Updating a file that is in the db already
 	const poster = req.file;
@@ -203,11 +189,11 @@ router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
 		return res.status(400).json(errors);
 	}
 
-	if(poster === undefined) {
+	else if(poster === undefined) {
 		return res.status(400).json({poster: 'Reupload your banner. Note: Pictures only'})
 	}
-
-	const title = req.body.title;
+	else{
+		const title = req.body.title;
 	
 	const date = req.body.date;
 
@@ -249,10 +235,15 @@ router.post('/updateannouncement/:id', upload.single('poster'), (req, res) => {
 			response.poster = posterReq;
 
 			response.save()
-			.then(_ => res.json('Update Successfully'))
+			.then(resp => res.json({
+				message:'Request updated',
+				datas: {resp}
+			}))
 			.catch(err => res.status(500).json(`Error ${err}`))
 	})
 	.catch(err => res.status(500).json(`Error Main: ${err}`));
+	}
+	
 });
 
 
@@ -277,5 +268,6 @@ router.get('/getByDate/:dateDate', async (req,res) => {
 	}
 
 });
+
 
 module.exports = router;

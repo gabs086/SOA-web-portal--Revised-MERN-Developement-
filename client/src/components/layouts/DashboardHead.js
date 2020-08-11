@@ -152,14 +152,8 @@ function DashboardHead(props) {
 
         const { auth } = props;
 
-        const id = setInterval(_ => {
          props.countNotifHead(auth.user.campus);
 
-        },800);
-
-        return _ => {
-            clearInterval(id);
-        };
 
     },[]);
 

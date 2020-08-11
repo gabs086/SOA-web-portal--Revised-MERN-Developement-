@@ -8,13 +8,19 @@ import {
 	DELETE_ANNOUNCEMENT_ADMIN,
 	DELETE_ANNOUNCEMENT_ADMIN_FALSE,
 
+	ADD_ANNOUNCEMENT_HEAD,
+	ADD_ANNOUNCEMENT_HEAD_FALSE,
+
+	UPDATE_ANNOUNCEMENT_HEAD,
+	UPDATE_ANNOUNCEMENT_HEAD_FALSE,
+
+
 } from '../actions/types';
 
 const initialState = {
 	added: false,
 	updated: false,
-	deleted: false
-
+	deleted: false,
 };
 
 export default function(state = initialState, action) {
@@ -56,3 +62,4 @@ export default function(state = initialState, action) {
 			return state;
 	}	
 };
+	

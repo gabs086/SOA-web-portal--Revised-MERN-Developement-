@@ -26,28 +26,6 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 //Admin Dashboard Component
 import DashboardAdmin from '../layouts/DashboardAdmin';
 
-function createFormData(object, form, namespace) {
-  var formData = form || new FormData();
-  for (var property in object) {
-    if (!object.hasOwnProperty(property) || !object[property]) {
-      continue;
-    }
-    var formKey = namespace ? namespace + "[" + property + "]" : property;
-    if (object[property] instanceof Date) {
-
-      formData.append(formKey, object[property].toISOString());
-
-    } else if ( typeof object[property] === "object" && !(object[property] instanceof File) ) {
-
-      createFormData(object[property], formData, formKey);
-
-    } else {
-      formData.append(formKey, object[property]);
-    }
-  }
-  return formData;
-};
-
 // Object Styles for the components 
 const styles = makeStyles(theme => ({
     root: {
@@ -96,20 +74,24 @@ const styles = makeStyles(theme => ({
 }));
 
 
-function AdminIndex(props){
+function AddEventForm(props){
         const classes = styles();
 
         /* States*/
 
         const [values, setValues] = useState({
-            poster: "",
-            fileName: '',
             title: '',
             venue: '',
             description: '',
             bgColor:'#000000',
 
         });
+
+        const [poster, getPoster] = useState({
+            poster: null,
+            fileName: ''
+        });
+
          const [selectedDate, setSelectedDate] = useState(new Date());
          const [selectedTime, setSelectedTime] = useState(new Date());
 
@@ -124,6 +106,7 @@ function AdminIndex(props){
             setSelectedTime(time);
         }
 
+
         const handleSubmit = e => {
             e.preventDefault();
 
@@ -135,17 +118,28 @@ function AdminIndex(props){
 
             const newAnnouncement = { 
                 ...values,
+                ...poster,
                 date,
                 dateDate,
                 dateTime,
                 setBy: 'SOA Admin'
             }
 
-            const _formData = createFormData(newAnnouncement);
+            let fd = new FormData();
+            fd.append('poster', poster.poster);
+            fd.append('title', values.title);
+            fd.append('venue', values.venue);
+            fd.append('description', values.description);
+            fd.append('fileName', poster.fileName);
+            fd.append('bgColor', values.bgColor);
+            fd.append('date', date);
+            fd.append('dateDate', dateDate);
+            fd.append('dateTime', dateTime);
+            fd.append('setBy', 'SOA Admin');
 
             // console.log(newAnnouncement);
             // console.log(_formData);
-            props.addAnnouncement(_formData);
+            props.addAnnouncement(fd);
 
         }
 
@@ -162,6 +156,7 @@ function AdminIndex(props){
               getErrors(props.errors)
         },[props.errors])
 
+        console.log(props);
      
         return (
             <div>
@@ -286,7 +281,7 @@ function AdminIndex(props){
 
                                       */}
                                         <input
-                                        onChange={e => setValues({...values, poster: e.target.files[0], fileName: e.target.files[0].name.toLowerCase().split(' ').join('-')})} 
+                                        onChange={e => getPoster({...poster, poster: e.target.files[0], fileName: e.target.files[0].name.toLowerCase().split(' ').join('-')})} 
                                         className={classes.input} id="poster" name="poster" type="file" />
                                           <label htmlFor="poster">
                                             <IconButton color="primary" aria-label="upload picture" component="span">
@@ -298,7 +293,7 @@ function AdminIndex(props){
 
                                       <Grid item xs={11}>
                                         <TextField 
-                                        value={values.fileName}
+                                        value={poster.fileName}
                                         id="input-with-icon-grid"
                                         label="Poster for the event"
                                         helperText="Note: .png and .jpg is required"
@@ -381,4 +376,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { addAnnouncement }; 
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminIndex);
+export default connect(mapStateToProps, mapDispatchToProps)(AddEventForm);

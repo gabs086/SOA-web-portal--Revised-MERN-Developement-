@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { updateAnnouncement } from '../../actions/announcementActions';
+import { updateAnnouncementHead } from '../../actions/announcementActions';
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,8 +28,10 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 //Admin Dashboard Component
-import DashboardAdmin from '../layouts/DashboardAdmin';
+import DashboardHead from '../layouts/DashboardHead';
 import FormConfirmationMsg from './FormConfirmationMsg';
+
+import { createFormData } from "./formData";
 
 // Object Styles for the components 
 const styles = makeStyles(theme => ({
@@ -79,24 +81,20 @@ const styles = makeStyles(theme => ({
 }));
 
 
-function UpdateEventForm(props){
+function UpdateEventFormHead(props){
         const classes = styles();
 
         /* States*/
 
         const [values, setValues] = useState({
             title: '',
+            poster: '',
+            fileName:'',
             venue: '',
             description: '',
             bgColor:'#000000',
 
         });
-
-        const [poster, getPoster] = useState({
-            poster: null,
-            fileName: ''
-        });
-
          const [selectedDate, setSelectedDate] = useState(new Date());
          const [selectedTime, setSelectedTime] = useState(new Date());
 
@@ -116,6 +114,8 @@ function UpdateEventForm(props){
         const handleSubmit = e => {
             e.preventDefault();
 
+            const { user } = props.auth;
+
             // const fullDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
             const dateDate = moment(selectedDate).format('YYYY-MM-DD');
             const dateTime = moment(selectedTime).format('HH:mm:ss');       
@@ -127,24 +127,29 @@ function UpdateEventForm(props){
                 date,
                 dateDate,
                 dateTime,
-                setBy: 'SOA Admin'
+                setBy: `SOA Head of ${user.campus}`
             }
 
-             const fd = new FormData();
-            fd.append('poster', poster.poster);
-            fd.append('title', values.title);
-            fd.append('venue', values.venue);
-            fd.append('description', values.description);
-            fd.append('fileName', poster.fileName);
-            fd.append('bgColor', values.bgColor);
-            fd.append('date', date);
-            fd.append('dateDate', dateDate);
-            fd.append('dateTime', dateTime);
-            fd.append('setBy', 'SOA Admin');
+            // const _formData = createFormData(newAnnouncement);
+
+            const formData = new FormData();
+            formData.append('poster', values.poster)
+            formData.append('title', values.title);
+            formData.append('fileName', values.fileName);
+            formData.append('venue', values.venue);
+            formData.append('description', values.description);
+            formData.append('bgColor', values.bgColor);
+            formData.append('date', date);
+            formData.append('dateDate', dateDate);
+            formData.append('dateTime', dateTime);
+            formData.append('setBy', `SOA Head of ${user.campus}`);
 
             // console.log(newAnnouncement);
-            // console.log(_formData);
-            props.updateAnnouncement(props.match.params.id, fd);
+            // console.log(formData.get('title'))
+
+            // console.log(e);
+            // console.log(dataAnnouncement);
+            props.updateAnnouncementHead(props.match.params.id, formData);
 
         }
 
@@ -180,10 +185,10 @@ function UpdateEventForm(props){
 
         // Component Effect for a successful Adding of Announcement
         useEffect(_ => {
-           if(props.announcement.updated)
-              props.history.push('/ad/announceevent');
+           if(props.announcement.updateHead)
+              props.history.push('/h/announceevent');
 
-        },[props.announcement.updated]);
+        },[props.announcement.updateHead]);
 
         // Component Effect for the errors
         useEffect(_ => {
@@ -197,7 +202,7 @@ function UpdateEventForm(props){
      
         return (
             <div>
-                <DashboardAdmin>
+                <DashboardHead>
                 <FormConfirmationMsg open={errorAll} onClose={handleClose} variant="error" message={errors.all}/>
 
                 <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
@@ -319,7 +324,7 @@ function UpdateEventForm(props){
 
                                       */}
                                         <input
-                                        onChange={e => getPoster({...poster, poster: e.target.files[0], fileName: e.target.files[0].name})} 
+                                        onChange={e => setValues({...values, poster: e.target.files[0], fileName: e.target.files[0].name.toLowerCase().split(' ').join('-')})} 
                                         className={classes.input} id="poster" name="poster" type="file" />
                                           <label htmlFor="poster">
                                             <IconButton color="primary" aria-label="upload picture" component="span">
@@ -331,7 +336,7 @@ function UpdateEventForm(props){
 
                                       <Grid item xs={11}>
                                         <TextField 
-                                        value={poster.fileName}
+                                        value={values.fileName}
                                         id="input-with-icon-grid"
                                         label="Poster for the event"
                                         helperText="Note: .png and .jpg is required"
@@ -401,7 +406,7 @@ function UpdateEventForm(props){
                                 </Container>
 
                     </Paper>
-                </DashboardAdmin>
+                </DashboardHead>
             </div>
         )
     
@@ -409,9 +414,10 @@ function UpdateEventForm(props){
 
 const mapStateToProps = state => ({
   announcement: state.announcement,
+  auth: state.auth,
   errors: state.errors,
 });
 
-const mapDispatchToProps = { updateAnnouncement }; 
+const mapDispatchToProps = { updateAnnouncementHead }; 
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateEventForm);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateEventFormHead);

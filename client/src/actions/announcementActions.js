@@ -13,17 +13,19 @@ import {
 	GET_ERRORS
 } from './types';
 
+//Admin
 export const addAnnouncement = data => dispatch => {
 	axios.post('/api/announcements/addEvents', data)
 	.then(res => dispatch({
 		type: ADD_ANNOUNCEMENT_ADMIN,
+		payload: res.data,
 	}))
 	.catch(err => dispatch({
 		type: GET_ERRORS,
 		payload: err.response.data
 	}));
-	// .catch(err => console.log(err.response))
 }
+
 export const addAnnouncementFalse = _ => {
 	return {
 		type: ADD_ANNOUNCEMENT_ADMIN_FALSE
@@ -58,3 +60,41 @@ export const deleteAnnouncement = id => dispatch => {
 export const deleteAnnouncementFalse = _ => {
 	return  { type: DELETE_ANNOUNCEMENT_ADMIN_FALSE }
 }
+
+// Head
+export const addAnnouncementHead = data => dispatch => {
+	axios.post('/api/announcements/addEvents', data)
+	.then(res => dispatch({
+		type: ADD_ANNOUNCEMENT_ADMIN,
+		payload: res.data
+	}))
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+	}));
+	// .catch(err => console.log(err.response))
+}
+export const addAnnouncementFalseHead = _ => {
+	return {
+		type: ADD_ANNOUNCEMENT_ADMIN_FALSE
+	}
+}
+
+export const updateAnnouncementHead = (id,data) => dispatch => {
+	axios.post(`/api/announcements/updateannouncement/${id}`, data)
+	.then(res => dispatch({
+		type:UPDATE_ANNOUNCEMENT_ADMIN,	
+		payload: res.data
+	}))
+	.catch(err => dispatch({
+		type: GET_ERRORS,
+		payload: err.response.data
+	}));
+}
+
+export const updateAnnouncementFalseHead = _ => {
+	return {
+		type: UPDATE_ANNOUNCEMENT_ADMIN_FALSE
+	}
+}
+

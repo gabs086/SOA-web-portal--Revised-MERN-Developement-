@@ -39,6 +39,8 @@ import Found from './components/h/Found';
 import AddFound from './components/h/AddFound';
 import HeadEventSingle from './components/h/HeadEventSingle';
 import HeadEvents from './components/h/HeadEvents';
+import AddEventFormHead from './components/h/AddEventFormHead';
+import UpdateEventFormHead from './components/h/UpdateEventFormHead';
 
 // SOA Admin Dashboard Components
 import AdminIndex from './components/ad/AdminIndex';
@@ -127,6 +129,8 @@ function App() {
           <PrivateRoute exact path="/h/activityassessment" component={ActivityAssessment} />
           <PrivateRoute exact path="/h/calendar/:id" component={HeadEventSingle} />
           <PrivateRoute exact path="/h/calendar/listOfEvents/:dateDate" component={HeadEvents} />
+          <PrivateRoute exact path="/h/announceevent/addEvent" component={AddEventFormHead} />
+          <PrivateRoute exact path="/h/announceevent/updateEvent/:id" component={UpdateEventFormHead} />
 
           {/* Administration Page  */}
           <PrivateRoute exact path="/ad" component={AdminIndex} />

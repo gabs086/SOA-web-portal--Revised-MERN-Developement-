@@ -291,7 +291,7 @@ function AnnounceEvents(props){
                    aria-describedby="alert-dialog-slide-description"
                    >
                        <DialogTitle id="alert-dialog-slide-title">
-                           {"Approved Request Activity"}
+                           {"Delete Announcement"}
                         </DialogTitle>
 
                         <DialogContent>
@@ -339,7 +339,6 @@ function AnnounceEvents(props){
                                 <StyledTableCell align="left">Date of Event</StyledTableCell>
                                 <StyledTableCell align="left">Time of Event</StyledTableCell>
                                 <StyledTableCell align="left">Venue of the Event</StyledTableCell>
-                                <StyledTableCell align="left">Description</StyledTableCell>
                                 <StyledTableCell align="left">Announce by</StyledTableCell>
                                 <StyledTableCell align="left">Action</StyledTableCell>
 
@@ -381,7 +380,6 @@ function AnnounceEvents(props){
                                           <TableCell align="left">{moment(row.dateDate).format('MMMM D YYYY')}</TableCell>
                                           <TableCell align="left">{moment(row.date).format('LT')}</TableCell>
                                           <TableCell align="left">{row.venue}</TableCell>
-                                          <TableCell align="left">{row.description}</TableCell>
                                           <TableCell align="left">{row.setBy}</TableCell>
                                           <TableCell align="left">
 

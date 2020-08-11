@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
-import { updateAnnouncement } from '../../actions/announcementActions';
+import { addAnnouncementHead } from '../../actions/announcementActions';
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,9 +12,6 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import ViewListIcon from '@material-ui/icons/ViewList';
 
 import Container from '@material-ui/core/Container';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -27,9 +23,9 @@ import IconButton from '@material-ui/core/IconButton';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
+import { createFormData } from "./formData";
 //Admin Dashboard Component
-import DashboardAdmin from '../layouts/DashboardAdmin';
-import FormConfirmationMsg from './FormConfirmationMsg';
+import DashboardHead from '../layouts/DashboardHead';
 
 // Object Styles for the components 
 const styles = makeStyles(theme => ({
@@ -79,12 +75,13 @@ const styles = makeStyles(theme => ({
 }));
 
 
-function UpdateEventForm(props){
+function AddEventFormHead(props){
         const classes = styles();
 
         /* States*/
 
         const [values, setValues] = useState({
+            fileName: '',
             title: '',
             venue: '',
             description: '',
@@ -92,18 +89,14 @@ function UpdateEventForm(props){
 
         });
 
-        const [poster, getPoster] = useState({
-            poster: null,
-            fileName: ''
-        });
+        const [poster, setPoster] = useState('');
+        const [fileName, setFileName] = useState('');
 
          const [selectedDate, setSelectedDate] = useState(new Date());
          const [selectedTime, setSelectedTime] = useState(new Date());
 
          const [errors, getErrors] = useState({});
         
-         const [errorAll, setErrorAll] = useState(false);
-
         /* Event Handlers*/
         const handleDate = date => {
             setSelectedDate(date);
@@ -111,6 +104,12 @@ function UpdateEventForm(props){
 
         const handleTime = time => {
             setSelectedTime(time);
+        }
+
+        const getFiles = e => {
+          setPoster(e.target.files[0])
+
+          setFileName(e.target.files[0].name.toLowerCase().split(' ').join('-'));
         }
 
         const handleSubmit = e => {
@@ -122,93 +121,50 @@ function UpdateEventForm(props){
 
             const date = `${dateDate} ${dateTime}`;
 
+            const { user } = props.auth;
+
             const newAnnouncement = { 
                 ...values,
+                fileName,
                 date,
                 dateDate,
                 dateTime,
-                setBy: 'SOA Admin'
+                setBy: `SOA Head of ${user.campus}`,
+                poster
             }
 
-             const fd = new FormData();
-            fd.append('poster', poster.poster);
-            fd.append('title', values.title);
-            fd.append('venue', values.venue);
-            fd.append('description', values.description);
-            fd.append('fileName', poster.fileName);
-            fd.append('bgColor', values.bgColor);
-            fd.append('date', date);
-            fd.append('dateDate', dateDate);
-            fd.append('dateTime', dateTime);
-            fd.append('setBy', 'SOA Admin');
-
-            // console.log(newAnnouncement);
-            // console.log(_formData);
-            props.updateAnnouncement(props.match.params.id, fd);
+            const _formData = createFormData(newAnnouncement);
+            props.addAnnouncementHead(_formData);
 
         }
 
-        // Closing Event for the Error message 
-        const handleClose = (event, reason) => {
-          if (reason === 'clickaway') {
-            return;
-          }
-
-          setErrorAll(false);
-        };
-
-        useEffect(_ => {
-          axios.get(`/api/announcements/${props.match.params.id}`)
-          .then(res => {
-            setValues({
-            title: res.data.title,
-            venue: res.data.venue,
-            description: res.data.description,
-            bgColor: res.data.backgroundColor,
-            // fileName: res.data.fileName,
-            // poster: res.data.poster
-
-            });
-
-            setSelectedDate(res.data.date);
-            setSelectedTime(res.data.date);
-          }
-
-            )
-          .catch(err => err)
-        },[]);
-
         // Component Effect for a successful Adding of Announcement
         useEffect(_ => {
-           if(props.announcement.updated)
-              props.history.push('/ad/announceevent');
+           if(props.announcement.addedHead)
+              props.history.push('/h/announceevent');
 
-        },[props.announcement.updated]);
+        },[props.announcement.addedHead]);
 
         // Component Effect for the errors
         useEffect(_ => {
           if(props.errors)
               getErrors(props.errors)
-
-          if(props.errors.all)
-            setErrorAll(true)
         },[props.errors])
 
-     
+
         return (
             <div>
-                <DashboardAdmin>
-                <FormConfirmationMsg open={errorAll} onClose={handleClose} variant="error" message={errors.all}/>
+                <DashboardHead>
 
                 <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
-                    <Link color="inherit" href="/ad/announceevent" className={classes.link}>
+                    <Link color="inherit" href="/h/announceevent" className={classes.link}>
                       <ViewListIcon className={classes.icon} />
                       Menu
                     </Link>
 
                     <Link
                       color="textPrimary"
-                      href="/ad/announceevent/addevent"
+                      href="/h/announceevent/addevent"
                       aria-current="page"
                       className={classes.link}
                     >
@@ -226,7 +182,7 @@ function UpdateEventForm(props){
                                     </Typography>
                                       <br></br>
 
-                                    <form noValidate onSubmit={handleSubmit} encType="multipart/form-data">
+                                    <form noValidate onSubmit={handleSubmit} enctype="multipart/form-data" method="POST">
 
                                     <Typography variant="h6">
                                      Input the details needed.
@@ -319,19 +275,19 @@ function UpdateEventForm(props){
 
                                       */}
                                         <input
-                                        onChange={e => getPoster({...poster, poster: e.target.files[0], fileName: e.target.files[0].name})} 
+                                        onChange={getFiles} 
                                         className={classes.input} id="poster" name="poster" type="file" />
                                           <label htmlFor="poster">
                                             <IconButton color="primary" aria-label="upload picture" component="span">
                                               <CloudUploadIcon />
-                                            </IconButton> 
+                                            </IconButton>
                                          </label>
 
                                       </Grid>
 
                                       <Grid item xs={11}>
                                         <TextField 
-                                        value={poster.fileName}
+                                        value={fileName}
                                         id="input-with-icon-grid"
                                         label="Poster for the event"
                                         helperText="Note: .png and .jpg is required"
@@ -401,7 +357,7 @@ function UpdateEventForm(props){
                                 </Container>
 
                     </Paper>
-                </DashboardAdmin>
+                </DashboardHead>
             </div>
         )
     
@@ -409,9 +365,10 @@ function UpdateEventForm(props){
 
 const mapStateToProps = state => ({
   announcement: state.announcement,
+  auth: state.auth,
   errors: state.errors,
 });
 
-const mapDispatchToProps = { updateAnnouncement }; 
+const mapDispatchToProps = { addAnnouncementHead }; 
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateEventForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddEventFormHead);

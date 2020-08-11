@@ -88,7 +88,7 @@ function UpdateEventForm(props){
             title: '',
             venue: '',
             description: '',
-            bgColor:'#000000',
+            bgColor:'',
 
         });
 

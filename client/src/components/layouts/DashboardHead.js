@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
+import axios from 'axios';
 //Redux components
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
@@ -113,6 +114,7 @@ function DashboardHead(props) {
     
     const [open, setOpen] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
+    const [count, setCount] = useState(0);
 
     // Counting the notif filtered by campus in request_activities table
     // const [count, setCount] = useState(4);
@@ -152,10 +154,12 @@ function DashboardHead(props) {
 
         const { auth } = props;
 
-         props.countNotifHead(auth.user.campus);
+        axios.get(`/api/requestactivities/countheadrequest/${auth.user.campus}`)
+        .then(res => setCount(res.data.count))
+        .catch(err => console.log(err))
 
 
-    },[]);
+    },[count]);
 
 
     //Name of user
@@ -164,7 +168,6 @@ function DashboardHead(props) {
     const { requestActivities } = props;
 
     // The count for the Notifications 
-    const count = requestActivities.countNotif;
 
     return (
         <div className={classes.root}>

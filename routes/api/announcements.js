@@ -21,7 +21,7 @@ const multer = require('multer');
 const path = require('path');
 
 //The directory where the files will be stored
-const DIR = 'client/public/announcements/';
+const DIR = 'uploads/announcements/';
 
 const Announcements = require('../../models/announcements.model');
 
@@ -108,17 +108,8 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	}
 	else {
 
-	const title = req.body.title;
-	
-	const date = req.body.date;
-
-	const dateDate = req.body.dateDate;
-	const dateTime = req.body.dateTime;
-	const venue = req.body.venue;
-	const description = req.body.description;
-	const backgroundColor = req.body.bgColor;
-	const setBy = req.body.setBy;
-	const fileName = req.body.fileName;
+	const { title, date, dateDate, dateTime, backgroundColor,
+			venue, description, setBy, fileName } = req.body;
 
 	const newAnnouncements = new Announcements({
 		title,
@@ -145,6 +136,11 @@ router.post('/addEvents', upload.single('poster'), (req, res) => {
 	// console.log(newAnnouncements);
 
 });
+
+router.get("/:poster", (req,res) => {
+	const poster  = req.params.poster;
+	res.sendFile(path.join(__dirname, `./uploads/announcements/${poster}`))
+})
 
 //@route DELETE /api/announcements/deleteannouncement/:id
 //@desc Delete a data for announcement

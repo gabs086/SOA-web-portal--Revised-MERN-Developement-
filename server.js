@@ -36,7 +36,7 @@ app.use(session(sess));
 
 //Middleware
 // Added a static folder for the accessing the downloads 
-app.use('/uploads/request_activities', express.static('uploads/request_activities'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 
 
 //PORT configuration
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 5000;
 
 // APIs
 // Passport middleware

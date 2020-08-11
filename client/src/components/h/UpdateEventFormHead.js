@@ -92,7 +92,7 @@ function UpdateEventFormHead(props){
             fileName:'',
             venue: '',
             description: '',
-            bgColor:'#000000',
+            bgColor:'',
 
         });
          const [selectedDate, setSelectedDate] = useState(new Date());
@@ -185,10 +185,10 @@ function UpdateEventFormHead(props){
 
         // Component Effect for a successful Adding of Announcement
         useEffect(_ => {
-           if(props.announcement.updateHead)
+           if(props.announcement.updated)
               props.history.push('/h/announceevent');
 
-        },[props.announcement.updateHead]);
+        },[props.announcement.updated]);
 
         // Component Effect for the errors
         useEffect(_ => {

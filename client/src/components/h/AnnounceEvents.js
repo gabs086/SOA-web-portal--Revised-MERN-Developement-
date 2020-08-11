@@ -255,12 +255,12 @@ function AnnounceEvents(props){
     },[props.announcement.added]);
 
     useEffect(_ => {
-       if(props.announcement.update)
+       if(props.announcement.updated)
           setUpdate(true)
 
       setTimeout(function(){ props.updateAnnouncementFalseHead() }, 6000);
 
-    },[props.announcement.update])
+    },[props.announcement.updated])
 
     const { user } = props.auth;
 

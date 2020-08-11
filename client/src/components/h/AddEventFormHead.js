@@ -81,7 +81,6 @@ function AddEventFormHead(props){
         /* States*/
 
         const [values, setValues] = useState({
-            fileName: '',
             title: '',
             venue: '',
             description: '',
@@ -89,8 +88,10 @@ function AddEventFormHead(props){
 
         });
 
-        const [poster, setPoster] = useState('');
-        const [fileName, setFileName] = useState('');
+        const [poster, getPoster] = useState({
+            poster: null,
+            fileName: ''
+        });
 
          const [selectedDate, setSelectedDate] = useState(new Date());
          const [selectedTime, setSelectedTime] = useState(new Date());
@@ -106,12 +107,6 @@ function AddEventFormHead(props){
             setSelectedTime(time);
         }
 
-        const getFiles = e => {
-          setPoster(e.target.files[0])
-
-          setFileName(e.target.files[0].name.toLowerCase().split(' ').join('-'));
-        }
-
         const handleSubmit = e => {
             e.preventDefault();
 
@@ -123,27 +118,28 @@ function AddEventFormHead(props){
 
             const { user } = props.auth;
 
-            const newAnnouncement = { 
-                ...values,
-                fileName,
-                date,
-                dateDate,
-                dateTime,
-                setBy: `SOA Head of ${user.campus}`,
-                poster
-            }
+            let fd = new FormData();
+            fd.append('poster', poster.poster);
+            fd.append('title', values.title);
+            fd.append('venue', values.venue);
+            fd.append('description', values.description);
+            fd.append('fileName', poster.fileName);
+            fd.append('backgroundColor', values.backgroundColor);
+            fd.append('date', date);
+            fd.append('dateDate', dateDate);
+            fd.append('dateTime', dateTime);
+            fd.append('setBy', `SOA Head of ${user.campus}`);
 
-            const _formData = createFormData(newAnnouncement);
-            props.addAnnouncementHead(_formData);
+            props.addAnnouncementHead(fd);
 
         }
 
         // Component Effect for a successful Adding of Announcement
         useEffect(_ => {
-           if(props.announcement.addedHead)
+           if(props.announcement.added)
               props.history.push('/h/announceevent');
 
-        },[props.announcement.addedHead]);
+        },[props.announcement.added]);
 
         // Component Effect for the errors
         useEffect(_ => {
@@ -275,7 +271,7 @@ function AddEventFormHead(props){
 
                                       */}
                                         <input
-                                        onChange={getFiles} 
+                                        onChange={e => getPoster({...poster, poster: e.target.files[0], fileName: e.target.files[0].name.toLowerCase().split(' ').join('-')})} 
                                         className={classes.input} id="poster" name="poster" type="file" />
                                           <label htmlFor="poster">
                                             <IconButton color="primary" aria-label="upload picture" component="span">
@@ -287,7 +283,7 @@ function AddEventFormHead(props){
 
                                       <Grid item xs={11}>
                                         <TextField 
-                                        value={fileName}
+                                        value={poster.fileName}
                                         id="input-with-icon-grid"
                                         label="Poster for the event"
                                         helperText="Note: .png and .jpg is required"

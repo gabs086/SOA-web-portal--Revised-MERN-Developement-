@@ -188,7 +188,7 @@ function StudentEventSingle(props) {
                                                   />
 
                                               <CardMedia className={classes.media}>
-                                                    <img style={{height: "340px", width: "450px"}} src={`${process.env.PUBLIC_URL}/announcements/${event.fileName}`}/>
+                                                    <img style={{height: "340px", width: "450px"}} src={`${event.poster}`}/>
                                               </CardMedia>
 
                                                   <CardContent>

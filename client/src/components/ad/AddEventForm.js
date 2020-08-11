@@ -83,7 +83,7 @@ function AddEventForm(props){
             title: '',
             venue: '',
             description: '',
-            bgColor:'#000000',
+            backgroundColor:'#000000',
 
         });
 
@@ -131,7 +131,7 @@ function AddEventForm(props){
             fd.append('venue', values.venue);
             fd.append('description', values.description);
             fd.append('fileName', poster.fileName);
-            fd.append('bgColor', values.bgColor);
+            fd.append('backgroundColor', values.backgroundColor);
             fd.append('date', date);
             fd.append('dateDate', dateDate);
             fd.append('dateTime', dateTime);
@@ -336,8 +336,8 @@ function AddEventForm(props){
                                     <Grid item xs={4}>
                                             <TextField 
                                             type="color"
-                                            value={values.bgColor}
-                                            onChange={e => setValues({...values, bgColor: e.target.value})}
+                                            value={values.backgroundColor}
+                                            onChange={e => setValues({...values, backgroundColor: e.target.value})}
                                                 id="color"
                                                 name="color"
                                                 label="Choose color for the display background of the event"

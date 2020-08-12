@@ -16,6 +16,7 @@ const org = require('./routes/api/org');
 const idreplacements = require('./routes/api/idreplacements');
 const requestActivities = require('./routes/api/request_activities');
 const announcements = require('./routes/api/announcements');
+const assessments = require('./routes/api/assessments');
 
 //Router
 const app = express();
@@ -74,6 +75,7 @@ app.use("/api/orgdesc", orgdesc);
 app.use("/api/org", org);
 app.use("/api/idreplacements", idreplacements);
 app.use("/api/requestactivities", requestActivities);
-app.use("/api/announcements", announcements)
+app.use("/api/announcements", announcements);
+app.use("/api/assessments", assessments);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

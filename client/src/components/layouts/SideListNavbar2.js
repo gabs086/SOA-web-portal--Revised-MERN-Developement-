@@ -87,7 +87,7 @@ function SideListNavbar2 (props) {
                     <ListItemText primary="Activities (Request, Reports)" />
                 </ListItem>
 
-              <ListItem button component="a" href="#">
+              <ListItem button component="a" href="/org/assessment">
                         <ListItemIcon>
                                 <AssessmentIcon />
                         </ListItemIcon>

@@ -262,7 +262,7 @@ function Navbar2 (props) {
                                 Calendar
                             </Button>
                             <Button color="inherit" href="/org/activitysections">Activities (Request, Reports)</Button>
-                            <Button color="inherit">Activity Assessment</Button>
+                            <Button color="inherit" href="/org/assessment">Activity Assessment</Button>
 
                         {/* This will be the link for measuring the notifications for the request activities*/}
                             <Button color="inherit" onClick={_ => handleUpdateNotif('read')}>

@@ -138,7 +138,7 @@ function OrgIndex(props) {
                        	 </ListItemLink>   
 
                        	 	 {/* Link 3  */}
-                       	 <ListItemLink href="#">
+                       	 <ListItemLink href="/org/assessment">
                        	 	 <ListItemIcon>
                                 <AssessmentIcon />
                             </ListItemIcon>

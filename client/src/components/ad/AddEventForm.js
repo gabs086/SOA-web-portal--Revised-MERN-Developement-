@@ -155,8 +155,6 @@ function AddEventForm(props){
           if(props.errors)
               getErrors(props.errors)
         },[props.errors])
-
-        console.log(props);
      
         return (
             <div>

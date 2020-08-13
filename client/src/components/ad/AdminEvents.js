@@ -2,11 +2,10 @@ import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 
 import moment from 'moment';
-import clsx from 'clsx';
+import Paper from '@material-ui/core/Paper';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
@@ -21,12 +20,7 @@ import CardActions from '@material-ui/core/CardActions';
 
 import { red } from '@material-ui/core/colors';
 
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import WarningIcon from '@material-ui/icons/Warning';

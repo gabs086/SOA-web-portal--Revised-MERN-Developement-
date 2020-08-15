@@ -24,9 +24,8 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
+import EditIcon from '@material-ui/icons/Edit';
 
 import Navbar2 from "../layouts/Navbar2";
 import FormConfirmationMsg from './FormConfirmationMsg';
@@ -182,13 +181,17 @@ function Assessment(props) {
      		setAdded(true);
 
      	setTimeout(function(){ props.addActivityAssessmentFalse() }, 6000);
-     },[props.assessment.added])
+     },[props.assessment.added]);
 
-    const rows = activities.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
+    const { user } = props.auth;
+
+    const rows = activities.sort((a, b) => a.date > b.date ? -1 : 1)
+    			.filter(row => row.username === user.username);
 
     //Empty row that says the rows for paginationaddAnnouncementFalseHead
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+    // console.log(props);
   return (
     <div>
     	<Navbar2 />
@@ -262,13 +265,20 @@ function Assessment(props) {
                                           <TableCell align="left">
                                           {
                                           	row.status === 'pending'
-                                          }
-
-                                                <Tooltip title="Update" placement="top">
+                                          	?
+                                          		<Fragment>
+                                          			Pending... 
+                                          			 <CircularProgress color="secondary" size={20}/>
+                                          		</Fragment>
+                                          	:
+                                          	 <Tooltip title="Update" placement="top">
                                                  <IconButton href={`${row.id}`} aria-label="edit" color="primary">
                                                   <EditIcon />
                                                 </IconButton>
-                                              </Tooltip>   
+                                              </Tooltip>  
+                                          }
+
+                                                
                                               {/*
                                               <Tooltip title="Delete" placement="top">
                                                  <IconButton onClick={_ => handleDelete(row.id)} aria-label="edit" color="secondary">
@@ -326,7 +336,8 @@ function Assessment(props) {
 }
 
 const mapStateToProps = state => ({
-	assessment: state.assessment
+	assessment: state.assessment,
+	auth: state.auth,
 });
 
 const mapDispatchToProps = { addActivityAssessmentFalse };

@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { addActivityAssessmentFalse } from '../../actions/assessmentActions';
 import { connect } from 'react-redux';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
@@ -28,6 +29,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import Navbar2 from "../layouts/Navbar2";
+import FormConfirmationMsg from './FormConfirmationMsg';
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -137,6 +139,8 @@ function Assessment(props) {
     const [loading, setLoading] = useState(true);
     const [ifError, setIfError] = useState(false);
 
+    const [added, setAdded] = useState(false);  
+
     //Event Handlers
     const handleChangePage = (event, newPage) => {
            setPage(newPage);
@@ -147,6 +151,17 @@ function Assessment(props) {
          setPage(0);
      };
 
+              // Event for added state 
+    const handleClose = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setAdded(false);
+                props.addActivityAssessmentFalse();
+     };
+
+     // Component Effects 
      useEffect(_ => {
      	axios.get('/api/assessments/')
      	.then(res => {
@@ -160,7 +175,14 @@ function Assessment(props) {
 
      		}
      	})
-     },[])
+     },[]);
+
+     useEffect(_ => {
+     	if(props.assessment.added)
+     		setAdded(true);
+
+     	setTimeout(function(){ props.addActivityAssessmentFalse() }, 6000);
+     },[props.assessment.added])
 
     const rows = activities.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
 
@@ -170,6 +192,8 @@ function Assessment(props) {
   return (
     <div>
     	<Navbar2 />
+
+    		<FormConfirmationMsg open={added} onClose={handleClose} variant="success" message="Activity Assessment Added."  />
 
     		<Container style={{paddingTop: 10}}>
 
@@ -192,7 +216,7 @@ function Assessment(props) {
                             <TableHead>
                               <TableRow>
                                 <StyledTableCell>Activity Title</StyledTableCell>
-                                <StyledTableCell align="left">Date of Activityt</StyledTableCell>
+                                <StyledTableCell align="left">Date of Activity</StyledTableCell>
                                 <StyledTableCell align="left">Requirements needed</StyledTableCell>
                                 <StyledTableCell align="left">Description of the Activity</StyledTableCell>
                                 <StyledTableCell align="left">Action</StyledTableCell>
@@ -301,4 +325,10 @@ function Assessment(props) {
   )
 }
 
-export default Assessment;
+const mapStateToProps = state => ({
+	assessment: state.assessment
+});
+
+const mapDispatchToProps = { addActivityAssessmentFalse };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Assessment);

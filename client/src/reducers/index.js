@@ -9,6 +9,7 @@ import orgReducer from './orgReducer';
 import idreplacementReducer from './idreplacementReducer';
 import requestActivitiesReducer from './requestActivitiesReducer';
 import announcementReducer from './announcementReducer';
+import assessmentsReducer from './assessmentsReducer';
 
 export default combineReducers({
     auth: authReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
     org: orgReducer,
     idreplacement: idreplacementReducer,
     requestActivities: requestActivitiesReducer,
-    announcement: announcementReducer
+    announcement: announcementReducer,
+    assessment: assessmentsReducer
 });

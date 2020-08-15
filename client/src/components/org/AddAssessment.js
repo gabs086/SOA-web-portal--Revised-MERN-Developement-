@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { addActivityAssessment } from '../../actions/assessmentActions';
 import { connect } from 'react-redux';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
@@ -20,6 +21,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker, KeyboardTimePicker,} from '@material-ui/pickers';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 import Navbar2 from "../layouts/Navbar2";
 
@@ -78,7 +80,9 @@ function AddAssessment(props){
  		description: ''
  	});
 
+ 	const [createdBy, getCreatedBy] = useState('');
  	const [selectedDate, setSelectedDate] = useState(new Date());
+ 	const [selectedTime, setSelectedTime] = useState(new Date());
 
  	/*Event Handlers*/
 
@@ -86,10 +90,48 @@ function AddAssessment(props){
         setSelectedDate(date);
      }
 
+     const handleTime = time => {
+         setSelectedTime(time);
+      }
 
  	const handleSubmit = e => {
  		e.preventDefault();
+
+ 		const { user } = props.auth;
+
+ 		const dateDate = moment(selectedDate).format('YYYY-MM-DD');
+        const dateTime = moment(selectedTime).format('HH:mm:ss'); 
+ 	
+        const date = `${dateDate} ${dateTime}`;
+
+ 		const newAssessment = {
+ 			...values,
+ 			date,
+ 			createdBy,
+ 			campus: user.campus,
+ 			username: user.username
+ 		}
+
+ 		// console.log(newAssessment);
+ 		props.addActivityAssessment(newAssessment);
  	}
+
+ 	  // Component Effects 
+	useEffect(_ => {
+		const { auth } = props;
+
+          axios.get('/api/org/getorgaccnts')
+        .then(res => {
+          res.data.filter(org => auth.user.username === org.username)
+          .map(org => getCreatedBy(org.orgname))
+        })
+        .catch(err => err)
+	},[]);
+
+	useEffect(_ => {
+		if(props.assessment.added)
+			props.history.push('/org/assessment')
+	},[props.assessment.added]);
 
  	useEffect( _ => {
       if(props.errors){
@@ -99,6 +141,8 @@ function AddAssessment(props){
 
  	const { user } = props.auth;
 
+ 	// console.log(props);
+
   return (
     <div>
     	<Navbar2 />
@@ -106,7 +150,7 @@ function AddAssessment(props){
     	<Container style={{paddingTop: 10}}>
 
     	 <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
-                        <Link color="inherit" href="#" className={classes.link}>
+                        <Link color="inherit" href="/org/assessment" className={classes.link}>
                           <AssessmentIcon className={classes.icon} />
                           Calendar
                         </Link>
@@ -134,7 +178,7 @@ function AddAssessment(props){
                         </Typography>
                         <br></br>
 
-                        <form noValidate>
+                        <form noValidate onSubmit={handleSubmit}>
 
 								<Grid item xs={12}>
                                     <TextField 
@@ -148,8 +192,13 @@ function AddAssessment(props){
                                             />
                                 </Grid>
                                 <br />
+                             <span style={{ color: "red" }}>
+                                {errors.activity}
+                            </span>
 
-					<Grid item xs={12}>
+                    	<Grid container spacing={3}>
+
+					<Grid item xs={6}>
                         <FormControl fullWidth className={classes.formControl}>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                         <KeyboardDatePicker
@@ -168,7 +217,31 @@ function AddAssessment(props){
                                     </MuiPickersUtilsProvider>
                              </FormControl>
                      </Grid>
-                     <br />
+
+                      <Grid item xs={6}>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                    <KeyboardTimePicker
+                                                     format= "hh:mm a"
+                                                      value={selectedTime}
+                                                      onChange={handleTime}
+                                                      margin="normal"
+                                                      id="time-picker"
+                                                      label="Time picker"
+                                                      KeyboardButtonProps={{
+                                                        'aria-label': 'change time',
+                                                      }}
+                                                      keyboardIcon={<AccessTimeIcon />}
+                                                    />
+                                                </MuiPickersUtilsProvider>
+                                            </FormControl>
+                                         </Grid>
+                                         <br/>
+                        </Grid>
+
+                      <span style={{ color: "red" }}>
+                                {errors.date}
+                            </span>
 
                      	<Grid item xs={12}>
                                     <TextField 
@@ -185,6 +258,9 @@ function AddAssessment(props){
                                             />
                                 </Grid>
                                 <br />
+                              <span style={{ color: "red" }}>
+                                {errors.activityRequirements}
+                            </span>
 
                          <Grid item xs={12}>
                                      <TextField
@@ -216,6 +292,9 @@ function AddAssessment(props){
                                             />
                                 </Grid>
                                 <br />
+                              <span style={{ color: "red" }}>
+                                {errors.description}
+                            </span>
 
 				 			<Typography variant="body2" color="textPrimary" component="p">
 				                  *** Please double check anything before passing it as a activity
@@ -246,8 +325,11 @@ function AddAssessment(props){
 }
 
 const mapStateToProps = state => ({
+	assessment: state.assessment,
 	auth: state.auth,
 	errors: state.errors
 });
 
-export default connect(mapStateToProps)(AddAssessment);
+const mapDispatchToProps = { addActivityAssessment };
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddAssessment);

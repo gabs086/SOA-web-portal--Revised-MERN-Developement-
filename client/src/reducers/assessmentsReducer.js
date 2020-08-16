@@ -5,14 +5,18 @@ import {
 	UPDATE_ASSESSMENT_ACTIVITY,
 	UPDATE_ASSESSMENT_ACTIVITY_FALSE,
 
-	GET_ASSESSMENT_ACTIVITY,
+	SET_ASSESSMENT_APPROVED,
+	SET_ASSESSMENT_APPROVED_FALSE,
 
-	ASSESSMENT_LOADING
+	SET_ASSESSMENT_DECLINED,
+	SET_ASSESSMENT_DECLINED_FALSE
 } from '../actions/types';
 
 const initialState = {
 	added: false,
 	updated: false,
+	approved: false,
+	declined: false
 };
 
 export default function (state = initialState, action) {
@@ -26,6 +30,27 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				added: false
+			}
+
+		case SET_ASSESSMENT_APPROVED:
+			return {
+				...state,
+				approved: true
+			}
+		case SET_ASSESSMENT_APPROVED_FALSE:
+			return {
+				...state,
+				approved: false
+			}
+		case SET_ASSESSMENT_DECLINED:
+			return {
+				...state,
+				declined: true
+			}
+		case SET_ASSESSMENT_DECLINED_FALSE:
+			return {
+				...state,
+				declined: false
 			}
 
 		default:

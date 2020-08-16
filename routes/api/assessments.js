@@ -8,6 +8,7 @@ const express = require('express');
 const router = express.Router();
 
 const Assessments = require('../../models/assessments.model');
+const Notifications = require('../../models/notifications.model');
 
 const validateAssessment = require('../../validation/assessments');
 
@@ -78,6 +79,70 @@ router.post('/addActivity', (req, res) => {
 	}))
 	.catch(err => res.status(500).json(err));
 
+});
+
+//@route /api/assessments/setAsApproved/:id
+//@desc set a activity report as approved
+//@access SOA Head only
+router.post('/setAsApproved/:id',  (req, res) => {
+	const id = req.params.id;
+
+	Assessments.findByPk(id)
+	.then(response => {
+		response.status = req.body.status;
+
+		response.save()
+		.then(data => res.json({
+			message:'activity Approved',
+			datas: {data}
+		}))
+		.catch(err => res.status(500).json(err));
+	})
+	.catch(err => res.status(500).json(err));
+});
+
+//@route /api/assessments/setAsDeclined/:id
+//@desc set a activity assessment to declined
+//@access SOA head only
+router.post('/setAsDeclined/:id', (req, res) => {
+	const id = req.params.id;
+
+	Assessments.findByPk(id)
+	.then(response => {
+		response.status = req.body.status;
+
+		response.save()
+		.then(data => res.json({
+			message:'activity Declined',
+			datas: {data}
+		}))
+		.catch(err => res.status(500).json(err));
+	})
+	.catch(err => res.status(500).json(err));
+
+});
+
+//@route /api/assessments/activityAssessment/notif
+//@desc send a notification to an organization about the status of their to be implemented activity
+//@access SOA Head only
+router.post('/activityAssessment/notif', (req, res) => {
+		// Getting the body for the notifications 
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+
+		// Saving message for notification
+	const newNotification = new Notifications({
+		username,
+		orgname,
+		notification
+	});
+
+	newNotification.save()
+	.then(_ => {
+		res.json('Notification Sent')
+	})
+	.catch(err => res.status(500).json(err));
 });
 
 module.exports = router;

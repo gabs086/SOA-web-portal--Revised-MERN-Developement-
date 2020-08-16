@@ -271,11 +271,21 @@ function Assessment(props) {
                                           			 <CircularProgress color="secondary" size={20}/>
                                           		</Fragment>
                                           	:
-                                          	 <Tooltip title="Update" placement="top">
-                                                 <IconButton href={`${row.id}`} aria-label="edit" color="primary">
-                                                  <EditIcon />
-                                                </IconButton>
-                                              </Tooltip>  
+                                          	<Fragment>
+                                          		{
+                                          			row.status === 'approved'
+                                          			?
+                                          			<a>
+                                          				Check students who joined...
+                                          			</a>
+                                          			:
+                                          			<Fragment>
+                                                    	Your activity is declined for implementation,
+                                                    	maybe change the prequisites or the date of the 
+                                                    	activity. <a>Edit Assessment</a>
+                                                	</Fragment>
+                                          		}
+                                          	</Fragment>
                                           }
 
                                                 

@@ -204,10 +204,10 @@ class Navbar extends Component {
                             <Button
                                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                                 aria-haspopup="true"
-                                onClick={this.handleActivityOpen}
+                                // onClick={this.handleActivityOpen}
                                 color="inherit"
                             >Activities
-                            <ArrowDropDownIcon />
+                            {/*<ArrowDropDownIcon />*/}
                             </Button>
                             <Button
                                 color="inherit"

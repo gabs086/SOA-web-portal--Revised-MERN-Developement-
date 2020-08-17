@@ -83,15 +83,20 @@ class SideListNavbar extends Component {
               <Divider />
          
               <List>
-              <ListItem button onClick={handleClick}>
+              {/*<ListItem button onClick={handleClick}>*/}
+              <ListItem button>
+
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
                         <ListItemText primary="Activities" />
                         </ListItem>
 
-                        {/* Static List for the Activities Will be update to dynamic list   */}
-                        <Collapse in={open} timeout="auto" unmountOnExit>
+                        {/* Static List for the Activities Will be update to dynamic list 
+                            Removing this feature
+                          */}
+                        
+                        {/*<Collapse in={open} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
                             <ListItem button className={classes.nested}>
                             <ListItemIcon>
@@ -100,7 +105,7 @@ class SideListNavbar extends Component {
                             <ListItemText primary="Sample" />
                             </ListItem>
                         </List>
-                        </Collapse>
+                        </Collapse>*/}
 
               </List>
               

@@ -1,8 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { setAsApproved, setAsApprovedFalse, setAsDeclined, setAsDeclinedFalse } from '../../actions/assessmentActions';
+import { setAsApproved, setAsApprovedFalse, setAsDeclined, setAsDeclinedFalse,
+        setAgainToPending, setAgainToPendingFalse } from '../../actions/assessmentActions';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -157,12 +159,16 @@ function ActivityAssessment(props){
     const [username, setUserName] = useState('');
     const [orgname, setOrgName] = useState('');
     const [notification, setNotif] = useState('');
+    const [reason, setReason] = useState('');
 
     const [approvedModal, openApprovedModal] = useState(false);
     const [declinedModal, openDeclinedModal] = useState(false);
+    const [pendingModal, openPendingModal] = useState(false);
 
     //Confimation States
     const [approve, setApprove] = useState(false);
+    const [declined, setDeclined] = useState(false);
+    const [pending, setPending] = useState(false);
 
         //Event Handlers
     const handleChangePage = (event, newPage) => {
@@ -186,6 +192,28 @@ function ActivityAssessment(props){
     const handleApprovedModalClose = _ =>  {
           openApprovedModal(false);
     }
+    const handleDeclined = (id, username, orgname, notif) => {
+        setId(id);
+        setUserName(username);
+        setOrgName(orgname);
+        setNotif(notif);
+
+        openDeclinedModal(true);
+    }
+    const handleDeclinedModalClose = _ => {
+        openDeclinedModal(false);
+    }
+    const handlePending = (id, username, orgname, notif) => {
+        setId(id);
+        setUserName(username);
+        setOrgName(orgname);
+        setNotif(notif);
+
+        openPendingModal(true);
+    }
+    const handlePendingModalClose = _ => {
+        openPendingModal(false);
+    }
 
     // Event for closing approved confimation msg
     const handleCloseApproved = (event, reason) => {
@@ -196,7 +224,22 @@ function ActivityAssessment(props){
                 setApprove(false);
                 props.setAsApprovedFalse();
           };
+    const handleClosedDeclined = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
 
+                setDeclined(false);
+                props.setAsDeclinedFalse();
+          };
+    const handleClosedPending = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setPending(false);
+                props.setAgainToPendingFalse();
+          };
 
     //Final Confirmation Event
     const approvedFinal = _ => {
@@ -214,6 +257,38 @@ function ActivityAssessment(props){
         props.setAsApproved(id, approvedBody, notifBody);
         openApprovedModal(false);
     }
+    const declinedFinal = _ => {
+        const declinedBody = {
+          status: 'declined'
+        }
+
+        const notifBody = {
+          username,
+          orgname,
+          notification: `Your activity ${notification} has been declined.`,
+          reason,
+        }
+
+        // props.setDeclinedHead(id, declinedBody, notifBody);
+        openDeclinedModal(false);
+        // console.log(id, declinedBody, notifBody);
+        props.setAsDeclined(id, declinedBody, notifBody);
+      }
+    const pendingFinal = _ => {
+         const pendingBody = {
+          status: 'pending'
+        }
+
+        const notifBody = {
+          username,
+          orgname,
+          notification: `Your activity ${notification} has been undo it's status.`,
+        }
+
+        openPendingModal(false);
+        // console.log(id, pendingBody, notifBody);
+        props.setAgainToPending(id, pendingBody, notifBody);
+    }
 
        // Component Effects 
      useEffect(_ => {
@@ -229,7 +304,7 @@ function ActivityAssessment(props){
 
             }
         })
-     },[props.assessment.approved]);
+     },[props.assessment.approved, props.assessment.declined, props.assessment.pendingAgain]);
 
      //Effects in Confirmations
      useEffect(_ => {
@@ -238,6 +313,20 @@ function ActivityAssessment(props){
 
       setTimeout(function(){ props.setAsApprovedFalse() }, 6000);
      },[props.assessment.approved]);
+
+      useEffect(_ => {
+        if(props.assessment.declined)
+            setDeclined(true)
+
+      setTimeout(function(){ props.setAsApprovedFalse() }, 6000);
+     },[props.assessment.declined]);
+
+    useEffect(_ => {
+        if(props.assessment.pendingAgain)
+            setPending(true)
+
+        setTimeout(function(){ props.setAgainToPendingFalse() }, 6000);
+    },[props.assessment.pendingAgain])
 
     const { user } = props.auth;
 
@@ -254,6 +343,8 @@ function ActivityAssessment(props){
                 <DashBoardHead>
 
                 <FormConfirmationMsg open={approve} onClose={handleCloseApproved} variant="success" message="Activity Accepted."  />
+                <FormConfirmationMsg open={declined} onClose={handleClosedDeclined} variant="success" message="Activity Declined."  />
+                <FormConfirmationMsg open={pending} onClose={handleClosedPending} variant="info" message="Activity Undo."  />
 
 
                 {/* For Approved Modal */}
@@ -267,7 +358,7 @@ function ActivityAssessment(props){
                    aria-describedby="alert-dialog-slide-description"
                    >
                        <DialogTitle id="alert-dialog-slide-title">
-                           {"Approved Request Activity"}
+                           {"Approved Activity Assessment"}
                         </DialogTitle>
 
                         <DialogContent>
@@ -286,6 +377,76 @@ function ActivityAssessment(props){
                             </Button>
                           </DialogActions>
                    </Dialog>
+
+                    {/* For Declined Modal */}
+                      <Dialog
+                       open={declinedModal}
+                       TransitionComponent={Transition}
+                       keepMounted
+                       onClose={handleDeclinedModalClose}
+                       aria-labelledby="alert-dialog-slide-title"
+                       aria-describedby="alert-dialog-slide-description"
+                       >
+                           <DialogTitle id="alert-dialog-slide-title">
+                               {"Declined Activity"}
+                            </DialogTitle>
+
+                            <DialogContent>
+
+                              <DialogContentText id="alert-dialog-slide-description">
+                                  Are you sure to decline this activity assessment? Tell the reason why?
+                                  </DialogContentText>
+                                    <TextField
+                                    onChange={e => setReason(e.target.value)}
+                                    autoFocus
+                                    margin="dense"
+                                    id="reason"
+                                    label="Reason"
+                                    type="text"
+                                    fullWidth
+                                  />
+                              </DialogContent>  
+
+                              <DialogActions>
+                                <Button onClick={declinedFinal} variant="outlined" color="primary">
+                                  Yes
+                                </Button>
+                                <Button onClick={handleDeclinedModalClose} variant="outlined" color="secondary">
+                                  No
+                                </Button>
+                              </DialogActions>
+                       </Dialog>
+
+                    {/* For Pending Modal */}
+                      <Dialog
+                           open={pendingModal}
+                           TransitionComponent={Transition}
+                           keepMounted
+                           onClose={handlePendingModalClose}
+                           aria-labelledby="alert-dialog-slide-title"
+                           aria-describedby="alert-dialog-slide-description"
+                           >
+                               <DialogTitle id="alert-dialog-slide-title">
+                                   {"Undo Activity Assessment"}
+                                </DialogTitle>
+
+                                <DialogContent>
+
+                                  <DialogContentText id="alert-dialog-slide-description">
+                                      Your about to undo a activity assessment by an organization.
+                                      Are you sure about this?
+                                      </DialogContentText>
+                                  </DialogContent>  
+
+                                  <DialogActions>
+                                    <Button onClick={pendingFinal} variant="outlined" color="primary">
+                                      Yes
+                                    </Button>
+                                    <Button onClick={handlePendingModalClose} variant="outlined" color="secondary">
+                                      No
+                                    </Button>
+                                  </DialogActions>
+                           </Dialog>
 
                      <Paper className={classes.root}>
                             
@@ -353,42 +514,55 @@ function ActivityAssessment(props){
                                               </Tooltip> 
                                               |
                                               <Tooltip title="Decline" placement="top">
-                                                 <IconButton href={`${row.id}`} aria-label="edit" color="secondary">
+                                                 <IconButton onClick={_ => handleDeclined(row.id, row.username, row.createdBy, row.activity)} aria-label="edit" color="secondary">
                                                   <CancelIcon />
                                                 </IconButton>
                                               </Tooltip> 
 
                                               </Fragment>
                                             :
-                                                <Fragment>
+                                            <Fragment>
                                                 {
-                                                    row.status === 'approved'
+                                                    row.status === 'finished'
                                                     ?
-                                                    <a>
-                                                        Check students who joined...
-                                                    </a>
+                                                    <span>
+                                                        This activity is already finished
+                                                    </span>
                                                     :
-                                                    <Fragment>
-                                                        You declined this activity,
-                                                        Change your mind? Click the icon.
-                                                     
-                                                    <IconButton href={`${row.id}`} aria-label="edit" color="primary">
-                                                      <UndoIcon />
-                                                    </IconButton>
-                                                     
-                                                    </Fragment>
+                                                                 <Fragment>
+                                                                    {
+                                                                row.status === 'approved'
+                                                                ?
+                                                                <Fragment>
+                                                                <Link>
+                                                                    Check students who joined...
+                                                                </Link>
+                                                                <br />
+                                                                     Change your mind? Click the icon.
+                                                                 
+                                                                <IconButton onClick={_ => handlePending(row.id, row.username, row.createdBy, row.activity)} aria-label="edit" color="primary">
+                                                                  <UndoIcon />
+                                                                </IconButton>
+
+                                                                </Fragment>
+                                                                :
+                                                                <Fragment>
+                                                                    You declined this activity,
+                                                                    Change your mind? Click the icon.
+                                                                 
+                                                                <IconButton onClick={_ => handlePending(row.id, row.username, row.createdBy, row.activity)} aria-label="edit" color="primary">
+                                                                  <UndoIcon />
+                                                                </IconButton>
+                                                                 
+                                                                </Fragment>
+                                                            }
+                                                            </Fragment>
+
                                                 }
-                                                </Fragment>
+                                            </Fragment>
+                                               
                                           }
 
-                                                
-                                              {/*
-                                              <Tooltip title="Delete" placement="top">
-                                                 <IconButton onClick={_ => handleDelete(row.id)} aria-label="edit" color="secondary">
-                                                  <DeleteIcon />
-                                                </IconButton>
-                                              </Tooltip>   
-                                               */ }
                                           </TableCell>
                                         </TableRow>
                                       ))
@@ -441,6 +615,6 @@ const mapStateToProps = state => ({
     auth: state.auth,
 });
 
-const mapDispatchToProp = { setAsApproved, setAsApprovedFalse, setAsDeclined, setAsDeclinedFalse };
+const mapDispatchToProp = { setAsApproved, setAsApprovedFalse, setAsDeclined, setAsDeclinedFalse, setAgainToPending, setAgainToPendingFalse };
 
 export default connect(mapStateToProps, mapDispatchToProp)(ActivityAssessment);

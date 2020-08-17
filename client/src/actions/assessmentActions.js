@@ -13,6 +13,9 @@ import {
 	SET_ASSESSMENT_DECLINED,
 	SET_ASSESSMENT_DECLINED_FALSE,
 
+	SET_ASSESSMENT_PENDING,
+	SET_ASSESSMENT_PENDING_FALSE,
+
 	GET_ERRORS,
 } from './types';
 
@@ -50,14 +53,34 @@ export const setAsApprovedFalse = _ => {
 	return { type: SET_ASSESSMENT_APPROVED_FALSE }
 }
 
-export const setAsDeclined = (id, data) => dispatch => {
+export const setAsDeclined = (id, data, notif) => dispatch => {
 	axios.post(`/api/assessments/setAsDeclined/${id}`, data)
 	.then(res => dispatch({
 		type: SET_ASSESSMENT_DECLINED
 	}))
 	.catch(err => console.log(err))
+
+	axios.post('/api/assessments/activityAssessmentDeclined/notif', notif)
+	.then(res => res)
+	.catch(err => err);
 }
 
 export const setAsDeclinedFalse = _ => {
+	return { type: SET_ASSESSMENT_DECLINED_FALSE }
+}
+
+export const setAgainToPending = (id, data, notif) => dispatch => {
+	axios.post(`/api/assessments/setAgainToPending/${id}`, data)
+	.then(res => dispatch({
+		type: SET_ASSESSMENT_PENDING
+	}))
+	.catch(err => console.log(err));
+
+	axios.post('/api/assessments/activityAssessment/notif', notif)
+	.then(res => res)
+	.catch(err => err);
+}
+
+export const setAgainToPendingFalse = _ => {
 	return { type: SET_ASSESSMENT_DECLINED_FALSE }
 }

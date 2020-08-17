@@ -111,6 +111,7 @@ router.post('/setAsDeclined/:id', (req, res) => {
 	.then(response => {
 		response.status = req.body.status;
 
+
 		response.save()
 		.then(data => res.json({
 			message:'activity Declined',
@@ -143,6 +144,54 @@ router.post('/activityAssessment/notif', (req, res) => {
 		res.json('Notification Sent')
 	})
 	.catch(err => res.status(500).json(err));
+});
+
+
+//@route /api/assessments/activityAssessmentDeclined/notif
+//@desc send a notification to an organization about the status of their to be implemented activity with a reason
+//@access SOA Head only
+router.post('/activityAssessmentDeclined/notif', (req, res) => {
+		// Getting the body for the notifications 
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+	const reason = req.body.reason
+
+		// Saving message for notification
+	const newNotification = new Notifications({
+		username,
+		orgname,
+		notification,
+		reason
+	});
+
+	newNotification.save()
+	.then(_ => {
+		res.json('Notification Sent')
+	})
+	.catch(err => res.status(500).json(err));
+});
+
+//@route /api/asssessments/setAgainToPending/:id
+//@desc set again a activity to pending
+//@access SOA Head only
+router.post('/setAgainToPending/:id', (req, res) => {
+	const id = req.params.id;
+
+	Assessments.findByPk(id)
+	.then(response => {
+		response.status = req.body.status;
+
+
+		response.save()
+		.then(data => res.json({
+			message:'activity Declined',
+			datas: {data}
+		}))
+		.catch(err => res.status(500).json(err));
+	})
+	.catch(err => res.status(500).json(err));
+
 });
 
 module.exports = router;

@@ -16,6 +16,9 @@ import {
 	SET_ASSESSMENT_PENDING,
 	SET_ASSESSMENT_PENDING_FALSE,
 
+	GET_ASSESSMENT_ACTIVITIES,
+	ASSESSMENT_LOADING,
+
 	GET_ERRORS,
 } from './types';
 
@@ -84,3 +87,5 @@ export const setAgainToPending = (id, data, notif) => dispatch => {
 export const setAgainToPendingFalse = _ => {
 	return { type: SET_ASSESSMENT_DECLINED_FALSE }
 }
+
+

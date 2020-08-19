@@ -17,6 +17,8 @@ import FoundTable from './components/st/FoundTable';
 import StudentCalendar from './components/st/StudentCalendar';
 import StudentEventSingle from './components/st/StudentEventSingle';
 import StudentEvents from './components/st/StudentEvents';
+import Activities from './components/st/Activities';
+import JoinActivity from './components/st/JoinActivity';
 
 // Student Organization Dashboard Components
 import OrgIndex from './components/org/OrgIndex';
@@ -106,9 +108,11 @@ function App() {
           <PrivateRoute exact path="/st/lostandfoundpage/reportlostitem" component={LostItemForm} />
           <PrivateRoute exact path="/st/lostandfoundpage/reportslist" component={LostItemReports} />
           <PrivateRoute exact path="/st/lostandfoundpage/foundreportslist" component={FoundTable} />
-          <PrivateRoute exact path="/st/lostandfoundpage/events" component={StudentCalendar} />
-          <PrivateRoute exact path="/st/lostandfoundpage/events/:id" component={StudentEventSingle} />
-          <PrivateRoute exact path="/st/lostandfoundpage/listOfEvents/:dateDate" component={StudentEvents} />
+          <PrivateRoute exact path="/st/events" component={StudentCalendar} />
+          <PrivateRoute exact path="/st/events/:id" component={StudentEventSingle} />
+          <PrivateRoute exact path="/st/listOfEvents/:dateDate" component={StudentEvents} />
+          <PrivateRoute exact path="/st/activities" component={Activities} />
+          <PrivateRoute exact path="/st/activities/:id/:activity" component={JoinActivity} />
 
           {/* Student Organization Route Pages  */}
           <PrivateRoute exact path="/org" component={OrgIndex} />

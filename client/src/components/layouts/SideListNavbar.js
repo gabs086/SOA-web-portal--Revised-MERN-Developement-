@@ -71,12 +71,12 @@ class SideListNavbar extends Component {
                 </ListItem>
 
                 {/* Calendar of Events components  */}
-                <ListItem button component="a" href="#">
+                <ListItem button component="a" href="/st/lostandfoundpage/events">
                     <ListItemIcon>
                         <EventIcon />
                     </ListItemIcon>
                     <ListItemText primary="Events" />
-                </ListItem>
+                </ListItem> 
 
               </List>
 
@@ -84,7 +84,7 @@ class SideListNavbar extends Component {
          
               <List>
               {/*<ListItem button onClick={handleClick}>*/}
-              <ListItem button>
+              <ListItem button component="a" href="/st/activities">
 
                         <ListItemIcon>
                             <InboxIcon />

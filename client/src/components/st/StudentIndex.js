@@ -72,16 +72,16 @@ class StudentIndex extends Component {
                             <ListItemText primary="File Reports for Lost and Found Items" />
                             </ListItemLink>
 
-                            {/* L ist 2  */}
+                            {/* L ist 2  
                         <ListItem button>
                             <ListItemIcon>
                                 <ViewHeadlineIcon />
                             </ListItemIcon>
                             <ListItemText primary="View BatStateU Organizational Reports" />
                             </ListItem>
-                    
+                    */}
 
-                        <ListItemLink href="/st/lostandfoundpage/events">
+                        <ListItemLink href="/st/events">
                         <ListItemIcon>
                                 <EventIcon />
                             </ListItemIcon>

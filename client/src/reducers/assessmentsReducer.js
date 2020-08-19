@@ -12,7 +12,7 @@ import {
 	SET_ASSESSMENT_DECLINED_FALSE,
 
 	SET_ASSESSMENT_PENDING,
-	SET_ASSESSMENT_PENDING_FALSE
+	SET_ASSESSMENT_PENDING_FALSE,
 
 } from '../actions/types';
 
@@ -24,6 +24,9 @@ const initialState = {
 	declined: false,
 
 	pendingAgain: false,
+
+	records : [],
+	loading: false
 };
 
 export default function (state = initialState, action) {
@@ -70,7 +73,6 @@ export default function (state = initialState, action) {
 				...state,
 				pendingAgain:false
 			}
-
 		default:
 			return state
 	}

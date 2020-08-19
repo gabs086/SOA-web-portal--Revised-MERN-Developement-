@@ -98,7 +98,7 @@ function StudentEventSingle(props) {
 				  <Container style={{paddingTop: 20}}>
 
 					<Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
-				        <Link color="inherit" href="/st/lostandfoundpage/events" className={classes.link}>
+				        <Link color="inherit" href="/st/events" className={classes.link}>
 				          <DateRangeIcon className={classes.icon} />
 				          Calendar
 				        </Link>

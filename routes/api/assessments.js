@@ -194,4 +194,26 @@ router.post('/setAgainToPending/:id', (req, res) => {
 
 });
 
+//@route  GET /api/assessments/getAssessments/:id/:activity
+//@DESC Fetch the data in the assessments table by id and activity parameter
+//@access updated later
+router.get('/getAssessments/:id/:activity', (req, res) => {
+	const { id, activity } = req.params;
+
+	// find a common activity assessment
+	Assessments.findOne({
+		where : {
+			id: id,
+			activity: activity
+		}
+	})
+	.then(response => {
+		res.json(response)
+	})
+	.catch(err => res.status(500).json(err));
+
+
+
+});
+
 module.exports = router;

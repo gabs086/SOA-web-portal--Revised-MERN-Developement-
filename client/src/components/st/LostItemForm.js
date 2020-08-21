@@ -155,7 +155,7 @@ class LostItemForm extends Component {
         const newLostReport = {
             name, src, yr, campus, department, course, details, contact
         };
-        // Action for form submittion
+        // Action for form submittionimport Select from '@material-ui/core/Select';
         this.props.addLostReport(newLostReport);
     }
 

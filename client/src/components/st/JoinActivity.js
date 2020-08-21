@@ -76,14 +76,26 @@ function JoinActivity(props) {
 
 	//Body State
 	const [values, setValues] = useState({
+		activityId: null,
+		activityTitle: '',
+		campus: '',
+		studentName: '',
+		srCode: '',
+		campus: '',
 		department: '',
-		yr: ''
+		yr: '',
+		section: '',
+		contactNumber: ''
 	})
 
 	//Event Handlers
 	const fetchAssessments = _ => {
 		axios.get(`/api/assessments/getAssessments/${props.match.params.id}/${props.match.params.activity}`)
-		.then(res => getActivity(res.data))
+		.then(res => {
+			// getActivity(res.data);
+			setValues({...values, activityTitle: res.data.activity, 
+				campus: res.data.campus, activityId: res.data.id})
+		})
 		.catch(err => console.log(err));
 	}
 
@@ -96,13 +108,19 @@ function JoinActivity(props) {
 		.catch(err => console.log(err));
 	}
 
+	const handleSubmit = e => {
+		e.preventDefault();
+
+		console.log(values);
+	}
+
 	//Component Effect
 	useEffect(_ => {
 		fetchAssessments();
 		fetchDepartments();
 	},[]);
 
-	console.log(activity);
+	// console.log(values);
 
 	return (
 		<div>
@@ -138,14 +156,15 @@ function JoinActivity(props) {
 											  </Typography>
 											   <br></br>
 
-											   <form noValidate>
+											   <form noValidate onSubmit={handleSubmit}>
 
 														<Grid container spacing={3}>
 
 															<Grid item xs={6}>
    																<TextField 
-						                                        id="activity"
-						                                        name="activity"
+   																value={values.activityTitle}
+						                                        id="activityTitle"
+						                                        name="activityTitle"
 						                                        label="Activity Name"
 						                                        fullWidth
 						                                        InputProps={{
@@ -156,6 +175,7 @@ function JoinActivity(props) {
 
 															<Grid item xs={6}>
 																	<TextField 
+																	value={values.campus}
 						                                        id="campus"
 						                                        name="campus"
 						                                        label="What Campus"
@@ -173,6 +193,8 @@ function JoinActivity(props) {
 
 											   				<Grid item xs={12}>
 																<TextField 
+																value={values.studentName}
+																onChange={e => setValues({...values, studentName: e.target.value})}
 						                                        id="studentName"
 						                                        name="studentName"
 						                                        label="Enter your full name"
@@ -184,6 +206,8 @@ function JoinActivity(props) {
 
 														<Grid item xs={12}>
 																<TextField 
+																value={values.srCode}
+																onChange={e => setValues({...values, srCode: e.target.value})}
 						                                        id="srCode"
 						                                        name="srCode"
 						                                        label="SR-Code"
@@ -249,6 +273,8 @@ function JoinActivity(props) {
 
 														<Grid item xs={6}>
 																<TextField 
+																value={values.section}
+																onChange={e => setValues({...values, section: e.target.value})}
 						                                        id="section"
 						                                        name="section"
 						                                        label="Section"
@@ -264,6 +290,8 @@ function JoinActivity(props) {
 
 											<Grid item xs={12}>
 													<TextField 
+														value={values.contactNumber}
+														onChange={e => setValues({...values, contactNumber: e.target.value})}
 						                                id="contactNumber"
 						                                name="contactNumber"
 						                                label="Contact Number"

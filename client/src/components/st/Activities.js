@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState} from 'react';
 import { connect } from "react-redux";
+import { registerStudentFalse } from '../../actions/registeredStudentsActions';
 import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +20,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Navbar from "../layouts/Navbar";
 
@@ -70,7 +77,14 @@ function Activities(props) {
       const [searchCampus, setSearchCampus] = useState('');
       const [searchAct, setSearchAct] = useState('');
 
+    //Confirmation state
+    const [openConfirmation, setOpenConfirmation] = useState(false);
+
 	//Event Handlers
+  const handleClose = _ => {
+    props.registerStudentFalse();
+    setOpenConfirmation(false);
+  }
 
 	//Component Effect
 	useEffect(_ => {
@@ -83,24 +97,29 @@ function Activities(props) {
 			if(err)
 				setIfError(true)
 		})
-	},[]);
+	},[props.registeredStudents.registered]);
 
 	 useEffect( _ => {
 
-            const id = setInterval( _ => {
+            // const id = setInterval( _ => {
                 (async _ => {
                     const res = await axios.get('/api/campuses');
                     getCampuses(res.data);
                     setLoadingCampuses(false)
                 })();
-            }, 2000)
+            // }, 2000)
 
-            return _ => {
-                clearInterval(id);
-            }
+            // return _ => {
+                // clearInterval(id);
+            // }
 
         },[]);
 
+   useEffect(_ => {
+      if(props.registeredStudents.registered)
+          setOpenConfirmation(true)
+
+   },[props.registeredStudents.registered])
 
 	const rows =  records.filter(row => row.status === 'approved')
 	// console.log(rows);
@@ -110,6 +129,27 @@ function Activities(props) {
     	<Navbar />
 
     		<Container style={{paddingTop: 20}}>
+
+        <Dialog
+        open={openConfirmation}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Activity joined successfully"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+           Activity joined successfully, We will notify you on your mobile number for any update. Please be always aware.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
 
     		 	<Paper className={classes.root} elevation={10} >
     		 	<Typography variant="h5" component="h3">
@@ -300,4 +340,10 @@ function Activities(props) {
   )
 }
 
-export default Activities;
+const mapStateToProps = state => ({
+  registeredStudents: state.registeredStudents,
+});
+
+const mapDispatchToProps = { registerStudentFalse };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Activities);

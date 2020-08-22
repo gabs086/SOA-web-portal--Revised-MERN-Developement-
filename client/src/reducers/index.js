@@ -10,6 +10,7 @@ import idreplacementReducer from './idreplacementReducer';
 import requestActivitiesReducer from './requestActivitiesReducer';
 import announcementReducer from './announcementReducer';
 import assessmentsReducer from './assessmentsReducer';
+import registeredStudentsReducer from './registeredStudentsReducer';
 
 export default combineReducers({
     auth: authReducer,
@@ -20,5 +21,6 @@ export default combineReducers({
     idreplacement: idreplacementReducer,
     requestActivities: requestActivitiesReducer,
     announcement: announcementReducer,
-    assessment: assessmentsReducer
+    assessment: assessmentsReducer,
+    registeredStudents: registeredStudentsReducer
 });

@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
+import { registerStudent } from '../../actions/registeredStudentsActions';
+import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -87,11 +89,14 @@ function JoinActivity(props) {
 		contactNumber: ''
 	})
 
+	//Erros State
+	const [errors, getErrors] = useState({})
+
 	//Event Handlers
 	const fetchAssessments = _ => {
 		axios.get(`/api/assessments/getAssessments/${props.match.params.id}/${props.match.params.activity}`)
 		.then(res => {
-			// getActivity(res.data);
+			getActivity(res.data);
 			setValues({...values, activityTitle: res.data.activity, 
 				campus: res.data.campus, activityId: res.data.id})
 		})
@@ -110,7 +115,15 @@ function JoinActivity(props) {
 	const handleSubmit = e => {
 		e.preventDefault();
 
-		console.log(values);
+		const notif = {
+			username: activity.username,
+			orgname: activity.createdBy,
+			notification : `A student named ${values.studentName} has joined the activity named ${values.activityTitle}. Please check if his/her requirements is complete.`
+		}
+
+		// console.log(values);
+		// console.log(notif);
+		props.registerStudent(values, notif);
 	}
 
 	//Component Effect
@@ -119,7 +132,18 @@ function JoinActivity(props) {
 		fetchDepartments();
 	},[]);
 
-	// console.log(values);
+	useEffect(_ => {
+		if(props.registeredStudents.registered)
+			props.history.push('/st/activities')
+	},[props.registeredStudents.registered])
+
+	// Component Effect in errors
+	useEffect(_ => {
+		if(props.errors)
+			getErrors(props.errors)
+	},[props.errors])
+
+	// console.log(activity);
 
 	return (
 		<div>
@@ -202,6 +226,10 @@ function JoinActivity(props) {
 						                                            />
 															</Grid>
 															<br />
+															    <span style={{ color: "red" }}>
+									                                {errors.studentName}
+									                            </span>
+
 
 														<Grid item xs={12}>
 																<TextField 
@@ -215,6 +243,9 @@ function JoinActivity(props) {
 						                                            />
 															</Grid>
 															<br />
+															<span style={{ color: "red" }}>
+									                                {errors.srCode}
+									                            </span>
 
 														<Grid item xs={12}>
 							                                    {/* College Year TextField */}
@@ -238,6 +269,9 @@ function JoinActivity(props) {
 							                                    </FormControl>
 							                             </Grid>
 														<br />
+														<span style={{ color: "red" }}>
+									                                {errors.yr}
+									                            </span>
 
 													<Grid container spacing={3}>
 
@@ -284,6 +318,14 @@ function JoinActivity(props) {
 
 														<br />
 
+														<span style={{ color: "red", paddingRight: 60 }}>
+									                                {errors.department}
+									                      </span>
+
+									                      <span style={{ color: "red" }}>
+									                                {errors.section}
+									                        </span>
+
 													</Grid>
 											<br />
 
@@ -300,6 +342,9 @@ function JoinActivity(props) {
 						                                            />
 													</Grid>
 											<br />
+											<span style={{ color: "red" }}>
+									                {errors.contactNumber}
+									            </span>
 
 												 <Button
 					                                type="submit"
@@ -326,4 +371,11 @@ function JoinActivity(props) {
 		)
 }
 
-export default JoinActivity;
+const mapStateToProps = state => ({
+	registeredStudents: state.registeredStudents,
+	errors: state.errors
+});
+
+const mapDispatchToProps = { registerStudent };
+
+export default connect(mapStateToProps, mapDispatchToProps)(JoinActivity);

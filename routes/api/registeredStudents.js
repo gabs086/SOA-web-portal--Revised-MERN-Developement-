@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const RegisteredStudents = require('../../models/registeredStudents.model');
+const Notifications = require('../../models/notifications.model');
 
 const validateRegisteredStudents = require ('../../validation/registeredStudents');
 
@@ -69,7 +70,7 @@ router.post('/registerStudent', (req, res) => {
 		yr,
 		section, 
 		contactNumber, 
-		status,
+		status: 'pending',
 		created_at: today
 	 });
 
@@ -79,6 +80,29 @@ router.post('/registerStudent', (req, res) => {
 	 	datas: {response}
 	 }))
 	 .catch(err => res.status(500).json(err))
+
+});
+
+//@route /api/registeredStudents/registerStudents/notif
+//@desc send a notification to organization that a student with its name joined
+//@access orgonly
+router.post('/sendNotifToOrg', (req, res) => {
+	// const { username, orgname, notification } = req.body;
+	const username = req.body.username;
+	const orgname = req.body.orgname;
+	const notification = req.body.notification;
+
+	const newNotification = new Notifications({
+			username,
+			orgname,
+			notification
+	});
+
+	newNotification.save()
+	.then(_ => {
+		res.json('Notification Sent')
+	})
+	.catch(err => res.status(500).json(err));
 
 });
 

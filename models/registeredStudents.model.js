@@ -39,9 +39,6 @@ module.exports = db.sequelize.define(
 			srCode: {
 				type: Sequelize.STRING
 			},
-			campus: {
-				type: Sequelize.STRING
-			},
 			department: {
 				type: Sequelize.STRING
 			},

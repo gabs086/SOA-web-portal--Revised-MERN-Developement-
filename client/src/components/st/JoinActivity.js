@@ -81,7 +81,6 @@ function JoinActivity(props) {
 		campus: '',
 		studentName: '',
 		srCode: '',
-		campus: '',
 		department: '',
 		yr: '',
 		section: '',

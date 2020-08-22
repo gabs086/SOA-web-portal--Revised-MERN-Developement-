@@ -29,7 +29,7 @@ router.get('/seeRegisteredStudents/:activityId/:activityTitle', async (req, res)
 
 	const result = await RegisteredStudents.findAndCountAll({
 		where: {
-			id: activityId,
+			activityId: activityId,
 			activityTitle: activityTitle
 		}
 	})

@@ -146,7 +146,7 @@ const useStyles = makeStyles(theme => ({
 function ActivityAssessment(props){
     const classes = useStyles();
 
-        // Pagination Controls addAnnouncementFalseHead
+    // Pagination Controls addAnnouncementFalseHead
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -534,7 +534,7 @@ function ActivityAssessment(props){
                                                                 row.status === 'approved'
                                                                 ?
                                                                 <Fragment>
-                                                                <Link>
+                                                                <Link to={`/h/activityassessment/${row.id}/${row.activity}`}>
                                                                     Check students who joined...
                                                                 </Link>
                                                                 <br />

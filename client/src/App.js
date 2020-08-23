@@ -30,6 +30,7 @@ import OrgEventSingle from './components/org/OrgEventSingle';
 import OrgEvents from './components/org/OrgEvents';
 import Assessment from './components/org/Assessment';
 import AddAssessment from './components/org/AddAssessment';
+import CheckRegisteredStudentsOrg from './components/org/CheckRegisteredStudentsOrg';
 
 // SOA Head Dashboard Components
 import HeadIndex from './components/h/HeadIndex';
@@ -125,6 +126,8 @@ function App() {
           <PrivateRoute exact path="/org/calendar/listOfEvents/:dateDate" component={OrgEvents} />
           <PrivateRoute exact path="/org/assessment" component={Assessment} />
           <PrivateRoute exact path="/org/assessment/addActivity" component={AddAssessment} />
+          <PrivateRoute exact path="/org/assessment/:activityId/:activityTitle" component={CheckRegisteredStudentsOrg} />
+
 
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />

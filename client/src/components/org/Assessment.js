@@ -3,6 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { addActivityAssessmentFalse } from '../../actions/assessmentActions';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -275,9 +276,9 @@ function Assessment(props) {
                                           		{
                                           			row.status === 'approved'
                                           			?
-                                          			<a>
+                                          			<Link to={`/org/assessment/${row.id}/${row.activity}`}>
                                           				Check students who joined...
-                                          			</a>
+                                          			</Link>
                                           			:
                                           			<Fragment>
                                                     	Your activity is declined for implementation,

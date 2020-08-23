@@ -4,7 +4,9 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,10 +22,10 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import TextField from '@material-ui/core/TextField'
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CancelIcon from '@material-ui/icons/Cancel';
 import UndoIcon from '@material-ui/icons/Undo';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -31,19 +33,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
-
-import Slide from '@material-ui/core/Slide';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import Slide from '@material-ui/core/Slide';
+// import CancelIcon from '@material-ui/icons/Cancel';
+// import UndoIcon from '@material-ui/icons/Undo';
 
-import Grid from '@material-ui/core/Grid';
-
-import DashBoardHead from '../layouts/DashboardHead';
+import Navbar2 from "../layouts/Navbar2";
 import FormConfirmationMsg from './FormConfirmationMsg';
 
 const Transition = props => {
@@ -122,6 +122,7 @@ function TablePaginationActions(props) {
   );
 }
 
+// Material UI styles 
 const useStyles = makeStyles(theme => ({
     list: {
         width: '100%',
@@ -146,22 +147,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CheckRegisteredStudents(props){
-    const classes = useStyles();
+function CheckRegisteredStudentsOrg(props) {
 
-    // Pagination Controls addAnnouncementFalseHead
+	const classes = useStyles();
+
+	    // Pagination Controls addAnnouncementFalseHead
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    //Filter State
-    const [filter, setFilter] = useState('');
-
-    //Data States
+       //Data States
     const [students, getStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ifError, setIfError] = useState(false);
-    
-            //Event Handlers
+
+    //Who's organization is online
+	const [orgOnline, setOrgOnline] = useState('');
+
+    //Modal State
+    const [openModalState, setOpenModalState] = useState(false);
+    const [id, getId] = useState(null);
+
+    //Confirmation State
+    const [complete, setComplete] = useState(false);
+    const [undo, setUndo] = useState(false);
+
+        //Filter State
+    const [filter, setFilter] = useState('');
+
+          //Event Handlers
     const handleChangePage = (event, newPage) => {
            setPage(newPage);
     };
@@ -171,6 +184,84 @@ function CheckRegisteredStudents(props){
          setPage(0);
      };
 
+     //Modal
+     const setFullRequirements = id => {
+     	getId(id);
+     	setOpenModalState(true);
+     }
+     const handleModalClose = _ => {
+     	setOpenModalState(false);
+     }
+
+     //Undo Event
+     const undoEvent = id => {
+     	const { auth } = props;
+
+     	const statusBody = {
+     		status: 'pending'
+     	};
+
+     	axios.post(`/api/registeredStudents/setStudentStatus/${id}`, statusBody)
+     	.then(res => {
+     		setUndo(true);
+     	})
+     	.catch(err => console.log(err))
+
+     	const newOrgFeed = {
+     		username: auth.user.username,
+     		orgname: orgOnline,
+     		message: `You've undo an action in assessment page.`
+     	}
+
+     	axios.post(`/api/registeredStudents/sendOrgFeed`, newOrgFeed)
+     	.then(res => res)
+     	.catch(err => console.log(err));
+
+
+     }
+       const closeUndo = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setUndo(false);
+          };
+
+
+     // Final Confirmation
+     const completeRequiremenFinal = _ => {
+     	const { auth } = props;
+
+     	const statusBody = {
+     		status: 'complete'
+     	}
+
+     	const newOrgFeed = {
+     		username: auth.user.username,
+     		orgname: orgOnline,
+     		message: `You've set a student as COMPLETE REQUIREMENTS`
+     	}
+
+     	axios.post(`/api/registeredStudents/setStudentStatus/${id}`, statusBody)
+     	.then(res => {
+     		setComplete(true);
+     		setOpenModalState(false);
+     	})
+     	.catch(err => console.log(err));
+
+     	axios.post(`/api/registeredStudents/sendOrgFeed`, newOrgFeed)
+     	.then(res => res)
+     	.catch(err => console.log(err));
+
+
+     }
+     const closeComplete = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setComplete(false);
+          };
 
      // Component Effects 
      useEffect(_ => {
@@ -186,21 +277,68 @@ function CheckRegisteredStudents(props){
 
             }
         })
-     },[]);
+     },[complete, undo]);
 
+     useEffect(_ => {
+		const { auth } = props;
 
-    const rows = students.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
+        axios.get('/api/org/getorgaccnts')
+        .then(res => {
+          res.data.filter(org => auth.user.username === org.username)
+          .map(org => setOrgOnline(org.orgname))
+        })
+        .catch(err => console.log(err))
+
+	},[]);
+
+     const rows = students.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
 
     //Empty row that says the rows for paginationaddAnnouncementFalseHead
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-    // console.log(props);
+    // console.log(students);
 
-     return (
-              <DashBoardHead>
+    return (
+    		<div>
+    			<Navbar2 />
+                
+                <FormConfirmationMsg open={complete} onClose={closeComplete} variant="success" message="Student set to complete requirements."  />
+                <FormConfirmationMsg open={undo} onClose={closeUndo} variant="info" message="Undo action."  />
 
-              <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
-                <Link color="inherit" href="/h/activityassessment" className={classes.link}>
+
+    			 <Dialog
+                   open={openModalState}
+                   TransitionComponent={Transition}
+                   keepMounted
+                   onClose={handleModalClose}
+                   aria-labelledby="alert-dialog-slide-title"
+                   aria-describedby="alert-dialog-slide-description"
+                   >
+                       <DialogTitle id="alert-dialog-slide-title">
+                           {"Approved Activity Assessment"}
+                        </DialogTitle>
+
+                        <DialogContent>
+
+                          <DialogContentText id="alert-dialog-slide-description">
+                              Are you sure this student is complete at requirements?
+                              </DialogContentText>
+                          </DialogContent>  
+
+                          <DialogActions>
+                            <Button onClick={completeRequiremenFinal} variant="outlined" color="primary">
+                              Yes
+                            </Button>
+                            <Button onClick={handleModalClose} variant="outlined" color="secondary">
+                              No
+                            </Button>
+                          </DialogActions>
+                   </Dialog>
+
+    		<Container style={{paddingTop: 10}}>
+
+    		<Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
+                <Link color="inherit" href="/org/assessment" className={classes.link}>
                   <AssessmentIcon className={classes.icon} />
                   Activities
                 </Link>
@@ -212,13 +350,13 @@ function CheckRegisteredStudents(props){
                   className={classes.link}
                 >
                 <EventNoteIcon className={classes.icon} />
-                  Join 
+                  Students who join
                 </Link>
             </Breadcrumbs>
 
-                 <Paper className={classes.root}>
+    			<Paper className={classes.root} elevation={10} >
 
-                 <Grid container spacing={3}>
+    			 <Grid container spacing={3}>
 
                  <Grid item xs={8}>
                   <TextField 
@@ -237,10 +375,10 @@ function CheckRegisteredStudents(props){
                     </Grid>
                     <br />
                     <br />
-                            
-                        <div className={classes.tableWrapper}>
+    				
+					<div className={classes.tableWrapper}>
 
-                            <Table className={classes.table} aria-label="custom pagination table">
+						  <Table className={classes.table} aria-label="custom pagination table">
                             {/* Table Head of the datas  */}
                             <TableHead>
                               <TableRow>
@@ -251,7 +389,7 @@ function CheckRegisteredStudents(props){
                                 <StyledTableCell align="left">College Year</StyledTableCell>
                                 <StyledTableCell align="left">Section</StyledTableCell>
                                 <StyledTableCell align="left">Contact Number</StyledTableCell>
-                                <StyledTableCell align="left">Actions</StyledTableCell>
+                                <StyledTableCell align="left">Complete Requirements ?</StyledTableCell>
 
 
                               </TableRow>
@@ -273,7 +411,7 @@ function CheckRegisteredStudents(props){
                                      {
                                       ifError
                                       ?
-                                      <TableRow>
+                                    <TableRow>
                                       <TableCell rowSpan={5} colSpan={8} style={{textAlign: 'center',}}>
                                         <span>Something went wrong. Please try again.</span>
                                       </TableCell>
@@ -314,22 +452,23 @@ function CheckRegisteredStudents(props){
                                             row.status === 'pending'
                                             ?
                                             <Fragment>
-                                            <Tooltip title="Complete requirements" placement="top">
-                                                 <IconButton aria-label="edit" style={{color: 'green'}}>
+                                            Click the check button ONLY if the students is complete at requirements
+                                            <Tooltip title="Yes" placement="top">
+                                                 <IconButton onClick={_ => setFullRequirements(row.id)} aria-label="edit" style={{color: 'green'}}>
                                                   <CheckCircleIcon />
                                                 </IconButton>
                                               </Tooltip> 
-                                              |
-                                              <Tooltip title="Delete Request" placement="top">
-                                                 <IconButton aria-label="Delete" color="secondary">
-                                                  <CancelIcon />
-                                                </IconButton>
-                                              </Tooltip> 
-                                              </Fragment>
+                                           </Fragment>
                                               :
-                                              <span>
+                                              <Fragment>
+                                              <p>
                                               Student is complete in requirements
-                                              </span>
+                                              </p>
+                                              If you feel you click the wrong one, click undo.
+                                                 <IconButton onClick={_ => undoEvent(row.id)} aria-label="edit" color="primary">
+                                                                  <UndoIcon />
+                                                                </IconButton>
+                                              </Fragment>
                                           }
 
                                           </TableCell>
@@ -374,14 +513,18 @@ function CheckRegisteredStudents(props){
                                 </TableFooter>
                               </Table>
 
-                        </div>
+					</div>
 
+				</Paper>
 
-                     </Paper>
+			</Container>
 
-              </DashBoardHead>
-      )
-
+    		</div>
+    	);
 }
 
-export default CheckRegisteredStudents;
+const mapStateToProps = state => ({
+	auth: state.auth
+})
+
+export default connect(mapStateToProps)(CheckRegisteredStudentsOrg);

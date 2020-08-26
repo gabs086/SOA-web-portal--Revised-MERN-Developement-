@@ -41,6 +41,17 @@ export default function (state = initialState, action) {
 				...state,
 				added: false
 			}
+		//Update=ign State
+		case UPDATE_ASSESSMENT_ACTIVITY:
+			return {
+				...state,
+				updated: true
+			};
+		case UPDATE_ASSESSMENT_ACTIVITY_FALSE:
+			return {
+				...state,
+				updated: false
+			}
 
 		case SET_ASSESSMENT_APPROVED:
 			return {

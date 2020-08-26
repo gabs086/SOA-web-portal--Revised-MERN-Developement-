@@ -26,6 +26,23 @@ router.get('/', async(req, res) => {
         }
 });
 
+//@route GET /api/assessments/:id
+//@desc fecth assessment data by id
+//@access org only
+router.get('/:id', async (req, res) => {
+	const id = req.params.id;
+
+	const result = await Assessments.findByPk(id)
+
+	try {
+		if(result) res.json(result)
+	}
+	catch(err) {
+		res.status(500).json(err)
+	}
+
+});
+
 //@route GET /api/assessments/:activity
 //@desc get data by specific activity
 //@access student, org and SOA Head
@@ -80,6 +97,60 @@ router.post('/addActivity', (req, res) => {
 	.catch(err => res.status(500).json(err));
 
 });
+
+//@route POST /api/assessments/updateActivity/:id
+//@desc update the current activity assessment
+//@access org only
+router.post('/updateActivity/:id', (req, res) => {
+	const today = new Date();
+
+	const id = req.params.id;
+
+	const { errors, isValid } = validateAssessment(req.body);
+
+	if(!isValid){
+		return res.status(400).json(errors)
+	}	
+
+	const { activity, date, activityRequirements, 
+			description, createdBy, campus, username,
+		} = req.body;
+
+	// Find a Assessment by id and update it 
+	Assessments.findByPk(id)
+	.then(assessment => {
+		if(assessment.activity === activity &&
+		   assessment.date === date &&
+		   assessment.activityRequirements === activityRequirements &&
+		   assessment.description === description
+		   ) {
+			errors.all = "No data have been change";
+
+			return res.status(400).json(errors);
+		} 
+		else {
+			assessment.activity = activity;
+			assessment.date = date;
+			assessment.activityRequirements = activityRequirements;
+			assessment.description = description;
+			assessment.createdBy = createdBy;
+			assessment.campus = campus;
+			assessment.username = username;
+			assessment.status = 'pending';
+
+			assessment.save()
+			.then(response => res.json({
+					message:'Request submitted',
+					datas: {response}
+				}))
+			.catch(err => res.status(500).json(err));
+		}
+
+	})
+	.catch(err => res.status(500).json(`Error: ${err}`))
+
+});
+
 
 //@route /api/assessments/setAsApproved/:id
 //@desc set a activity report as approved

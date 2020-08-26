@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { addActivityAssessmentFalse } from '../../actions/assessmentActions';
+import { addActivityAssessmentFalse, updateActivityAssessmentFalse } from '../../actions/assessmentActions';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 
@@ -140,6 +140,7 @@ function Assessment(props) {
     const [ifError, setIfError] = useState(false);
 
     const [added, setAdded] = useState(false);  
+    const [updated, setUpdated] = useState(false);  
 
     //Event Handlers
     const handleChangePage = (event, newPage) => {
@@ -160,6 +161,13 @@ function Assessment(props) {
                 setAdded(false);
                 props.addActivityAssessmentFalse();
      };
+     const handleCloseUpdate = (event, reason) => {
+        if (reason === 'clickaway') {
+                  return;
+                }
+              setUpdated(false);
+              props.updateActivityAssessmentFalse()
+     }
 
      // Component Effects 
      useEffect(_ => {
@@ -177,12 +185,21 @@ function Assessment(props) {
      	})
      },[]);
 
+     //If added props
      useEffect(_ => {
      	if(props.assessment.added)
      		setAdded(true);
 
      	setTimeout(function(){ props.addActivityAssessmentFalse() }, 6000);
      },[props.assessment.added]);
+
+     // if updated props 
+     useEffect(_ => {
+      if(props.assessment.updated)
+          setUpdated(true)
+
+      setTimeout(function(){ props.updateActivityAssessmentFalse() }, 6000);
+     },[props.assessment.updated])
 
     const { user } = props.auth;
 
@@ -198,6 +215,7 @@ function Assessment(props) {
     	<Navbar2 />
 
     		<FormConfirmationMsg open={added} onClose={handleClose} variant="success" message="Activity Assessment Added."  />
+        <FormConfirmationMsg open={updated} onClose={handleCloseUpdate} variant="success" message="Activity Assessment Updated & Resend."  />
 
     		<Container style={{paddingTop: 10}}>
 
@@ -282,8 +300,8 @@ function Assessment(props) {
                                           			:
                                           			<Fragment>
                                                     	Your activity is declined for implementation,
-                                                    	maybe change the prequisites or the date of the 
-                                                    	activity. <a>Edit Assessment</a>
+                                                    	maybe change the prerequisites or the date of the 
+                                                    	activity. <Link to={`/org/assessment/${row.id}`}>Edit Assessment</Link>
                                                 	</Fragment>
                                           		}
                                           	</Fragment>
@@ -351,6 +369,6 @@ const mapStateToProps = state => ({
 	auth: state.auth,
 });
 
-const mapDispatchToProps = { addActivityAssessmentFalse };
+const mapDispatchToProps = { addActivityAssessmentFalse, updateActivityAssessmentFalse };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Assessment);

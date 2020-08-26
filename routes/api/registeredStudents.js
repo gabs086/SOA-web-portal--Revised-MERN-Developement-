@@ -84,6 +84,22 @@ router.post('/registerStudent', (req, res) => {
 
 });
 
+//@route DELETE /api/registeredStudents/delete/:id
+//@desc delete a registered student
+//@access SOA Head only
+router.delete('/delete/:id', (req, res) => {
+	const id = req.params.id;
+
+	RegisteredStudents.destroy({
+		where:{
+			id: id
+		}
+	})
+	.then(_ => res.json(`Deleted`))
+	.catch(err => res.status(500).json(err));
+
+});
+
 //@route /api/registeredStudents/registerStudents/notif
 //@desc send a notification to organization that a student with its name joined
 //@access orgonly

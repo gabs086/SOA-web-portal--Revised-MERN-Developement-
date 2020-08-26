@@ -457,8 +457,9 @@ function ActivityAssessment(props){
                             <TableHead>
                               <TableRow>
                                 <StyledTableCell>Activity Title</StyledTableCell>
-                                <StyledTableCell align="left">Date of Activity</StyledTableCell>
                                 <StyledTableCell align="left">By</StyledTableCell>
+                                <StyledTableCell align="left">Date of Activity</StyledTableCell>
+                                
                                 <StyledTableCell align="left">Requirements needed</StyledTableCell>
                                 <StyledTableCell align="left">Description of the Activity</StyledTableCell>
                                 <StyledTableCell align="left">Action</StyledTableCell>

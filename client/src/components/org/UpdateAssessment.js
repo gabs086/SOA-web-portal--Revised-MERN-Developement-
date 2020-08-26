@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { addActivityAssessment } from '../../actions/assessmentActions';
+import { updateActivityAssessment } from '../../actions/assessmentActions';
 import { connect } from 'react-redux';
 
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
@@ -22,6 +22,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker, KeyboardTimePicker,} from 
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import FormConfirmationMsg from './FormConfirmationMsg';
 
 import Navbar2 from "../layouts/Navbar2";
 
@@ -67,12 +68,13 @@ const useStyles = makeStyles(theme => ({
       },
 }));
 
-function AddAssessment(props){
+function UpdateAssessment(props){
 
  	const classes = useStyles();
 
  	/*State*/
  	const [errors, getErrors] = useState({});
+  const [errorsAll, getErrorsAll] = useState(false);
 
  	const [values, setValues] = useState({
  		activity: '',
@@ -113,29 +115,60 @@ function AddAssessment(props){
  		}
 
  		// console.log(newAssessment);
- 		props.addActivityAssessment(newAssessment);
+    props.updateActivityAssessment(props.match.params.id, newAssessment);
+ 		// props.addActivityAssessment(newAssessment);
  	}
+
+                // Event for added state 
+    const handleClose = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                getErrorsAll(false);
+     };
 
  	  // Component Effects 
 	useEffect(_ => {
 		const { auth } = props;
 
-          axios.get('/api/org/getorgaccnts')
+        axios.get('/api/org/getorgaccnts')
         .then(res => {
           res.data.filter(org => auth.user.username === org.username)
           .map(org => getCreatedBy(org.orgname))
         })
-        .catch(err => err)
+        .catch(err => console.log(err));
+
+        //Getting the values f
+        axios.get(`/api/assessments/${props.match.params.id}`)
+        .then(res => {
+          console.log(res.data);
+          setValues({
+            ...values,
+            activity: res.data.activity,
+            activityRequirements: res.data.activityRequirements,
+            description: res.data.description
+          });
+
+          setSelectedDate(res.data.date);
+          setSelectedTime(res.data.date);
+
+        })  
+        .catch(err => err);
 	},[]);
 
 	useEffect(_ => {
-		if(props.assessment.added)
+		if(props.assessment.updated)
 			props.history.push('/org/assessment')
-	},[props.assessment.added]);
+	},[props.assessment.updated]);
 
  	useEffect( _ => {
       if(props.errors){
         getErrors(props.errors)
+      }
+
+      if(props.errors.all){
+        getErrorsAll(true)
       }
     },[props.errors]);
 
@@ -146,6 +179,8 @@ function AddAssessment(props){
   return (
     <div>
     	<Navbar2 />
+
+      <FormConfirmationMsg open={errorsAll} onClose={handleClose} variant="error" message={errors.all}  />
 
     	<Container style={{paddingTop: 10}}>
 
@@ -242,8 +277,7 @@ function AddAssessment(props){
                       <span style={{ color: "red" }}>
                                 {errors.date}
                             </span>
-
-                           <br/>
+                          <br/>
 
                      	<Grid item xs={12}>
                                     <TextField 
@@ -332,6 +366,6 @@ const mapStateToProps = state => ({
 	errors: state.errors
 });
 
-const mapDispatchToProps = { addActivityAssessment };
+const mapDispatchToProps = { updateActivityAssessment };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddAssessment);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateAssessment);

@@ -160,6 +160,11 @@ function CheckRegisteredStudents(props){
     const [students, getStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ifError, setIfError] = useState(false);
+
+    // For Deleting a data in registered process
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [id, setId] = useState(null);
+    const [deleted, setDeleted] = useState(false);
     
             //Event Handlers
     const handleChangePage = (event, newPage) => {
@@ -171,6 +176,30 @@ function CheckRegisteredStudents(props){
          setPage(0);
      };
 
+     const handleDeleteModal = id => {
+        setId(id);
+        setDeleteModal(true);
+     }
+     const handleDeleteModalClose = _ => {
+        setDeleteModal(false);
+     }
+
+     const deleteFinal = _ => {
+          axios.delete(`/api/registeredStudents/delete/${id}`)
+          .then(res => {
+            setDeleted(true);
+            setDeleteModal(false);
+          })
+          .catch(err => console.log(err));
+     }
+
+     const handleClose = (reason, event) => {
+           if (reason === 'clickaway') {
+                  return;
+                }
+
+          setDeleted(false);
+     }
 
      // Component Effects 
      useEffect(_ => {
@@ -186,7 +215,7 @@ function CheckRegisteredStudents(props){
 
             }
         })
-     },[]);
+     },[deleted]);
 
 
     const rows = students.sort((a, b) => a.created_at > b.created_at ? -1 : 1);
@@ -198,6 +227,37 @@ function CheckRegisteredStudents(props){
 
      return (
               <DashBoardHead>
+
+                <FormConfirmationMsg open={deleted} onClose={handleClose} variant="success" message="Deleted Successfully."  />
+
+                  <Dialog
+                   open={deleteModal}
+                   TransitionComponent={Transition}
+                   keepMounted
+                   onClose={handleDeleteModalClose}
+                   aria-labelledby="alert-dialog-slide-title"
+                   aria-describedby="alert-dialog-slide-description"
+                   >
+                       <DialogTitle id="alert-dialog-slide-title">
+                           {"Approved Request Activity"}
+                        </DialogTitle>
+
+                        <DialogContent>
+
+                          <DialogContentText id="alert-dialog-slide-description">
+                              Are you sure this student in no longer active at passing requiremen?
+                              </DialogContentText>
+                          </DialogContent>  
+
+                          <DialogActions>
+                            <Button onClick={deleteFinal} variant="outlined" color="primary">
+                              Yes
+                            </Button>
+                            <Button onClick={handleDeleteModalClose} variant="outlined" color="secondary">
+                              No
+                            </Button>
+                          </DialogActions>
+                   </Dialog>
 
               <Breadcrumbs aria-label="breadcrumb"  style={{ paddingBottom: '20px'}}>
                 <Link color="inherit" href="/h/activityassessment" className={classes.link}>
@@ -314,22 +374,18 @@ function CheckRegisteredStudents(props){
                                             row.status === 'pending'
                                             ?
                                             <Fragment>
-                                            <Tooltip title="Complete requirements" placement="top">
-                                                 <IconButton aria-label="edit" style={{color: 'green'}}>
-                                                  <CheckCircleIcon />
-                                                </IconButton>
-                                              </Tooltip> 
-                                              |
                                               <Tooltip title="Delete Request" placement="top">
-                                                 <IconButton aria-label="Delete" color="secondary">
+                                                 <IconButton onClick={_ => handleDeleteModal(row.id)} aria-label="Delete" color="secondary">
                                                   <CancelIcon />
                                                 </IconButton>
                                               </Tooltip> 
                                               </Fragment>
                                               :
-                                              <span>
+                                              <Fragment>
+                                              <p>
                                               Student is complete in requirements
-                                              </span>
+                                              </p>
+                                              </Fragment>
                                           }
 
                                           </TableCell>

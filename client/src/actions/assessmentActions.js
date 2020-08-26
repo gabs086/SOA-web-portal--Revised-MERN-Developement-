@@ -39,6 +39,22 @@ export const addActivityAssessmentFalse = _ => {
 	return { type: ADD_ASSESSMENT_ACTIVITY_FALSE }
 }
 
+export const updateActivityAssessment = (id, data) => dispatch => {
+
+	axios.post(`/api/assessments/updateActivity/${id}`, data)
+	.then(res => dispatch({
+		type: UPDATE_ASSESSMENT_ACTIVITY
+	}))
+	.catch(err => dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+    }));  
+}
+
+export const updateActivityAssessmentFalse = _ => {
+	return { type: UPDATE_ASSESSMENT_ACTIVITY_FALSE };
+}
+
 //Approved and Declined Actions
 export const setAsApproved = (id, data, notif) => dispatch => {
 	axios.post(`/api/assessments/setAsApproved/${id}`, data)

@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {
+  Link,
+} from "react-router-dom";
 
 // Material-ui components 
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +15,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Navbar2 from "../layouts/Navbar2";
 
@@ -38,14 +47,59 @@ const useStyles = makeStyles(theme => ({
       cardContent: {
         flexGrow: 1,
       },
+      link: {
+        textDecoration: 'none'
+      }
 }));
 
 function ActivityRequestReports(props) {
   const classes = useStyles();
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const preventDefault = (event) => event.preventDefault();
+
   return (
 
     <div>
+
+    <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Send an organizational report"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Your about to send a organization report to the admin. As default,
+            your report submitted will archived. Proceed?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Disagree
+          </Button>
+
+           <Typography>
+               <Link to="/org/sendArchive" className={classes.link}>
+                  <Button color="primary" autoFocus>
+                    Agree
+                  </Button>
+
+                </Link>
+        </Typography>
+
+        </DialogActions>
+      </Dialog>
 
     <Navbar2 />
 
@@ -116,7 +170,7 @@ function ActivityRequestReports(props) {
                 </CardContent>
 
                 <CardActions>
-                     <Button size="small" variant="outlined" color="secondary">
+                     <Button onClick={_ => setOpen(true)} size="small" variant="outlined" color="secondary">
                         Submit an Activity Report
                     </Button>
                 </CardActions>

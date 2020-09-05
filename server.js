@@ -18,6 +18,7 @@ const requestActivities = require('./routes/api/request_activities');
 const announcements = require('./routes/api/announcements');
 const assessments = require('./routes/api/assessments');
 const registeredStudents = require('./routes/api/registeredStudents');
+const reports = require('./routes/api/reports');
 
 //Router
 const app = express();
@@ -79,5 +80,6 @@ app.use("/api/requestactivities", requestActivities);
 app.use("/api/announcements", announcements);
 app.use("/api/assessments", assessments);
 app.use("/api/registeredStudents", registeredStudents);
+app.use("/api/reports", reports);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

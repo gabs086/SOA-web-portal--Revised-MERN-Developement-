@@ -32,6 +32,7 @@ import Assessment from './components/org/Assessment';
 import AddAssessment from './components/org/AddAssessment';
 import CheckRegisteredStudentsOrg from './components/org/CheckRegisteredStudentsOrg';
 import UpdateAssessment from './components/org/UpdateAssessment';
+import SendOrgReports from './components/org/SendOrgReports';
 
 // SOA Head Dashboard Components
 import HeadIndex from './components/h/HeadIndex';
@@ -128,7 +129,8 @@ function App() {
           <PrivateRoute exact path="/org/assessment" component={Assessment} />
           <PrivateRoute exact path="/org/assessment/addActivity" component={AddAssessment} />
           <PrivateRoute exact path="/org/assessment/:activityId/:activityTitle" component={CheckRegisteredStudentsOrg} />
-          <PrivateRoute exact path="/org/assessment/:id" component={UpdateAssessment} />          
+          <PrivateRoute exact path="/org/assessment/:id" component={UpdateAssessment} />
+          <PrivateRoute exact path="/org/sendArchive" component={SendOrgReports} />
 
           {/* Head Organization Route Pages  */}
           <PrivateRoute exact path="/h" component={HeadIndex} />

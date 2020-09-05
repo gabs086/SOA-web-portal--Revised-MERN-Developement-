@@ -11,6 +11,7 @@ import requestActivitiesReducer from './requestActivitiesReducer';
 import announcementReducer from './announcementReducer';
 import assessmentsReducer from './assessmentsReducer';
 import registeredStudentsReducer from './registeredStudentsReducer';
+import reportsReducer from './reportsReducer';
 
 export default combineReducers({
     auth: authReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
     requestActivities: requestActivitiesReducer,
     announcement: announcementReducer,
     assessment: assessmentsReducer,
-    registeredStudents: registeredStudentsReducer
+    registeredStudents: registeredStudentsReducer,
+    reports: reportsReducer
 });

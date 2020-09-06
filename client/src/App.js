@@ -67,6 +67,7 @@ import IDReplacementAddForm from './components/ad/IDReplacementAddForm';
 import IDReplacementUpdateForm from './components/ad/IDReplacementUpdateForm';
 import AdminEventSingle from './components/ad/AdminEventSingle';
 import AdminEvents from './components/ad/AdminEvents';
+import ViewOrgReports from  './components/ad/ViewOrgReports';
 
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
@@ -165,8 +166,7 @@ function App() {
           <PrivateRoute exact path="/ad/idreplacement/updateidreplacement/:id" component={IDReplacementUpdateForm} />
           <PrivateRoute exact path="/ad/calendar/:id" component={AdminEventSingle} />
           <PrivateRoute exact path="/ad/calendar/listOfEvents/:dateDate" component={AdminEvents} />
-
-
+          <PrivateRoute exact path="/ad/filesandreports/viewArchivedReports" component={ViewOrgReports} />
 
         </Switch>
 

@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import ArchiveIcon from '@material-ui/icons/Archive';
 import Grid from '@material-ui/core/Grid';
 
 import Paper from '@material-ui/core/Paper';
@@ -210,7 +210,7 @@ function SendOrgReports(props){
 					          aria-current="page"
 					          className={classes.textPrimary}
 					        >
-					        <InboxIcon className={classes.icon}/>
+					        <ArchiveIcon className={classes.icon}/>
 					        Archived
 					        </Link>
 

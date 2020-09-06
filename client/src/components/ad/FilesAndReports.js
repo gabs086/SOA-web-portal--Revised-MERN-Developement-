@@ -76,6 +76,14 @@ function FilesAndReports(props){
                                           </Typography>
 
                                         </CardContent>
+
+                                        <CardActions>
+                                            <Link to="/ad/filesandreports/viewArchivedReports" className={classes.link}>
+                                                <Button size="small" variant="outlined" color="secondary">
+                                                    View Reports
+                                                </Button>
+                                            </Link>
+                                        </CardActions>
                                         
                                     </Card>
                                 </Grid>
@@ -92,15 +100,21 @@ function FilesAndReports(props){
                                         <CardContent className={classes.cardContent}>
 
                                             <Typography gutterBottom variant="h5" component="h2">
-                                                  University Organizational Reports
+                                                  File Sharing
                                             </Typography>
 
                                             <Typography component="p">
-                                                The archived reports of each student organization in the university.
-                                                Only you as an admin can see it.
+                                                Share downloadable files in all students and 
+                                                student organization of the university
                                           </Typography>
 
                                         </CardContent>
+
+                                        <CardActions>
+                                            <Button size="small" variant="outlined" color="secondary">
+                                                Share files
+                                            </Button>
+                                        </CardActions>
                                         
                                     </Card>
                                 </Grid>

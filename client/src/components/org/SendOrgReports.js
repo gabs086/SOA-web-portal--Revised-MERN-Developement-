@@ -142,19 +142,16 @@ function SendOrgReports(props){
 	}
 	//Component effect
 	// Effect to know what org is online
-	 useEffect(async _ => {
+	 useEffect(_ => {
 		const { auth } = props;
 
-		try {
-			const res = await axios.get('/api/org/getorgaccnts')
-
-			res.data.filter(org => auth.user.username === org.username)
-			.map(org => setOrgName(org.orgname));
-		}
-		catch (err) {
-			if(err.request)
-				setErrorOrgName(true)
-		}
+		axios.get('/api/org/getorgaccnts')
+		.then(res => res.data.filter(org => auth.user.username === org.username).map(org => setOrgName(org.orgname)))
+		.catch(err => {
+			// if(err.request)
+			// 	setErrorOrgName(true)
+			console.log(err);
+		});
 
 	},[]);
 

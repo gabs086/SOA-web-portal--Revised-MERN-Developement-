@@ -96,6 +96,12 @@ function SendOrgReports(props){
 	//Event Handlers
 	 const handleClose = () => {
 	    setSubmitted(false);
+	    setValues({
+	    	reportTitle: '',
+			reportDesc: '',
+			file: null,
+			fileName: ''
+	    })
 	  };
 
 	const handleSubmit = e => {
@@ -131,6 +137,7 @@ function SendOrgReports(props){
 
 		// console.log(newReports);
 		props.submitReport(fd, newOrgFeed);
+
 
 	}
 	//Component effect

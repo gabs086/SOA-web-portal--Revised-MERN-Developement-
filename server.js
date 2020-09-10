@@ -19,6 +19,7 @@ const announcements = require('./routes/api/announcements');
 const assessments = require('./routes/api/assessments');
 const registeredStudents = require('./routes/api/registeredStudents');
 const reports = require('./routes/api/reports');
+const fileSharings = require('./routes/api/fileSharings');
 
 //Router
 const app = express();
@@ -81,5 +82,6 @@ app.use("/api/announcements", announcements);
 app.use("/api/assessments", assessments);
 app.use("/api/registeredStudents", registeredStudents);
 app.use("/api/reports", reports);
+app.use("/api/fileSharings", fileSharings);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

@@ -12,6 +12,7 @@ import announcementReducer from './announcementReducer';
 import assessmentsReducer from './assessmentsReducer';
 import registeredStudentsReducer from './registeredStudentsReducer';
 import reportsReducer from './reportsReducer';
+import fileSharingReducer from './fileSharingReducer';
 
 export default combineReducers({
     auth: authReducer,
@@ -24,5 +25,6 @@ export default combineReducers({
     announcement: announcementReducer,
     assessment: assessmentsReducer,
     registeredStudents: registeredStudentsReducer,
-    reports: reportsReducer
+    reports: reportsReducer,
+    fileSharing: fileSharingReducer
 });

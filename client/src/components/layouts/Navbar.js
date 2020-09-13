@@ -199,7 +199,7 @@ class Navbar extends Component {
                             <Button color="inherit" href="/st/lostandfoundpage">
                                 Lost&Found
                             </Button>
-                            <Button color="inherit">BatStateU Org Reports</Button> 
+                          {/*  <Button color="inherit">BatStateU Org Reports</Button> */}
                             <Button color="inherit" href="/st/events">Events</Button>
                             <Button
                                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}

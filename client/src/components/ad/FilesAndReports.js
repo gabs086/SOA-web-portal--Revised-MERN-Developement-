@@ -111,9 +111,11 @@ function FilesAndReports(props){
                                         </CardContent>
 
                                         <CardActions>
-                                            <Button size="small" variant="outlined" color="secondary">
-                                                Share files
-                                            </Button>
+                                         <Link to="/ad/filesandreports/shareFiles" className={classes.link}>
+                                                <Button size="small" variant="outlined" color="secondary">
+                                                    Share Files
+                                                </Button>
+                                            </Link>
                                         </CardActions>
                                         
                                     </Card>

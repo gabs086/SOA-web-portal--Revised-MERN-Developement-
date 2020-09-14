@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, forwardRef} from 'react';
 import { connect } from 'react-redux';
 import { Link as Router } from "react-router-dom";
+import { shareFiles } from '../../actions/fileSharingActions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -95,35 +96,57 @@ function ShareFiles(props) {
 		stud: ''
 	});
 
+	const [errors, getErrors] = useState({});
+
 	//Event Handlers
 	const handleSubmit = e => {
 		e.preventDefault();
 
-		console.log(obj);
+		const fd = new FormData();
+		fd.append('file', obj.file);
+		fd.append('fileName', obj.fileName);
+		fd.append('stud', obj.stud);
+
+		props.shareFiles(fd);
 	}
 
 	//Component Effect
+
+	useEffect(_ => {
+		if(props.errors)
+			getErrors(props.errors)
+	},[props.errors]);
+
+	useEffect(_ => {
+		if(props.fileSharing)
+			props.history.push('/ad/filesandreports/shareFiles/list');
+	}, [props.fileSharing]);
+
+	// console.log(props);
 
   return (
     <div>
     	<DashboardAdmin>
 
     		<Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumb}>
-			      	 <LinkRouter className={classes.link} color="inherit" to="/">
+			      	 <LinkRouter className={classes.link} color="inherit" to="/ad/filesandreports/">
 			      	 <ViewListIcon classes={classes.icon} />
 	                  Menu
 	                </LinkRouter>
 
-	                <LinkRouter className={classes.link} color="textPrimary" to="/">
+	                <LinkRouter className={classes.link} color="textPrimary" to="/ad/filesandreports/shareFiles">
 	                <ShareIcon classes={classes.icon} />
 	                  Share Files
 	                </LinkRouter>
 
 			      	</Breadcrumbs>
 
-			      	<Button color="secondary" variant="outlined">
-			      		View List
-			      	</Button>
+			      	<LinkRouter to="/ad/filesandreports/shareFiles/list">
+				      	<Button color="secondary" variant="outlined">
+				      		View List
+				      	</Button>
+			      	</LinkRouter>
+			      	
 			      	<br />
 			      	<br />
 			      	
@@ -133,10 +156,10 @@ function ShareFiles(props) {
 		    		<Grid container spacing={2}> 
 
 
-					      	    		<Grid item xs={2}>
+					      	    		<Grid item md={2} xs={0}>
 					      	    		</Grid>
 
-					      	    		<Grid  item xs={8}>
+					      	    		<Grid  item xs={12} md={8}>
 			      	    				
 				      	    							
 			      	    							 <Typography variant="h6">
@@ -191,8 +214,10 @@ function ShareFiles(props) {
 
 														        </Grid>
 														        </Grid>
-
-														      
+														             <span style={{ color: "red" }}>
+							                                               {errors.file}
+							                                         </span>
+																					      
 														    </div> 
 
 
@@ -211,6 +236,10 @@ function ShareFiles(props) {
 														          <MenuItem value={"org"}>Student Organizations</MenuItem>
 														        </Select>
 														      </FormControl>
+														      <span style={{ color: "red" }}>
+							                                               {errors.stud}
+							                                         </span>
+							                                         <br />
 
 					                        		<span>*** Please double check everythin before you submit</span>
 
@@ -230,7 +259,7 @@ function ShareFiles(props) {
 								     		 		
 					      	    		</Grid>
 
-					      	    		<Grid item xs={2}>
+					      	    		<Grid item md={2} xs={0}>
 					      	    		</Grid>
 
 
@@ -243,4 +272,11 @@ function ShareFiles(props) {
   )
 }
 
-export default ShareFiles;
+const mapStateToProps = state => ({
+	fileSharing: state.fileSharing.shared,
+	errors: state.errors
+});
+
+const mapDispatchToProps = { shareFiles };
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShareFiles);

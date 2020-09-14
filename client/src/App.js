@@ -69,7 +69,7 @@ import AdminEventSingle from './components/ad/AdminEventSingle';
 import AdminEvents from './components/ad/AdminEvents';
 import ViewOrgReports from  './components/ad/ViewOrgReports';
 import ShareFiles from './components/ad/ShareFiles';
-
+import ViewSharedFiles from './components/ad/ViewSharedFiles';
 //PrivateRoute
 import PrivateRoute from './private-route/PrivateRoute';
 
@@ -169,6 +169,8 @@ function App() {
           <PrivateRoute exact path="/ad/calendar/listOfEvents/:dateDate" component={AdminEvents} />
           <PrivateRoute exact path="/ad/filesandreports/viewArchivedReports" component={ViewOrgReports} />
           <PrivateRoute exact path="/ad/filesandreports/shareFiles" component={ShareFiles} />
+          <PrivateRoute exact path="/ad/filesandreports/shareFiles/list" component={ViewSharedFiles} />
+
 
 
         </Switch>

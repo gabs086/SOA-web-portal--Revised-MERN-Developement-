@@ -297,7 +297,7 @@ function AnnounceEvents(props){
                         <DialogContent>
 
                           <DialogContentText id="alert-dialog-slide-description">
-                              Are you sure to approve this requested activity?
+                              Are you sure to delete this announcement?
                               </DialogContentText>
                           </DialogContent>  
 

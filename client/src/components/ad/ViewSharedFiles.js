@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, forwardRef, Fragment} from 'react';
 import { connect } from "react-redux";
 import { Link as Router } from "react-router-dom";
-import  { getRecords, shareFilesFalse } from '../../actions/fileSharingActions';
+import  { getRecords, shareFilesFalse, deleteFiles, deleteFilesFalse } from '../../actions/fileSharingActions';
 import moment from 'moment';
 
 import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
@@ -32,8 +32,22 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
+import DeleteIcon from '@material-ui/icons/Delete';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+
 import DashboardAdmin from '../layouts/DashboardAdmin';
 import FormConfirmationMsg from './FormConfirmationMsg';
+
+const Transition = props => {
+    return <Slide direction="up" {...props} />
+}
 
 //Header of the Table
 const StyledTableCell = withStyles(theme => ({
@@ -153,7 +167,12 @@ function ViewSharedFiles(props){
 	const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    const [shared, setShared] = useState(false)
+    const [shared, setShared] = useState(false);
+    const [id, getId] = useState(null);
+
+          //Delete modal State
+    const [deleteModal, openDeleteModal] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
 
 	//Event Handlers
 	  //Getting the pages, Material UI Funcs
@@ -166,6 +185,16 @@ function ViewSharedFiles(props){
     setPage(0);
   };
 
+  const handleDelete = id => {
+  	getId(id);
+
+  	openDeleteModal(true);
+  };
+
+   const handleDeleteModalClose = _ => {
+          openDeleteModal(false)
+    };
+
             // Event for openAdded state 
         const handleClose = (event, reason) => {
                 if (reason === 'clickaway') {
@@ -175,6 +204,25 @@ function ViewSharedFiles(props){
                 setShared(false);
                 props.shareFilesFalse();
           };
+
+
+            // Event for openAdded state 
+        const handleCloseDeleted = (event, reason) => {
+                if (reason === 'clickaway') {
+                  return;
+                }
+
+                setOpenDelete(false);
+                props.deleteFilesFalse();
+          };
+
+      //Final action for deleting a file
+    const deleteFinal = _ => {
+    	props.deleteFiles(id);
+
+    	openDeleteModal(false);
+    	setOpenDelete(true);
+    }
 
 	//Component Effect
 	useEffect(_ => {
@@ -187,7 +235,15 @@ function ViewSharedFiles(props){
 
 	useEffect(_ => {
 		props.getRecords();
-	},[])
+	},[props.fileSharing.deleted])
+
+	useEffect(_ => {
+		if(props.fileSharing.deleted)
+			setOpenDelete(true)
+
+		setTimeout( function(){ props.deleteFilesFalse() }, 6000)
+
+	},[props.fileSharing.deleted])
 
 	  //Array of the reports in the lost item reports 
   //Amd filters it by chosen campus
@@ -196,14 +252,44 @@ function ViewSharedFiles(props){
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-
   	// console.log(props);
 
 	return (
 		<div>
 			 <DashboardAdmin>
 
-                <FormConfirmationMsg open={shared} onClose={handleClose} variant="success" message="Announcement Added."  />
+			 <Dialog
+                   open={deleteModal}
+                   TransitionComponent={Transition}
+                   keepMounted
+                   onClose={handleDeleteModalClose}
+                   aria-labelledby="alert-dialog-slide-title"
+                   aria-describedby="alert-dialog-slide-description"
+                   >
+                       <DialogTitle id="alert-dialog-slide-title">
+                           {"Delete Announcement"}
+                        </DialogTitle>
+
+                        <DialogContent>
+
+                          <DialogContentText id="alert-dialog-slide-description">
+                              Are you sure to delete this shared file?
+                              </DialogContentText>
+                          </DialogContent>  
+
+                          <DialogActions>
+                            <Button onClick={deleteFinal} variant="outlined" color="primary">
+                              Yes
+                            </Button>
+                            <Button onClick={handleDeleteModalClose} variant="outlined" color="secondary">
+                              No
+                            </Button>
+                          </DialogActions>
+                   </Dialog>
+
+                <FormConfirmationMsg open={shared} onClose={handleClose} variant="success" message="Shared file Added."  />
+                <FormConfirmationMsg open={openDelete} onClose={handleCloseDeleted} variant="success" message="Shared file Deleted."  />
+
 
 			 <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumb}>
 			      	 <LinkRouter className={classes.link} color="inherit" to="/ad/filesandreports/">
@@ -277,7 +363,15 @@ function ViewSharedFiles(props){
                                           }
                                           </TableCell>
                                           <TableCell align="left">{moment(row.created_at).format('YYYY-MM-DD')}</TableCell>
-                                          <TableCell align="left">Functions Here</TableCell>
+                                          <TableCell align="left">
+
+                                          <Tooltip title="Delete" placement="top">
+                                                 <IconButton onClick={_ => handleDelete(row.id)} aria-label="edit" color="secondary">
+                                                  <DeleteIcon />
+                                                </IconButton>
+                                              </Tooltip>   
+
+                                          </TableCell>
                                         	
                                         </TableRow>
                                       ))
@@ -327,6 +421,6 @@ const mapStateToProps = state => ({
 	fileSharing: state.fileSharing
 });
 
-const mapDispatchToProps = { getRecords, shareFilesFalse };
+const mapDispatchToProps = { getRecords, shareFilesFalse, deleteFiles, deleteFilesFalse };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewSharedFiles);

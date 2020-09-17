@@ -2,6 +2,9 @@ import {
 	SHARE_FILES,
 	SHARE_FILES_FALSE,
 
+	DELETE_SHARE_FILES,
+	DELETE_SHARE_FILES_FALSE,
+
 	GET_SHARED,
 	GET_SHARED_FILES_STUDENTS,
 	GET_SHARED_FILES_ORG,
@@ -14,6 +17,7 @@ import {
 
 const initialState = {
 	shared: false,
+	deleted: false,
 	orgs: [],
 	students: [],
 	records: [],
@@ -35,6 +39,19 @@ export default function(state = initialState, action) {
 				...state,
 				shared: false
 			}
+
+		case DELETE_SHARE_FILES:
+			return {
+				...state,
+				deleted: true,
+				records: state.records
+									.filter(record => record.id !== action.payload)
+			};
+		case DELETE_SHARE_FILES_FALSE:
+			return {
+				...state,
+				deleted: false
+			};
 
 		case GET_SHARED:
 			return {

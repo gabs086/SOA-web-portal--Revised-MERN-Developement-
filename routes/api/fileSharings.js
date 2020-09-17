@@ -112,4 +112,18 @@ router.post('/shareFiles', upload.single('file'), (req, res) => {
 
 });
 
+//@route DELETE /api/fileSharings/deleteSharedFiles/:id
+//@desc Delete a data in fileSharings table
+//@access admin only
+router.delete('/deleteSharedFiles/:id', (req, res) => {
+
+	Files.destroy({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(_ => res.json('File shared Deleted'))
+	.catch(err => res.status(500).json(err));
+});
+
 module.exports = router;

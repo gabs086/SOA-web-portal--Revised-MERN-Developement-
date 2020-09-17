@@ -4,6 +4,9 @@ import {
 	SHARE_FILES,
 	SHARE_FILES_FALSE,
 
+	DELETE_SHARE_FILES,
+	DELETE_SHARE_FILES_FALSE,
+
 	GET_SHARED,
 	GET_SHARED_FILES_STUDENTS,
 	GET_SHARED_FILES_ORG,
@@ -44,4 +47,18 @@ export const shareFiles = data => dispatch => {
 
 export const shareFilesFalse = _ => {
 	return { type: SHARE_FILES_FALSE }
+};
+
+//Delete Share Files
+export const deleteFiles = id => dispatch => {
+	axios.delete(`/api/fileSharings/deleteSharedFiles/${id}`)
+	.then(res => dispatch({
+		type: DELETE_SHARE_FILES,
+		payload: res.data
+	}))
+	.catch(err => console.log(err))
+}
+
+export const deleteFilesFalse = _ => {
+	return {  type: DELETE_SHARE_FILES_FALSE }
 }

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import SideListNavbar from './SideListNavbar';
+import StudentFileDownload from '../st/StudentFileDownload';
 //Materialize Components
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -70,6 +71,9 @@ class Navbar extends Component {
         this.onLogoutClick = this.onLogoutClick.bind(this);
         this.onModalLogoutClick = this.onModalLogoutClick.bind(this);
         this.onHandleLogoutClickClose = this.onHandleLogoutClickClose.bind(this);
+        this.handleModalFiles = this.handleModalFiles.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+
 
         this.toggleDrawer = this.toggleDrawer.bind(this);
 
@@ -80,6 +84,7 @@ class Navbar extends Component {
             anchorDropDownEl: null,
             //logout modal
             modalLogout: false,
+            downloadFiles: false,
 
             // State for toggling the drawer
             right: false
@@ -124,9 +129,18 @@ class Navbar extends Component {
         this.props.logoutUser();
     }
 
+    handleModalFiles() {
+        this.setState({ anchorDropDownEl: null});
+        this.setState({ downloadFiles: true});
+    }
+
+    handleClose() {
+        this.setState({ downloadFiles: false});
+    }
+
     render() {
         const { classes } = this.props;
-        const { anchorEl, anchorDropDownEl, modalLogout } = this.state;
+        const { anchorEl, anchorDropDownEl, modalLogout, downloadFiles } = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isSettingsOpen = Boolean(anchorDropDownEl);
 
@@ -152,13 +166,16 @@ class Navbar extends Component {
                 open={isSettingsOpen}
                 onClose={this.handleSettingsClose}
             >
-                <MenuItem onClick={this.handleSettingsClose}>Downloadable Files </MenuItem>
+                <MenuItem onClick={this.handleModalFiles}>Downloadable Files </MenuItem>
                 <MenuItem onClick={this.onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         )
 
         return (
             <div className={classes.root}>
+
+                <StudentFileDownload handleClose={this.handleClose} open={downloadFiles}/>
+
                 {/* Modal */}
                 <Dialog
                     open={modalLogout}

@@ -22,6 +22,14 @@ export const loadingFiles = _ => {
 	return { type: SHARED_FILES_LOADING}
 }
 
+export const loadingFilesStudents = _ => {
+	return { type: SHARED_FILES_LOADING_STUDENT }
+}
+
+export const loadingFilesOrg = _ => {
+	return { type: SHARED_FILES_LOADING_ORG }
+}
+
 export const getRecords = _ => dispatch => {
 	dispatch(loadingFiles)
 	axios.get('/api/fileSharings/')
@@ -61,4 +69,26 @@ export const deleteFiles = id => dispatch => {
 
 export const deleteFilesFalse = _ => {
 	return {  type: DELETE_SHARE_FILES_FALSE }
+}
+
+//get sharedFiles records in students
+export const getRecordsInStudents = _ => dispatch => {
+	dispatch(loadingFilesStudents);
+	axios.get('/api/fileSharings/student')
+	.then(res => dispatch({
+		type: GET_SHARED_FILES_STUDENTS,
+		payload: res.data
+	}))
+	.catch(err => err)
+}
+
+//Get sharedFiles records in org
+export const getRecordsInOrg = _ => dispatch => {
+	dispatch(loadingFilesOrg);
+	axios.get('/api/fileSharings/org')
+	.then(res => dispatch({
+		type: GET_SHARED_FILES_ORG,
+		payload: res.data
+	}))
+	.catch(err => err)
 }

@@ -104,9 +104,9 @@ class StudentIndex extends Component {
                     </List>
                 </div>
                 <center>
-                <Button variant="outlined" color="secondary" className={classes.button}>
+                {/* <Button variant="outlined" color="secondary" className={classes.button}>
                     Learn More...
-                </Button>
+                </Button> */}
                 </center>
 
                 </Paper>

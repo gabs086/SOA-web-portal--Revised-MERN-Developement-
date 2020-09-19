@@ -36,7 +36,6 @@ if(app.get('env') === 'production'){
     app.set('trust proxy', 1); 
     sess.cookie.secure = true;
 }
-app.use(session(sess));
 
 //Middleware
 // Added a static folder for the accessing the downloads 
@@ -46,6 +45,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(session(sess));
+
+app.use((req, res, next) => {
+	console.log(req.session);
+	next();
+});
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

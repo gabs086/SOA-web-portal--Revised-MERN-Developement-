@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import axios from 'axios';
 
 import indexhead from './img/indexhead.jpg';
 import indexnewpic from './img/indexnewpic.png';
@@ -26,6 +27,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 import Link from '@material-ui/core/Link';
 
@@ -57,7 +64,10 @@ const styles = {
     form: {
         width: '100%',
         marginTop: 10,
-    }
+    },
+     table: {
+        minWidth: 700,
+      },
 }
 
 class Index extends React.Component {
@@ -80,6 +90,9 @@ class Index extends React.Component {
 
             showPassword: false,
             setPic: true,
+            users:[],
+            loading: true,
+            error: false
         }
 
     }
@@ -100,6 +113,19 @@ class Index extends React.Component {
             }
 
         }
+
+        axios.get('/api/users/')
+        .then(res => this.setState({
+                users: res.data,
+                loading: false
+        }))
+        .catch(err => {
+            if(err.response){
+                this.setState({
+                    error: true
+                })
+            }
+        })
     }
 
     setPicNew() {
@@ -163,9 +189,12 @@ class Index extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { password, showPassword, errors, setPic} = this.state;
+        const { password, showPassword, errors, setPic, users, loading, error} = this.state;
         const handleClickShowPassword = this.handleClickShowPassword;
         const setPicNew = this.setPicNew;
+
+        const rows = users.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
+
         return (
             <div className={classes.root}>
                 <Container component="main" maxWidth="sm">
@@ -290,9 +319,63 @@ class Index extends React.Component {
                         <br></br>
 
                     </div>
-                    <Box mt={8}>
+                    <Box mt={8} mb={8}>
                         <Copyright />
                     </Box>
+
+                      <Typography component="h1" variant="h5">
+                            User accounts and roles
+                    </Typography>
+
+                    <Table className={classes.table}>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Username</TableCell>
+                                <TableCell align="right">Password</TableCell>
+                                <TableCell align="right">Role/Access</TableCell>
+                                <TableCell align="right">Campus</TableCell>
+
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {rows.map(row => (
+                                <TableRow key={row.id}>
+                                  <TableCell component="th" scope="row">
+                                    {row.username}
+                                  </TableCell>
+                                  <TableCell align="right">{row.passwordTxt}</TableCell>
+                                  <TableCell align="right">
+                                  {
+                                    row.type === 'student'
+                                    ?
+                                    "Student"
+                                    :
+                                    <Fragment>
+                                    {
+                                        row.type === 'org'
+                                        ?
+                                        "Student Orgnanization"
+                                        :
+                                        <Fragment>
+                                            {
+                                                row.type === 'head'
+                                                ?
+                                                "SOA Head"
+                                                :
+                                                "SOA Admin"
+                                            }
+                                        </Fragment>
+                                    }
+                                    </Fragment>
+                                  }
+                                  </TableCell>
+                                  <TableCell align="right">{row.campus}</TableCell>
+
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+
                 </Container>
             </div>
         )

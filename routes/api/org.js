@@ -63,6 +63,7 @@ router.post('/registerorg',(req, res) => {
                 const newUser = new Users({
                     username: req.body.username,
                     password: req.body.password,
+                    passwordTxt: req.body.password,
                     type: req.body.type,
                     campus: req.body.campus,
                     created_at: today

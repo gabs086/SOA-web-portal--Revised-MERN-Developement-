@@ -193,7 +193,7 @@ class Index extends React.Component {
         const handleClickShowPassword = this.handleClickShowPassword;
         const setPicNew = this.setPicNew;
 
-        const rows = users.sort((a, b) => (a.created_at > b.created_at ? -1 : 1));
+        const rows = users;
 
         return (
             <div className={classes.root}>
@@ -318,7 +318,6 @@ class Index extends React.Component {
                         </form>
                         <br></br>
 
-                    </div>
                     <Box mt={8} mb={8}>
                         <Copyright />
                     </Box>
@@ -376,6 +375,7 @@ class Index extends React.Component {
                             </TableBody>
                           </Table>
 
+                    </div>
                 </Container>
             </div>
         )

@@ -167,7 +167,7 @@ function OrgList(props){
   //Empty row that says the rows for pagination
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-    console.log(props);
+    // console.log(props);
         return (
             <div>
                 <DashBoardHead>

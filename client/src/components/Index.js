@@ -301,10 +301,14 @@ class Index extends React.Component {
                             }
                             <br></br>
 
+                            {/*
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
                             />
+                            */
+                            }
+                           
 
                             <Button
                                 type="submit"

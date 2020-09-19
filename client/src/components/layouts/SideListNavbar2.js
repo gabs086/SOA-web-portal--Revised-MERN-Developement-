@@ -112,7 +112,7 @@ function SideListNavbar2 (props) {
 
               <List>
                     {/* Downloadable Files Page  */}
-                    <ListItem>
+                    <ListItem button onClick={props.onClickDownload}>
                         <ListItemIcon>
                             <GetAppIcon />
                         </ListItemIcon>

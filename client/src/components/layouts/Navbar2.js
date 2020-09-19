@@ -27,6 +27,8 @@ import Slide from '@material-ui/core/Slide';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
 
+import OrgFileDownload from '../org/OrgFileDownload';
+
 const useStyles = makeStyles(theme => ({
      root: {
         width: "100%",
@@ -100,6 +102,7 @@ function Navbar2 (props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorDropDownEl, setAnchorDropDownEl] = useState(null);
     const [modalLogout, setModalLogout] = useState(null);
+    const [open, setOpen] = useState(false); 
     const [side, setSide] = useState({
         top: false,
         left: false,
@@ -174,6 +177,18 @@ function Navbar2 (props) {
         .catch(err => console.log(err));
     }
 
+    const handleClose = _ => {
+        setOpen(false)
+    }
+
+    const openModalDownloads = _ => {
+        setOpen(true);
+        setAnchorDropDownEl(null)
+    }
+
+    const onClickDownload = _ => {
+         setOpen(true);
+    }   
 
     // Component Effects ++++++++++++++
 
@@ -214,13 +229,16 @@ function Navbar2 (props) {
                 open={isSettingsOpen}
                 onClose={handleSettingsClose}
             >
-                <MenuItem onClick={handleSettingsClose}>Downloadable Files </MenuItem>
+                <MenuItem onClick={openModalDownloads}>Downloadable Files </MenuItem>
                 <MenuItem onClick={onModalLogoutClick} style={{ color: "red" }}>Logout </MenuItem>
             </Menu>
         );
 
         return (
             <div className={classes.root}>
+
+                <OrgFileDownload handleClose={handleClose} open={open} />
+
                 {/* Modal */}
                 <Dialog
                     open={modalLogout}
@@ -301,7 +319,7 @@ function Navbar2 (props) {
 
                             onKeyDown={toggleDrawer('right', false)}
                         >
-                            <SideListNavbar2 class={classes.list} onClick={onModalLogoutClick} />
+                            <SideListNavbar2 class={classes.list} onClick={onModalLogoutClick} onClickDownload={onClickDownload} />
                         </div>
 
                         </Drawer>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getRecordsInStudents } from '../../actions/fileSharingActions'
+import { getRecordsInOrg } from '../../actions/fileSharingActions'
 
 import GetAppIcon from '@material-ui/icons/GetApp';
 import List from '@material-ui/core/List';
@@ -10,15 +10,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 
-function StudentFileDownload(props) {
+function OrgFileDownload(props) {
 
 	useEffect(_ => {
-		props.getRecordsInStudents();
-	},[]);
+		props.getRecordsInOrg();
+	},[])
 
-	const rows = props.fileSharing.students.sort((a,b) => (a.created_at > b.created_at ? -1 : 1));
+		const rows = props.fileSharing.orgs.sort((a,b) => (a.created_at > b.created_at ? -1 : 1));
 
 	return (
+
 		<Dialog onClose={props.handleClose} 
 		aria-labelledby="simple-dialog-title"
 		open={props.open}
@@ -26,7 +27,7 @@ function StudentFileDownload(props) {
 		 <DialogTitle id="simple-dialog-title">Files that can be downloaded</DialogTitle>
 		<List>
 			{
-				props.fileSharing.loadingStudent 
+				props.fileSharing.loadingOrg 
 				?
 				<ListItem>
 		            <ListItemText primary="Loading..," />
@@ -46,6 +47,7 @@ function StudentFileDownload(props) {
 		</List>
 			
 		</Dialog>
+
 		);
 }
 
@@ -53,6 +55,6 @@ const mapStateToProps = state => ({
 	fileSharing: state.fileSharing
 });
 
-const mapDispatchToProps = { getRecordsInStudents };
+const mapDispatchToProps = { getRecordsInOrg };
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudentFileDownload);
+export default connect(mapStateToProps, mapDispatchToProps)(OrgFileDownload);

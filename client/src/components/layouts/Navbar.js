@@ -73,6 +73,7 @@ class Navbar extends Component {
         this.onHandleLogoutClickClose = this.onHandleLogoutClickClose.bind(this);
         this.handleModalFiles = this.handleModalFiles.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.onClickDownloads = this.onClickDownloads.bind(this);
 
 
         this.toggleDrawer = this.toggleDrawer.bind(this);
@@ -136,6 +137,11 @@ class Navbar extends Component {
 
     handleClose() {
         this.setState({ downloadFiles: false});
+    }
+
+    onClickDownloads() {
+        this.setState({ downloadFiles: true })
+        this.setState({ anchorDropDownEl: null });
     }
 
     render() {
@@ -257,7 +263,7 @@ class Navbar extends Component {
 
                             onKeyDown={this.toggleDrawer('right', false)}
                         >
-                            <SideListNavbar class={classes.list} onClick={this.onModalLogoutClick} />
+                            <SideListNavbar class={classes.list} onClick={this.onModalLogoutClick} onClickDownloads={this.onClickDownloads} />
                         </div>
 
                         </Drawer>

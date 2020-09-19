@@ -113,7 +113,7 @@ class SideListNavbar extends Component {
 
               <List>
                     {/* Downloadable Files Page  */}
-                    <ListItem>
+                    <ListItem button onClick={this.props.onClickDownloads}>
                         <ListItemIcon>
                             <GetAppIcon />
                         </ListItemIcon>

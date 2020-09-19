@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 19, 2020 at 11:22 AM
+-- Generation Time: Sep 19, 2020 at 11:37 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -330,7 +330,17 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `passwordTxt`, `type`, `campus`, `created_at`) VALUES
 (1, 'student', '$2a$10$UqdphsPfSUumE.J3J3wCGu4SZtnoYeebHY9TI9/lMbByAJeo98.uK', 'P@ssword123', 'student', '', '2020-03-07 08:43:53'),
-(2, 'SOAAdmin', '$2a$10$9EY9eyDENyuuZVR1I9MhWuHpijXXJF88o5iaIcTjSy2IN.dRK8gjS', 'admin', 'admin', '', '2020-03-07 08:47:31');
+(2, 'SOAAdmin', '$2a$10$9EY9eyDENyuuZVR1I9MhWuHpijXXJF88o5iaIcTjSy2IN.dRK8gjS', 'admin', 'admin', '', '2020-03-07 08:47:31'),
+(22, 'SN_01', '$2a$10$W0DOQFcrvgB7KBmsOn8YMuewljFQhfa4gTHEqSS122GaBYGwEVsKi', 'schoolNumberOne', 'head', 'School Number 1', '2020-09-19 09:30:40'),
+(23, 'SN_02', '$2a$10$TJta6NrD81YHng2YVIMd4uPqDHk61lD5coPQi0cTmPKiHanLspvOO', 'schoolNumberTwo', 'head', 'School Number 2', '2020-09-19 09:30:59'),
+(24, 'SN_03', '$2a$10$X4v6mP8MTd2Oye0LFQ9H.epRjRe4UlEJZYfAgVXeCHe5Rn9Ki.ZiW', 'schoolNumberThree', 'head', 'School Number 3', '2020-09-19 09:31:13'),
+(25, 'SN_04', '$2a$10$86ljOFIFGRonfO34UafQNuNPbjxUugX8Y7aWZi5M/rBH2Ssy20yS.', 'schoolNumberFour', 'head', 'School Number 4', '2020-09-19 09:32:07'),
+(26, 'SN_05', '$2a$10$M03uwPyXqdYDWnv.Oe78Kuu6hEYy.mF4A3zf2psKTfUd8INxtU0Pe', 'schoolNumberFive', 'head', 'School Number 5', '2020-09-19 09:32:17'),
+(27, 'SN_06', '$2a$10$J6RH6QWR0z1Vcj.9kOghGeZWbvYCBNyLSltOBf/93s1gGdRJ71wny', 'schoolNumberSix', 'head', 'School Number 6', '2020-09-19 09:32:40'),
+(28, 'SN_07', '$2a$10$LN2DH4KhjiNs.AhY/.5dcuyo1Bn121BIkxq9Gli0MbzsGqCWF4Uou', 'schoolNumberSeven', 'head', 'School Number 7', '2020-09-19 09:32:51'),
+(29, 'SN_08', '$2a$10$kZlENy6E1.3jokkMqypTy.2xhbhc4NAsv3pMvHn.TlrcFxwr6.vx2', 'schoolNumberEight', 'head', 'School Number 8', '2020-09-19 09:33:08'),
+(30, 'SN_09', '$2a$10$9aE7N15Nu6TvZdenvLNoZu.k6Z4AS6Z2Epxfrd/307H/QLHZl7AsS', 'schoolNumberNine', 'head', 'School Number 9', '2020-09-19 09:33:21'),
+(31, 'SN_10', '$2a$10$pVCaLXIKtnaRWABf4u4nhOoTUS.D8EBRZ0997NR8r9PBBbjKzpf8a', 'schoolNumberTen', 'head', 'School Number 10', '2020-09-19 09:33:32');
 
 --
 -- Indexes for dumped tables
@@ -530,7 +540,7 @@ ALTER TABLE `request_activities`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

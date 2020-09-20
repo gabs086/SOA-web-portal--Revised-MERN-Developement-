@@ -1,5 +1,8 @@
 const Sequelize = require("sequelize");
 const db = {};
+
+//Connection keys for clearDb Mysql in heroku
+const clearDb = require('./clearDb');
 const sequelize = new Sequelize("portal", "root", "", {
     host: 'localhost',
     dialect: 'mysql',

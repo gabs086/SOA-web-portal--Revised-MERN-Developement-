@@ -90,14 +90,12 @@ app.use("/api/registeredStudents", registeredStudents);
 app.use("/api/reports", reports);
 app.use("/api/fileSharings", fileSharings);
 
-// Serve static assets if in Production
-if(process.env.NODE_ENV === 'production') {
-  // Set a static folder
-  app.use(express.static('client/build'));
+if (process.env.NODE_ENV === 'production'){
+    app.use(express.static('client/build'));
+}
 
-  app.get('*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
-}
 
 app.listen(port, () => console.log(`Server is running in port ${port}`));

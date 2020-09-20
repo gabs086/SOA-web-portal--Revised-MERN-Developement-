@@ -4,7 +4,7 @@ const session = require('express-session');
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const passport = require('passport');
-
+const path = require('path');
 //API Routes
 const users = require("./routes/api/users");
 const lost = require('./routes/api/lost');

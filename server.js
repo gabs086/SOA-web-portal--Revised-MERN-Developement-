@@ -76,9 +76,6 @@ app.use((req, res, next) => {
 });
 
 
-//PORT configuration
-const port = process.env.PORT || 5000;
-
 // APIs
 // Passport middleware
 app.use(passport.initialize());
@@ -101,5 +98,7 @@ app.use("/api/registeredStudents", registeredStudents);
 app.use("/api/reports", reports);
 app.use("/api/fileSharings", fileSharings);
 
+//PORT configuration
+const PORT = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`Server is running in port ${port}`));
+app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));

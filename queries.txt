@@ -1,0 +1,174 @@
+CREATE TABLE IF NOT EXISTS `users` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username varchar(255) NULL,
+  password varchar(255) NULL,
+  passwordTxt varchar(255) NOT NULL,
+  type varchar(255) NULL,
+  campus varchar(255) NULL,
+  created_at varchar(255) NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `campuses` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  campusename varchar(255) NOT NULL,
+  created_at date not NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `departments` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  department varchar(255) NOT NULL,
+  created_at date not NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `announcements` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  date varchar(255) NOT NULL,
+  dateDate varchar(255) NOT NULL,
+  dateTime varchar(255) NOT NULL,
+  backgroundColor varchar(255) NOT NULL,
+  venue varchar(255) NOT NULL,
+  description varchar(255) NOT NULL,
+  poster varchar(255) NOT NULL,
+  fileName varchar(255) NOT NULL,
+  setBy varchar(255) NOT NULL,
+  created_at date not NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `assessments` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  activity varchar(255) NOT NULL,
+  date varchar(255) NOT NULL,
+  activityRequirements varchar(255) NOT NULL,
+  description varchar(255) NOT NULL,
+  createdBy varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
+  status varchar(255) NOT NULL,
+  created_at date not NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE IF NOT EXISTS `fileSharings` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  file varchar(255) NOT NULL,
+  fileName varchar(255) NOT NULL,
+  stud varchar(255) NOT NULL,
+  created_at datetime(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `foundreports` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  findername varchar(255) NOT NULL,
+  founditem varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  date date NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `idreplacements` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  year varchar(255) NOT NULL,
+  src varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  department varchar(255) NOT NULL,
+  idreason varchar(255) NOT NULL,
+  count varchar(255) NOT NULL,
+  otherinfo varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `lostitemsreports` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  src varchar(255) NOT NULL,
+  yr varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  department varchar(255) NOT NULL,
+  course varchar(255) NOT NULL,
+  details varchar(255) NOT NULL,
+  contact varchar(255) NOT NULL,
+  status varchar(255) NOT NULL,
+  seen varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `notifications` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username varchar(255) NOT NULL,
+  orgname varchar(255) NOT NULL,
+  notification varchar(255) NOT NULL,
+  reason varchar(255) NOT NULL,
+  status varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `orgaccnts` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  orgname varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  created_at varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `orgdescs` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  campus varchar(255) NOT NULL,
+  department varchar(255) NOT NULL,
+  orgname varchar(255) NOT NULL,
+  orgpresname varchar(255) NOT NULL,
+  orgadvisername varchar(255) NOT NULL,
+  quantitymembers varchar(255) NOT NULL,
+  quantityofficers varchar(255) NOT NULL,
+  description varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `org_feeds` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username varchar(255) NOT NULL,
+  orgname varchar(255) NOT NULL,
+  message varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `registeredStudents` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  activityId int(11) NOT NULL,
+  activityTitle varchar(255) NOT NULL,
+  studentName varchar(255) NOT NULL,
+  srCode varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  department varchar(255) NOT NULL,
+  yr varchar(255) NOT NULL,
+  section varchar(255) NOT NULL,
+  contactNumber varchar(255) NOT NULL,
+  status varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `reports` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  orgname varchar(255) NOT NULL,
+  reportTitle varchar(255) NOT NULL,
+  reportDesc varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  file varchar(255) NOT NULL,
+  created_at datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `request_activities` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  activity_title varchar(255) NOT NULL,
+  file varchar(255) NOT NULL,
+  fileName varchar(255) NOT NULL,
+  description varchar(255) NOT NULL,
+  orgname varchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
+  status varchar(255) NOT NULL,
+  campus varchar(255) NOT NULL,
+  notif varchar(255) NOT NULL,
+  created_at date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

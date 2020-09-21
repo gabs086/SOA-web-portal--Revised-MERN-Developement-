@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 
 import indexhead from './img/indexhead.jpg';
@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { loginUser } from "../actions/authActions";
 
 //MaterialUI Dependencies
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 
@@ -21,6 +21,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import green from '@material-ui/core/colors/green';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
@@ -51,7 +53,7 @@ function Copyright() {
 }
 
 
-const styles = {
+const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
@@ -68,132 +70,110 @@ const styles = {
      table: {
         minWidth: 700,
       },
-}
+    wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
 
-class Index extends React.Component {
-    
-    constructor(props) {
-        super(props)
-        // Form 
-        this.handleChange = this.handleChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+   buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '70%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}))
 
-        this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
-        this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
-        // Magic for setting the img true 
-        this.setPicNew = this.setPicNew.bind(this);
+function Index (props) {
 
-        this.state = {
-            username: '',
-            password: '',
-            errors: {},
 
-            showPassword: false,
-            setPic: true,
-            users:[],
-            loading: true,
-            error: false
-        }
+    const [login, setLogin] = useState({
+        username: '',
+        password: ''
+    });
 
-    }
+    const [errors, getErrors] = useState('');
 
-    componentDidMount() {
-        if (this.props.auth.isAuthenticated) {
-            if (this.props.auth.user.type === "admin") {
-                this.props.history.push("/ad");
-            }
-            if (this.props.auth.user.type === "head") {
-                this.props.history.push("/h");
-            }
-            if (this.props.auth.user.type === "org") {
-                this.props.history.push("/org");
-            }
-            if (this.props.auth.user.type === "student") {
-                this.props.history.push("/st");
-            }
+    const [showPassword, setShowPassword] = useState(false);
+    const [setPic, setPicBool] = useState(true);
 
-        }
+    const [users, getUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [loadingAuth, setLoadingAuth] = useState(false)
 
-        axios.get('/api/users/')
-        .then(res => this.setState({
-                users: res.data,
-                loading: false
-        }))
-        .catch(err => {
-            if(err.response){
-                this.setState({
-                    error: true
-                })
-            }
-        })
-    }
+    const setPicNew = _ => {
+        setPicBool(!setPic)
+    };
 
-    setPicNew() {
-        this.setState(state => ({
-            setPic: !state.setPic
-        }));
-    }
+    const handleClickShowPassword = _ => {
+        setShowPassword(!showPassword);
+    };
 
-    handleClickShowPassword() {
-        this.setState(state => ({
-            showPassword: !state.showPassword
-        }));
-    }
-    handleMouseDownPassword(e) {
+    const handleMouseDownPassword = e => {
         e.preventDefault();
     }
 
-    handleChange = prop => e => {
-        this.setState({
-            [prop]: e.target.value
-        });
+    const handleChange = prop => e => {
+        setLogin({...login, [prop]: e.target.value});
     }
 
-    onSubmit(e) {
+    const onSubmit = e => {
         e.preventDefault();
+        setLoadingAuth(!loadingAuth);
 
         const loginData = {
-            username: this.state.username,
-            password: this.state.password
+            username: login.username,
+            password: login.password
         };
-        //Function for authentication
-        this.props.loginUser(loginData);
 
+        props.loginUser(loginData);
     }
 
-    //Alernative method for componentWillReceiveProps
-    static getDerivedStateFromProps(nextProps, prevState) {
-        // console.log(nextProps);
-        if (nextProps.auth.isAuthenticated) {
-            if (nextProps.auth.user.type === "admin") {
-                nextProps.history.push("/ad");
-            }
-            if (nextProps.auth.user.type === "head") {
-                nextProps.history.push("/h");
-            }
-            if (nextProps.auth.user.type === "org") {
-                nextProps.history.push("/org");
-            }
-            if (nextProps.auth.user.type === "student") {
-                nextProps.history.push("/st");
-            }
+    useEffect(_ => {
+        axios.get('/api/users/')
+        .then(res => {
+            getUsers(res.data);
+            setLoading(false);
+        })
+        .catch(err => {
+             if(err.response){
+              setError(true)
+            }  
+        })
+    },[]);
 
+    useEffect(_ => {
+        if(props.auth.isAuthenticated){
+             if (props.auth.user.type === "admin") {
+                props.history.push("/ad");
+            }
+            if (props.auth.user.type === "head") {
+                props.history.push("/h");
+            }
+            if (props.auth.user.type === "org") {
+                props.history.push("/org");
+            }
+            if (props.auth.user.type === "student") {
+                props.history.push("/st");
+            }
         }
+    },[props.auth.isAuthenticated]);
 
-
-        if (nextProps.errors) {
-            return ({ errors: nextProps.errors })
+    useEffect(_ => {
+        if(props.errors){
+            getErrors(props.errors);
+            setLoadingAuth(false);
         }
-        
-    }
+    },[props.errors])
 
-    render() {
-        const { classes } = this.props;
-        const { password, showPassword, errors, setPic, users, loading, error} = this.state;
-        const handleClickShowPassword = this.handleClickShowPassword;
-        const setPicNew = this.setPicNew;
+        const classes = useStyles();
+   
 
         const rows = users;
+
+        // console.log(loadingAuth);
 
         return (
             <div className={classes.root}>
@@ -213,7 +193,7 @@ class Index extends React.Component {
                             Sign In
                     </Typography>
 
-                        <form className={classes.form} noValidate onSubmit={this.onSubmit}>
+                        <form className={classes.form} noValidate onSubmit={onSubmit}>
                             {/* Username handling */}
                             {   errors.username || errors.usernotfound
                                 ?
@@ -226,7 +206,7 @@ class Index extends React.Component {
                                 label="Username"
                                 name="username"
                                 autoFocus
-                                onChange={this.handleChange("username")}
+                                onChange={handleChange("username")}
                                 helperText={errors.username || errors.usernotfound}
                             />
                                 :
@@ -238,7 +218,7 @@ class Index extends React.Component {
                                 label="Username"
                                 name="username"
                                 autoFocus
-                                onChange={this.handleChange("username")}
+                                onChange={handleChange("username")}
                                
                             />
                             }
@@ -253,9 +233,9 @@ class Index extends React.Component {
                                     name="password"
                                     label="Password"
                                     id="password"
-                                    type={this.state.showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={this.handleChange('password')}
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={login.password}
+                                    onChange={handleChange('password')}
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
@@ -263,7 +243,7 @@ class Index extends React.Component {
                                                     edge="end"
                                                     aria-label="toggle password visibility"
                                                     onClick={handleClickShowPassword}
-                                                    onMouseDown={this.handleMouseDownPassword}
+                                                    onMouseDown={handleMouseDownPassword}
                                                 >
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
@@ -280,9 +260,9 @@ class Index extends React.Component {
                                     name="password"
                                     label="Password"
                                     id="password"
-                                    type={this.state.showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={this.handleChange('password')}
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={login.password}
+                                    onChange={handleChange('password')}
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
@@ -290,7 +270,7 @@ class Index extends React.Component {
                                                     edge="end"
                                                     aria-label="toggle password visibility"
                                                     onClick={handleClickShowPassword}
-                                                    onMouseDown={this.handleMouseDownPassword}
+                                                    onMouseDown={handleMouseDownPassword}
                                                 >
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
@@ -309,16 +289,24 @@ class Index extends React.Component {
                             */
                             }
                            
+                            <div className={classes.wrapper}>
 
                             <Button
                                 type="submit"
                                 fullWidth
-                                variant="contained"
+                                variant="outlined"
                                 color="primary"
                                 className={classes.submit}
+                                disable={loadingAuth}
                             >
-                                Login
+                                {loadingAuth ? 
+                                    <Fragment>
+                                    <CircularProgress size={24} className={classes.buttonProgress} /> 
+                                    Loading... 
+                                    </Fragment>
+                                    : "Login"}
                             </Button>
+                            </div>
                         </form>
                         <br></br>
 
@@ -383,8 +371,6 @@ class Index extends React.Component {
                 </Container>
             </div>
         )
-    }
-
 
 }
 
@@ -407,4 +393,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { loginUser }
-)(withStyles(styles)(Index));
+)(Index);

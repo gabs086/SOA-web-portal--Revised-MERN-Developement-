@@ -13,7 +13,7 @@
     "@material-ui/lab": "^4.0.0-alpha.48",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/system": "^4.9.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "fullcalendar": "^5.1.0",
     "jwt-decode": "^2.2.0",
